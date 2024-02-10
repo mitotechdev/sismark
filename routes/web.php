@@ -46,6 +46,10 @@ Route::resource('project', ProjectController::class);
 
 Route::view('/test','pages.marketing.project.project-list');
 
+Route::view('/project-card-view', 'pages.marketing.project.project-card-view');
+Route::view('/project-detail-view', 'pages.marketing.project.project-detail-view');
+Route::view('/project-todo-view', 'pages.marketing.todo.task-add');
+
 
 
 

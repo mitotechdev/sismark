@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
+            $table->string('project_code');
             $table->string('project_name');
-            $table->text('description');
+            $table->enum('assign_to', ['Sintia Lestari', 'Yudha Satria'])->default('Sintia Lestari');
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('due_date');
             $table->enum('status', ['Ongoing', 'Completed', 'Inactive', 'Canceled', 'Critical']);
+            $table->text('desc_project');
+            $table->enum('created_by', ['gea'])->default('gea');
             $table->timestamps();
         });
     }

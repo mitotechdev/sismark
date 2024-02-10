@@ -13,7 +13,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return view('pages.marketing.project.project-add');
+        $projects = Project::all();
+        return view('pages.marketing.project.project-add', compact('projects'));
     }
 
     /**
@@ -29,7 +30,22 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            Project::create([
+                'project_code' => 'A-9224',
+                'project_name' => $request->project_name,
+                'assign_to' => $request->assign_to,
+                'start_date' => $request->start_date,
+                'due_date' => $request->due_date,
+                'status' => 'Ongoing',
+                'desc_project' => $request->desc_project,
+            ]);
+            return redirect()->back()->with('success', 'Data baru telah ditambahkan 🚀');
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -45,7 +61,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        // dd($project);
+        return view('pages.marketing.project.project-edit', compact('project'));
     }
 
     /**
@@ -53,7 +70,21 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+        try {
+            $project->update([
+                'project_name' => $request->project_name,
+                'assign_to' => $request->assign_to,
+                'start_date' => $request->start_date,
+                'due_date' => $request->due_date,
+                'status' => $request->status,
+                'desc_project' => $request->desc_project
+            ]);
+    
+            return redirect()->route('project.index')->with('success', 'Data berhasil diperbaharui 🚀');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
     }
 
     /**
