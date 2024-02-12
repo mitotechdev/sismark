@@ -2,7 +2,13 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Inventory\StockMasterController;
+use App\Http\Controllers\Marketing\ProjectCardViewController;
 use App\Http\Controllers\Marketing\ProjectController;
+use App\Http\Controllers\Marketing\ProjectDetailController;
+use App\Http\Controllers\Marketing\TaskCompletedController;
+use App\Http\Controllers\Marketing\TaskController;
+use App\Http\Controllers\Marketing\TaskProjectController;
+use App\Http\Controllers\Marketing\UpdateTaskProjectController;
 use App\Http\Controllers\Partner\CustomerController;
 use App\Http\Controllers\Partner\CustomerPersonaliaController;
 use App\Http\Controllers\Report\ReportController;
@@ -43,11 +49,15 @@ Route::view('/branch-customer', 'pages.partner.customer.branch.branch-customer')
 
 Route::resource('user', UserController::class);
 Route::resource('project', ProjectController::class);
+Route::get('task-project/{project}', TaskProjectController::class)->name('task.project');
+Route::resource('task', TaskController::class);
+Route::put('/task-checked', UpdateTaskProjectController::class)->name('task.checked');
+Route::get('/task-completed/{project}', TaskCompletedController::class)->name('task.completed');
+Route::get('/project-detail/{project}', ProjectDetailController::class)->name('project.detail');
+Route::get('/project-card-view', ProjectCardViewController::class)->name('project.card.view');
 
 Route::view('/test','pages.marketing.project.project-list');
 
-Route::view('/project-card-view', 'pages.marketing.project.project-card-view');
-Route::view('/project-detail-view', 'pages.marketing.project.project-detail-view');
 Route::view('/project-todo-view', 'pages.marketing.todo.task-add');
 
 

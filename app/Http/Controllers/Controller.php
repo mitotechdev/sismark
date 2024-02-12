@@ -11,7 +11,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Inventory\StockMaster;
 use App\Models\TaskManagement\Activity;
 use App\Models\Transaction\Invoice;
-use App\Models\UserManagement\SalesUser;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;

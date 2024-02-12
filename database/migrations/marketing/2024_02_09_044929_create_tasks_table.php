@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->time('time_task');
             $table->text('desc_task');
-            $table->boolean('status_task')->default(0);
+            $table->boolean('status_task')->default(0)->nullable();
             $table->timestamps();
         });
     }

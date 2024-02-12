@@ -29,7 +29,20 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            Task::create([
+                'project_id' => $request->project_id,
+                'name_task' => $request->name_task,
+                'start_date' => $request->start_date,
+                'time_task' => $request->time_task,
+                'desc_task' => $request->desc_task,
+            ]);
+
+            return redirect()->back()->with('success', 'Task baru berhasil ditambahkan 🚀');
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**

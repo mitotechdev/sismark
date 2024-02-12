@@ -62,7 +62,7 @@
                                         <input type="date" id="start_date" name="start_date" class="form-control" title="Tanggal Mulai" required>
                                     </div>
                                     <div class="col mb-0">
-                                        <label for="due_date" class="form-label">Deadline</label>
+                                        <label for="due_date" class="form-label">Proyeksi Deadline</label>
                                         <input type="date" id="due_date" name="due_date" class="form-control" title="Deadline Kegiatan" required>
                                     </div>
                                 </div>
@@ -173,7 +173,8 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="/project-todo-view">Task</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('task.project', $project->id) }}">Task</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('project.detail', $project->id) }}">See More</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0);">Print</a></li>
                                     <li><a class="dropdown-item" href="{{ route('project.edit', $project->id) }}">Update</a></li>
                                     <li>
