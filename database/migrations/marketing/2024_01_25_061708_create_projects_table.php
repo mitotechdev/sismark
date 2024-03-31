@@ -13,14 +13,18 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->string('project_code');
+            // $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('branch_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('project_code')->unique();
             $table->string('project_name');
-            $table->enum('assign_to', ['Sintia Lestari', 'Yudha Satria'])->default('Sintia Lestari');
+            $table->string('assign_to');
             $table->date('start_date');
             $table->date('due_date');
-            $table->enum('status', ['Ongoing', 'Completed', 'Inactive', 'Canceled', 'Critical']);
             $table->text('desc_project');
             $table->enum('created_by', ['gea'])->default('gea');
+            $table->text('desc_prospect')->nullable();
+            $table->foreignId('prospect_id')->default(1)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('market_progress_id')->default(1)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

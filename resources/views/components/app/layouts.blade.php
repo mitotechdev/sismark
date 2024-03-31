@@ -105,8 +105,13 @@
 
                         <ul class="menu-sub">
                             <li class="menu-item">
+                                <a href="{{ route('product.index') }}" class="menu-link">
+                                    <div data-i18n="Without menu">Products</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
                                 <a href="{{ route('stock-master.index') }}" class="menu-link">
-                                    <div data-i18n="Without menu">Product Master</div>
+                                    <div data-i18n="Without menu">Stocks</div>
                                 </a>
                             </li>
                         </ul>
@@ -133,11 +138,31 @@
                                     <div>Activities Card</div>
                                 </a>
                             </li>
-                            {{-- <li class="menu-item">
-                                <a href="{{ route('activities.index') }}" class="menu-link">
-                                    <div>Aktivitas Saya</div>
+                        </ul>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-folder"></i>
+                            <div>Prospect</div>
+                        </a>
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="{{route('hot.prospect.index') }}" class="menu-link">
+                                    <div>Hot Prospect</div>
                                 </a>
-                            </li> --}}
+                            </li>
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link">
+                                    <div>Loss Prospect</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link">
+                                    <div>Void Prospect</div>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
@@ -154,11 +179,6 @@
                             <li class="menu-item">
                                 <a href="{{ route('pricelist.index') }}" class="menu-link">
                                     <div>Pricelists</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="" class="menu-link">
-                                    <div>Actual Sales</div>
                                 </a>
                             </li>
                         </ul>
@@ -198,15 +218,15 @@
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="{{ route('po-internal.index') }}" class="menu-link">
-                                    <div>PO Internal</div>
+                                <a href="{{ route('sales-order.index') }}" class="menu-link">
+                                    <div>Sales Order</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            {{-- <li class="menu-item">
                                 <a href="{{ route('sppb.index') }}" class="menu-link">
                                     <div data-i18n="Notifications">SPPB</div>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="menu-item">
                                 <a href="{{ route('invoice.index') }}" class="menu-link">
                                     <div data-i18n="Connections">Invoice</div>
@@ -237,6 +257,12 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home"></i>
+                            <div>Branches</div>
+                        </a>
                     </li>
                 </ul>
             </aside>

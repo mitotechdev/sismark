@@ -111,4 +111,29 @@ class Controller extends BaseController
 
     }
 
+
+    public function test($cat)
+    {
+        switch ($cat) {
+            case 'Mapping':
+                return 'Prospect';
+            case 'Introduction':
+                return 'Prospect';
+            case 'Penetration':
+                return 'Prospect';
+            case 'Jartest':
+                return 'Prospect';
+            case 'Quotation':
+                return 'Prospect';
+            case 'PO':
+                return 'Hot Prospect';
+            case 'Supply & Maintenance':
+                return 'Hot Prospect';
+            default:
+                # code...
+                echo 'data tidak di kenali';
+                return 0;
+        }
+    }
+
 }

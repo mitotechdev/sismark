@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('quotation_items', function (Blueprint $table) {
+        Schema::create('prospects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quotation_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('pricelist_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            // $table->string('type_expedition');
-            $table->decimal('price', 10,2);
+            $table->string('name');
+            $table->string('tag_front_end'); // tag untuk kode bootstrap  ex. primary/warning/danger
+            $table->string('tag_status'); // tag kode untuk memudahkan backend ex. hot prospect => hot, loss prospect => loss,
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('quotation_items');
+        Schema::dropIfExists('prospects');
     }
 };

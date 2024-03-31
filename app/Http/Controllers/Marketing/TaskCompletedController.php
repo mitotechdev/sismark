@@ -16,6 +16,7 @@ class TaskCompletedController extends Controller
     {
 
         $tasksCompleted = Task::where('project_id', $project->id)->where('status_task', true)->latest()->get();
+        // dd($tasksCompleted);
         return view('pages.marketing.todo.task-completed', compact('project', 'tasksCompleted'));
     }
 }

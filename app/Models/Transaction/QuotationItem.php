@@ -2,6 +2,7 @@
 
 namespace App\Models\Transaction;
 
+use App\Models\Inventory\Product;
 use App\Models\Sales\Pricelist;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,11 @@ class QuotationItem extends Model
     {
         return $this->belongsTo(Quotation::class);
         // duluan 'id' baru 'quotation_id' dikarenakan [CASE 1] dikarenakan set hasOne nya dimodel Utama,
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     public function pricelist(): HasOne

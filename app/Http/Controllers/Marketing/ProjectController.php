@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Marketing;
 use App\Http\Controllers\Controller;
 use App\Models\Marketing\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+use function PHPSTORM_META\map;
 
 class ProjectController extends Controller
 {
@@ -31,19 +34,39 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         try {
-
-            Project::create([
-                'project_code' => 'A-9224',
-                'project_name' => $request->project_name,
-                'assign_to' => $request->assign_to,
-                'start_date' => $request->start_date,
-                'due_date' => $request->due_date,
-                'status' => 'Ongoing',
-                'desc_project' => $request->desc_project,
+            $validateData = Validator::make($request->all(), [
+                'project_name' => 'required',
+                'assign_to' => 'required',
+                'start_date' => 'required',
+                'due_date' => 'required',
+                'desc_project' => 'required'
+            ],
+            [
+                'project_name.required' => 'Anda belum mengisi bagian Nama Customer/Aktivitas',
+                'assign_to.required' => 'Anda belum memilih PIC yang di tugaskan',
+                'start_date.required' => 'Anda belum meNmilih tanggal mulai aktivitas',
+                'due_date.required' => 'Anda belum memilih proyeksi selesai aktivitas',
+                'desc_project.required' => 'Field deskripsi belum di isi',
             ]);
-            return redirect()->back()->with('success', 'Data baru telah ditambahkan 🚀');
+
+            if($validateData->fails()) {
+                return redirect()->back()->withErrors($validateData)->withInput();
+            }
+
+            $project = Project::create([
+                            'project_code' => 'P-' . date('y') . date('d') . date('m') . random_int(1000, 9999),
+                            'project_name' => $request->project_name,
+                            'assign_to' => $request->assign_to,
+                            'start_date' => $request->start_date,
+                            'due_date' => $request->due_date,
+                            'desc_project' => $request->desc_project,
+                            'branch_id' => 1,
+                        ]);
+
+            return redirect()->route('task.project', $project->id)->with('success', 'Data baru telah ditambahkan 🚀');
 
         } catch (\Throwable $th) {
+            // abort(404);
             throw $th;
         }
     }
@@ -76,7 +99,6 @@ class ProjectController extends Controller
                 'assign_to' => $request->assign_to,
                 'start_date' => $request->start_date,
                 'due_date' => $request->due_date,
-                'status' => $request->status,
                 'desc_project' => $request->desc_project
             ]);
     

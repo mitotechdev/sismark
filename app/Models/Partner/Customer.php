@@ -4,6 +4,7 @@ namespace App\Models\Partner;
 
 use App\Models\UserManagement\SalesUser;
 use App\Models\Backend\Branch;
+use App\Models\Sales\SalesOrder;
 use App\Models\Transaction\Invoice;
 use App\Models\Transaction\PoInternal;
 use App\Models\Transaction\Sppb;
@@ -18,9 +19,9 @@ class Customer extends Model
     use HasFactory;
     protected $guarded = ['id'];
     protected $tables = 'customers';
-    // protected $casts = [
-    //     'foundation_date' => 'datetime'
-    // ];
+    protected $casts = [
+        'foundation_date' => 'datetime'
+    ];
 
     public function branch(): HasOne
     {
@@ -56,4 +57,11 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerBranch::class, 'customer_id');
     }
+
+    public function sales_order(): BelongsTo
+    {
+        return $this->belongsTo(SalesOrder::class);
+    }
+
+
 }

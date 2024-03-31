@@ -3,6 +3,7 @@
 namespace App\Models\Transaction;
 
 use App\Models\Backend\Branch;
+use App\Models\Marketing\Project;
 use App\Models\TaskManagement\Activity;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +16,7 @@ class Quotation extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    // protected $tables = 'quotations';
 
     public function activities(): HasOne
     {
@@ -34,4 +36,10 @@ class Quotation extends Model
     {
         return $this->hasMany(QuotationItem::class, 'quotation_id');
     }
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
 }

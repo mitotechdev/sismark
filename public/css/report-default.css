@@ -1,0 +1,230 @@
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    font-size: 20px;
+    line-height: 1.238;
+    color: #000;
+}
+
+/* Utilities CSS */
+.fw-light {
+    font-weight: lighter;
+}
+.fw-normal {
+    font-weight: normal;
+}
+.fw-bold {
+    font-weight: bold;
+}
+
+.text-muted {
+    color: #6c757d;
+}
+
+/* Display */
+.d-flex {
+    display: flex;
+}
+.align-items-center {
+    align-items: center;
+}
+.justify-content-center {
+    justify-content: center;
+}
+.justify-content-between {
+    justify-content: space-between;
+}
+/* Font Size */
+.fs-13 {
+    font-size: 13px;
+}
+/* Float */
+.fs {
+    float: left;
+}
+.fe {
+    float: right;
+}
+
+/* Alignment Text */
+.text-start {
+    text-align: left;
+}
+.text-end {
+    text-align: right;
+}
+.text-center {
+    text-align: center;
+}
+
+/* Width */
+.w-10 {
+    width: 10%;
+}
+.w-15 {
+    width: 15%;
+}
+.w-18 {
+    width: 18%;
+}
+.w-20 {
+    width: 20%;
+}
+.w-25 {
+    width: 25%;
+}
+.w-30 {
+    width: 30%;
+}
+.w-40 {
+    width: 40%;
+}
+.w-50 {
+    width: 50%;
+}
+.w-70 {
+    width: 70%;
+}
+.w-72 {
+    width: 72%;
+}
+.w-75 {
+    width: 75%;
+}
+.w-80 {
+    width: 80%;
+}
+.w-85 {
+    width: 85%;
+}
+.w-90 {
+    width: 90%;
+}
+.w-100 {
+    width: 100%;
+}
+
+/* Heigh */
+.h-110 {
+    height: 110px;
+}
+
+/* Background Color */
+.bg-primary {
+    background-color: #696cff;
+}
+.bg-info {
+    background-color: #03C3EC;
+}
+.bg-danger {
+    background-color: #FF3E1D;
+}
+.bg-secondary {
+    background-color: #8592a3;
+}
+
+
+
+ /* Margin */
+ .mt-1 {
+    margin-top: 16px;
+ }
+ .mt-2 {
+    margin-top: 24px;
+ }
+ .mt-3 {
+    margin-top: 32px;
+ }
+.mt-4 {
+    margin-top: 40px;
+}
+.mt-5 {
+    margin-top: 48px;
+}
+.mb-1 {
+    margin-bottom: 16px;
+}
+.mb-2 {
+    margin-bottom: 24px;
+}
+.mb-3 {
+    margin-bottom: 32px;
+}
+.mb-4 {
+    margin-bottom: 40px;
+}
+.mb-5 {
+    margin-bottom: 48px;
+}
+.my-0 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.my-1 {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+.my-2 {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+.my-3 {
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+.my-4 {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+.my-5 {
+    margin-top: 48px;
+    margin-bottom: 48px;
+}
+.my-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Padding */
+.py-0 {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+hr {
+    border: .7px solid #282828;
+}
+
+
+table, th, td {
+    border: .1px solid #ebebeb;
+}
+
+
+table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+th, td {
+    padding: 13px;
+    text-align: left;
+    width: fit-content;
+}
+
+th {
+    text-transform: uppercase;
+    font-size: 17px;
+    font-weight: bold;
+    /* background-color: #f5f5f5; */
+}

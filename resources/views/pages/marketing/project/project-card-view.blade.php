@@ -8,18 +8,31 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         {{-- <span class="badge rounded-pill bg-success">{{ $project->status }}</span> --}}
-                        @if ($project->status == "Ongoing")
-                            <span class="badge rounded-pill bg-label-primary py-2 px-3 mb-2">🟣 {{ $project->status }}</span>
-                        @elseif ($project->status == "Completed")
-                            <span class="badge rounded-pill bg-label-success py-2 px-3 mb-2">🟢 {{ $project->status }}</span>
-                        @elseif ($project->status == "Inactive")
-                            <span class="badge rounded-pill bg-label-secondary py-2 px-3 mb-2">🟤 {{ $project->status }}</span>
-                        @elseif ($project->status == "Canceled")
-                            <span class="badge rounded-pill bg-label-warning py-2 px-3 mb-2">🟠 {{ $project->status }}</span>
-                        @else
-                            <span class="badge rounded-pill bg-label-danger py-2 px-3 mb-2">🔴 {{ $project->status }}</span>
-                        @endif
-                        <label class="form-label">{{ $project->created_at->diffForHumans() }}</label>
+                        <div class="status">
+                            @if ($project->prospect_status == 0)
+                                <span class="badge bg-label-warning">Draf</span>
+                            @elseif ($project->prospect_status == 1)
+                                <span class="badge bg-label-primary">Prospect</span>
+                            @elseif ($project->prospect_status == 2)
+                                <span class="badge bg-label-success">Hot Prospect</span>
+                            @elseif ($project->prospect_status == 3)
+                                <span class="badge bg-label-danger">Loss Prospect</span>
+                            @else
+                                <span class="badge bg-label-secondary">Void/Issue</span>
+                            @endif
+                        </div>
+                        <div class="detail-card d-flex align-items-center">
+                            <label class="form-label mb-0">{{ $project->created_at->diffForHumans() }}</label>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-transparant btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="">Mark as Hot Prospect</a></li>
+                                    <li><a class="dropdown-item" href="">Mark as Loss Prospect</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $project->project_name }}</h5>

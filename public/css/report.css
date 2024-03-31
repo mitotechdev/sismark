@@ -1,3 +1,4 @@
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,6 +6,7 @@
 }
 @page {
     margin: 60px !important;
+    font-size: 0.9375rem;
 }
 
 .label-sm {
@@ -24,6 +26,8 @@
 
 body {
     font-family: Public Sans, sans-serif;
+    font-size: 0.9375rem;
+    line-height: 1.35;
 }
 
 header {
@@ -35,7 +39,7 @@ footer {
     bottom: 0; 
     left: 0;
     right: 0;
-
+    margin: 0 40px;
 }
 
 #report-header .wrapper-header .col-sec-1, #report-header .wrapper-header .col-sec-2 {
@@ -55,12 +59,13 @@ footer {
 }
 
 #report-content {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 table {
+    border: none !important;
     width: 100%;
-    font-size: 17px;
+    font-size: 20px;
 }
 
 table thead {
@@ -122,7 +127,7 @@ table tbody tr td {
 }
 
 #report-table thead {
-    background-color: rgb(191, 197, 203);
+    background-color: rgb(205, 205, 205);
 }
 #report-table tbody tr td:nth-child(1) {
     text-align: center;
@@ -139,6 +144,7 @@ table tbody tr td {
 
 /* Page Quotation */
 #report-content .current-date {
+    font-size: 20px;
     float: right;
     text-align: right;
     overflow: auto;
@@ -156,7 +162,7 @@ table tbody tr td {
     font-size: 22px;
 }
 
-.wrapper-detail-cust .wrapper-info {
+.wrapper-info {
     margin-top: 20px;
     margin-bottom: 20px;
     font-size: 22px;
@@ -189,7 +195,7 @@ table tbody tr td {
 }
 
 .quo-item .quo-item-table {
-    font-size: 22px;
+    font-size: 20px
 }
 
 .quo-item .quo-item-table tbody tr td:nth-child(4), .quo-item .quo-item-table tbody tr td:nth-child(5) {
@@ -281,5 +287,44 @@ table tbody tr td {
 }
 
 
+.table-info td, .table-info tbody, .table-info thead, .table-info th {
+    border: none;
+}
+.table-info td,
+.table-info  {
+    width: auto;
+}
+
 
 /* End Page */
+
+/* Style Sneat */
+  
+  h1, .h1 {
+    font-size: calc(1.3625rem + 1.35vw);
+  }
+  
+  h2, .h2 {
+    font-size: calc(1.325rem + 0.9vw);
+  }
+  
+  h3, .h3 {
+    font-size: calc(1.2875rem + 0.45vw);
+  }
+
+  h4, .h4 {
+    font-size: calc(1.2625rem + 0.15vw);
+  }
+
+  h5, .h5 {
+    font-size: 1.125rem;
+  }
+  
+  h6, .h6 {
+    font-size: 0.9375rem;
+  }
+  
+  p {
+    margin-top: 0;
+    /* margin-bottom: 1rem; */
+  }

@@ -7,7 +7,7 @@
                 <li class="breadcrumb-item">
                     <a href="{{ route('index') }}">Home</a>
                 </li>
-                <li class="breadcrumb-item active">My Activiy</li>
+                <li class="breadcrumb-item active">My Activity</li>
             </ol>
         </nav>
         <div class="card">
@@ -18,29 +18,37 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <button type="button" class="btn btn-transparant text-primary fw-bold" data-bs-toggle="modal" data-bs-target="#addNewActivity">
-                    + Add New Activity
+
+                @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissible text-black" role="alert">
+                    {{ $error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endforeach
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewActivity">
+                    <i class='bx bxs-plus-circle'></i>
+                    <span class="ms-1">Add Activity</span>
                 </button>
                 
                 <!-- Modal -->
                 <div class="modal fade" id="addNewActivity" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-lg" role="document">
                         <form action="{{ route('project.store') }}" method="POST" class="needs-validation form-create">
                             @csrf
                             @method('POST')
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Informasi Kegiatan</h5>
+                                    <h5 class="modal-title">Information Activity</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                 <div class="row">
                                     <div class="mb-3">
-                                        <label for="project_name" class="form-label">Name Customer</label>
+                                        <label for="project_name" class="form-label">Name of Activity</label>
                                         <input type="text" id="project_name" name="project_name" class="form-control"
-                                            oninvalid="this.setCustomValidity('Isikan nama customer / prospek anda.')"
-                                            title="Nama customer / prospek anda"
-                                            placeholder="Enter name customer" required>
+                                            oninvalid="this.setCustomValidity('Enter your name activity')"
+                                            title="Name of Activity"
+                                            placeholder="Enter name your activity" required>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -58,18 +66,18 @@
                                 </div>
                                 <div class="row g-2">
                                     <div class="col mb-0">
-                                        <label for="start_date" class="form-label">Tanggal Mulai</label>
+                                        <label for="start_date" class="form-label">Date Start</label>
                                         <input type="date" id="start_date" name="start_date" class="form-control" title="Tanggal Mulai" required>
                                     </div>
                                     <div class="col mb-0">
-                                        <label for="due_date" class="form-label">Proyeksi Deadline</label>
+                                        <label for="due_date" class="form-label">Due Date</label>
                                         <input type="date" id="due_date" name="due_date" class="form-control" title="Deadline Kegiatan" required>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="my-3">
-                                        <label for="desc_project" class="form-label">Deskripsi Tambahan</label>
-                                        <textarea name="desc_project" id="desc_project" class="form-control" style="height: 100px;"></textarea>
+                                        <label for="desc_project" class="form-label">Additional Decs</label>
+                                        <textarea name="desc_project" id="desc_project" class="form-control" rows="10" placeholder="Tambahkan deskripsi untuk aktivitas anda. Kosongkan dengan (-) untuk mengabaikan bagian ini"></textarea>
                                     </div>
                                 </div>
                                 </div>
@@ -83,14 +91,17 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-bordered">
+                <table class="table table-bordered" style="font-size: 14px">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th style="width: 45%">Name Customer</th>
+                            <th style="width: 5%">#</th>
+                            <th>Code</th>
+                            <th data-priority="1">Activity</th>
                             <th>Assign To</th>
-                            <th>Start Date</th>
-                            <th>Due Date</th>
+                            {{-- <th>Start Date</th> --}}
+                            {{-- <th>Due Date</th> --}}
+                            <th>Status</th>
+                            <th>Progress</th>
                             <th>Act.</th>
                         </tr>
                     </thead>
@@ -98,8 +109,8 @@
                         @foreach ($projects as $project)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $project->project_code }}</td>
                             <td>
-                                {{-- <a class="fw-bold" href="">{{ $project->project_name }}</a> --}}
                                 <div class="col-lg-12 col-md-6">
                                     <div class="wrapper">
                                       <a
@@ -128,19 +139,9 @@
                                           ></button>
                                         </div>
                                         <div class="offcanvas-body mx-0 flex-grow-0">
-                                            @if ($project->status == "Ongoing")
-                                                <span class="badge rounded-pill bg-label-primary py-2 px-3 mb-2">🟣 {{ $project->status }}</span>
-                                            @elseif ($project->status == "Completed")
-                                                <span class="badge rounded-pill bg-label-success py-2 px-3 mb-2">🟢 {{ $project->status }}</span>
-                                            @elseif ($project->status == "Inactive")
-                                                <span class="badge rounded-pill bg-label-secondary py-2 px-3 mb-2">🟤 {{ $project->status }}</span>
-                                            @elseif ($project->status == "Canceled")
-                                                <span class="badge rounded-pill bg-label-warning py-2 px-3 mb-2">🟠 {{ $project->status }}</span>
-                                            @else
-                                                <span class="badge rounded-pill bg-label-danger py-2 px-3 mb-2">🔴 {{ $project->status }}</span>
-                                            @endif
-                                            <h2 class="mb-4">{{ $project->project_name }}</h2>
-                                            <h5>Prospect Overview</h5>
+                                            <span class="badge rounded-pill bg-label-{{ $project->prospect->tag_front_end }} py-2 px-3 mb-2">{{ $project->prospect->name }}</span>
+                                            <h3 class="mb-4">{{ $project->project_name }}</h3>
+                                            <h5>Overview</h5>
                                             <p class="mb-3">
                                                 {{ $project->desc_project }}
                                             </p>
@@ -165,22 +166,32 @@
                                   </div>
                             </td>
                             <td>{{ $project->assign_to }}</td>
-                            <td>{{ date('d M, Y', strtotime($project->start_date)) }}</td>
-                            <td>{{ date('d M, Y', strtotime($project->due_date)) }}</td>
+                            {{-- <td>{{ date('d M, Y', strtotime($project->start_date)) }}</td> --}}
+                            {{-- <td>{{ date('d M, Y', strtotime($project->due_date)) }}</td> --}}
+                            <td>
+                                <span class="badge bg-label-{{$project->prospect->tag_front_end}}">{{ $project->prospect->name }}</span>
+                                
+                            </td>
+                            <td>
+                                <span class="badge bg-label-{{$project->market_progress->tag_front_end}}">{{ $project->market_progress->name }}</span>
+                            </td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-transparant btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <button type="button" class="btn btn-sm btn-transparant btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('task.project', $project->id) }}">Task</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('project.detail', $project->id) }}">See More</a></li>
-                                    <li><a class="dropdown-item" href="javascript:void(0);">Print</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('project.edit', $project->id) }}">Update</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="javascript:void(0);">Remove</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ route('task.project', $project->id) }}">Task</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('project.detail', $project->id) }}">See More</a></li>
+                                        {{-- <li><a class="dropdown-item" href="javascript:void(0);">Print</a></li> --}}
+                                        <li><a class="dropdown-item" href="{{ route('project.edit', $project->id) }}">Update</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="javascript:void(0);">Remove</a></li>
                                     </ul>
                                 </div>
                             </td>

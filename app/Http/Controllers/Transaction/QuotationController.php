@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
+use App\Models\Inventory\Product;
+use App\Models\Marketing\Project;
 use App\Models\Sales\Pricelist;
 use App\Models\TaskManagement\Activity;
 use App\Models\Transaction\Quotation;
 use App\Models\Transaction\QuotationItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class QuotationController extends Controller
@@ -16,9 +19,11 @@ class QuotationController extends Controller
      */
     public function index()
     {
-        $quotations = Quotation::with('user', 'branch', 'activities')->latest()->get();
+        $quotations = Quotation::with('user', 'branch')->latest()->get();
         $activities = Activity::with('progress')->where('status_work', 'on-going')->get();
-        return view('pages.transaction.quotation.quotation', compact('activities', 'quotations'));
+        $projects = Project::all();
+        $users = User::where('title_id', 17)->get();
+        return view('pages.transaction.quotation.quotation', compact('activities', 'quotations', 'projects', 'users'));
     }
 
     /**
@@ -39,24 +44,24 @@ class QuotationController extends Controller
         if ( $quotation == null ) {
             $generateNo = "001";
         } else {
-            $generateNo = substr($quotation->code_quo, 11, 3) + 1;
+            $generateNo = substr($quotation->quo_code, 0, 3) + 1;
             $generateNo = str_pad($generateNo, 3, "0", STR_PAD_LEFT);
         }
-        $quotationNo = "QUOPKU" . date('Y') . '-'. $generateNo;
+        $quotationNo = $generateNo . '/' . 'SP-MEICHEM' . '/' . date('m') . '/' . date('Y');
         
-        $newData = Quotation::create([
-            'code_quo' => $quotationNo,
-            'activity_id' => $request->activity_id,
-            'no_sp' => $request->no_sp,
+        $data = Quotation::create([
+            'quo_code' => $quotationNo,
+            'project_id' => $request->project_id,
             'type_expedition' => $request->type_expedition,
-            'type_payment' => $request->type_payment,
-            'status_quo' => 'draf',
-            'remark' => $request->remark,
-            'user_id' => 6,
+            'validated_quo' => $request->validated_quo,
+            'tax_type' => $request->tax_type,
+            'desc_quo' => $request->desc_quo,
+            'user_id' => $request->user_id,
+            'payment_term' => $request->payment_term,
             'branch_id' => 1,
+            'status' => 'Draf',
         ]);
-
-        return redirect()->route('quotation.show', $newData->id)->with('success','Data quotation berhasil diinput, tambahkan produk selanjutnya 🚀');
+        return redirect()->route('quotation.show', $data->id)->with('success','Data quotation berhasil diinput, tambahkan produk selanjutnya 🚀');
     }
 
     /**
@@ -64,9 +69,10 @@ class QuotationController extends Controller
      */
     public function show(Quotation $quotation)
     {
-        $pricelists = Pricelist::where('type_expedition', $quotation->type_expedition)->with('stock_master', 'city')->get();
-        $quotationItems = QuotationItem::where('quotation_id', $quotation->id)->with('quotation', 'pricelist')->get();
-        return view('pages.transaction.quotation.item-quotation', compact('quotation', 'pricelists', 'quotationItems'));
+        $products = Product::latest()->get();
+        $quotationItems = QuotationItem::where('quotation_id', $quotation->id)->latest()->with('product')->get();
+        // $quotationItems = QuotationItem::where('quotation_id', $quotation->id)->with('quotation', 'pricelist')->get();
+        return view('pages.transaction.quotation.item-quotation', compact('quotation', 'quotationItems', 'products'));
     }
 
     /**
@@ -74,7 +80,9 @@ class QuotationController extends Controller
      */
     public function edit(Quotation $quotation)
     {
-        return view('pages.transaction.quotation.edit-quotation', compact('quotation'));
+        $projects = Project::latest()->get();
+        $users = User::latest()->get();
+        return view('pages.transaction.quotation.edit-quotation', compact('quotation', 'projects', 'users'));
     }
 
     /**
@@ -83,10 +91,13 @@ class QuotationController extends Controller
     public function update(Request $request, Quotation $quotation)
     {
         $quotation->update([
-            'no_sp' => $request->no_sp,
+            'project_id' => $request->project_id,
             'type_expedition' => $request->type_expedition,
-            'type_payment' => $request->type_payment,
-            'remark' => $request->remark
+            'validated_quo' => $request->validated_quo,
+            'tax_type' => $request->tax_type,
+            'payment_term' => $request->payment_term,
+            'desc_quo' => $request->desc_quo,
+            'user_id' => $request->user_id
         ]);
 
         return redirect()->route('quotation.index')->with('success', 'Data berhasil diperbaharui 🚀');
@@ -129,6 +140,11 @@ class QuotationController extends Controller
         ]);
         return redirect()->route('quotation.index')->with('success', 'Penawaran berhasil dibuat, klik cetak untuk aksi selanjutnya 🚀');
 
+    }
+
+    public function getReferenceProject(Project $project)
+    {
+        return response()->json($project);
     }
 }
 

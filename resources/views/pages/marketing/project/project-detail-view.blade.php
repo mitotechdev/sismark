@@ -16,18 +16,8 @@
         <div class="card">
             <div class="card-body">
                 <h2>{{ $project->project_name }}</h2>
-                @if ($project->status == "Ongoing")
-                    <span class="badge rounded-pill bg-label-primary py-2 px-3 mb-2">🟣 {{ $project->status }}</span>
-                @elseif ($project->status == "Completed")
-                    <span class="badge rounded-pill bg-label-success py-2 px-3 mb-2">🟢 {{ $project->status }}</span>
-                @elseif ($project->status == "Inactive")
-                    <span class="badge rounded-pill bg-label-secondary py-2 px-3 mb-2">🟤 {{ $project->status }}</span>
-                @elseif ($project->status == "Canceled")
-                    <span class="badge rounded-pill bg-label-warning py-2 px-3 mb-2">🟠 {{ $project->status }}</span>
-                @else
-                    <span class="badge rounded-pill bg-label-danger py-2 px-3 mb-2">🔴 {{ $project->status }}</span>
-                @endif
-
+                <span class="badge rounded-pill bg-label-{{ $project->prospect->tag_front_end }} py-2 px-3 mb-2">{{ $project->prospect->name }}</span>
+                <span class="badge rounded-pill bg-label-{{ $project->market_progress->tag_front_end }} py-2 px-3 mb-2">{{ $project->market_progress->name }}</span>
                 <div class="row g-5 mt-1">
                     <div class="col-md-5">
                         <div class="row g-3">

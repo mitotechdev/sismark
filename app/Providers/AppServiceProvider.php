@@ -21,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom([
             database_path().'/migrations/marketing',
+            database_path().'/migrations/inventory',
+            database_path().'/migrations/sales',
+            database_path().'/migrations/status',
         ]);
     }
 }

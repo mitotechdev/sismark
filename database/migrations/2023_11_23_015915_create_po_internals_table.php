@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('po_internals', function (Blueprint $table) {
             $table->id();
-            $table->string('code_po_in')->unique();
+            //new schema table
+            $table->string('po_number')->unique();
             $table->foreignId('customer_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('created_by')->nullable();
-            $table->enum('status_po_in', ['draf', 'request', 'approved', 'close', 'reject'])->default('draf');
+            $table->date('order_date');
+            $table->string('created_by');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

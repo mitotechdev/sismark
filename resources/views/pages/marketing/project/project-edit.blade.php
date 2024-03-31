@@ -64,25 +64,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="my-3">
+                            <div class="mt-3">
                                 <label for="desc_project" class="form-label">Deskripsi Tambahan</label>
                                 <textarea name="desc_project" id="desc_project" class="form-control" style="height: 170px;">{{ $project->desc_project }}</textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="status" class="form-label">Update Status</label>
-                            <small>Anda dapat mengubah status prospek terakhir</small>
-                            <div class="mb-3">
-                                <select class="form-select" name="status" id="status"
-                                required
-                                title="Status Prospek Terakhir"
-                            >
-                                    <option value="Ongoing" {{ $project->status == "Ongoing" ? "selected" : "" }}>🟣 Ongoing</option>
-                                    <option value="Completed" {{ $project->status == "Completed" ? "selected" : "" }}>🟢 Completed</option>
-                                    <option value="Inactive" {{ $project->status == "Inactive" ? "selected" : "" }}>🟤 Inactive</option>
-                                    <option value="Canceled" {{ $project->status == "Canceled" ? "selected" : "" }}>🟠 Canceled</option>
-                                    <option value="Critical" {{ $project->status == "Critical" ? "selected" : "" }}>🔴 Critical</option>
-                            </select>
                             </div>
                         </div>
                     </div>
