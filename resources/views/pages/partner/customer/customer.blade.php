@@ -13,6 +13,7 @@
         {{-- End Alert Success --}}
 
         {{-- Form Customer --}}
+        @can('create-customer')
         <form action="{{ route('customer.store') }}" method="POST" class="needs-validation form-create">
             @csrf
             @method('POST')
@@ -76,10 +77,10 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="pic_sales" class="form-label">Nama Sales/Marketing <span class="text-danger">*</span></label>
-                                            <select name="sales_user_id" id="pic_sales" class="form-select" title="Nama PIC / Marketing MITO" required>
+                                            <select name="user_id" id="pic_sales" class="form-select select-box" title="Nama PIC / Marketing MITO" required>
                                                 <option value="" selected>Pilih Sales / Marketing</option>
-                                                @foreach ($sales as $pic)
-                                                    <option value="{{ $pic->id }}">{{ $pic->user->name }}</option>
+                                                @foreach ($users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->full_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -112,11 +113,11 @@
                                         <div class="col-md-5">
                                             <div class="mb-3">
                                                 <label class="form-label" for="email_a">Email <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="email_a" name="email_a" placeholder="Nomor Telepon" title="Email" required>
+                                                <input type="text" class="form-control" id="email_a" name="email_a" placeholder="Email" title="Email" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="email_b">Email <span class="text-muted">(opsional)</span></label>
-                                                <input type="text" class="form-control" id="email_b" name="email_b" placeholder="Nomor Telepon (opsional)" title="Email (opsional)" required>
+                                                <input type="text" class="form-control" id="email_b" name="email_b" placeholder="Email (opsional)" title="Email (opsional)" required>
                                             </div>
                                         </div>
                                     </div>
@@ -292,6 +293,7 @@
                 </div>
             </div>
         </form>
+        @endcan
 
 
         {{-- Table View --}}
@@ -301,15 +303,16 @@
             </div>
             <div class="card-body">
                 <div class="text-nowrap">
-                    <table class="table table-bordered table-striped" style="width:100%">
+                    <table class="table table-bordered table-striped datatable" style="width:100%">
                         <thead>
                             <tr>
                                 <th data-priority="0">#</th>
                                 <th data-priority="1">Nama Customer</th>
                                 <th data-priority="2">Bidang Usaha</th>
                                 <th data-priority="4">Kota</th>
-                                <th data-priority="5">NPWP</th>
+                                <th data-priority="7">NPWP</th>
                                 <th data-priority="6">Telp.</th>
+                                <th data-priority="5">Status</th>
                                 <th data-priority="3">Aksi</th>
                             </tr>
                         </thead>
@@ -323,20 +326,30 @@
                                     <td>{{ $customer->npwp }}</td>
                                     <td>{{ $customer->phone_a }}</td>
                                     <td>
-                                        {{-- <a class="btn btn-sm btn-warning" href="{{ route('customer.edit', $customer->id) }}">Edit</a>
-                                        <button class="btn btn-sm btn-danger">Hapus</button> --}}
+                                        <span class="badge bg-label-{{ $customer->type_customer->tag_front_end }}">{{ $customer->type_customer->name }}</span>
+                                    </td>
+                                    <td>
                                         <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
 
                                             <div class="dropdown-menu" style="">
-                                                <a href="{{ route('detailCustomer', $customer->id) }}" class="dropdown-item"><i class='bx bx-show-alt me-1'></i>Selengkapnya</a>
+                                                <a href="{{ route('customer.detail', $customer->id) }}" class="dropdown-item">Read More</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href=""><i class="bx bx-edit-alt me-1"></i> Edit Customer</a>
-                                                <a class="dropdown-item" href="{{ route('personaliaIndex', $customer->id) }}"><i class="bx bx-edit-alt me-1"></i> Edit Personalia</a>
-                                                <a class="dropdown-item" href=""><i class="bx bx-edit-alt me-1"></i> Edit Branch</a>
-                                                <a class="dropdown-item" href=""><i class="bx bx-trash me-1"></i> Hapus</a>  
+                                                <a class="dropdown-item" href="{{ route('customer.personalia', $customer->id) }}">Personalia</a>
+                                                <a class="dropdown-item" href="{{ route('customer.branch', $customer->id) }}">Branch</a>
+                                                @can('edit-customer')
+                                                <a class="dropdown-item" href="{{ route('customer.edit', $customer->id) }}">Edit Customer</a>
+                                                @endcan
+                                                @can('delete-customer')
+                                                {{-- <a class="dropdown-item" href=""><i class="bx bx-trash me-1"></i> Hapus</a>  --}}
+                                                <form action="{{ route('customer.destroy', $customer->id) }}" method="POST" class="needs-validation form-destroy">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn dropdown-item">Delete</button>
+                                                </form>
+                                                @endcan 
                                             </div>
                                         </div>
                                     </td>

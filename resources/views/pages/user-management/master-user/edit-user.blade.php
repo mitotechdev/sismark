@@ -8,91 +8,95 @@
             </ol>
         </nav>
 
-        {{-- Alert Success --}}
-        @if ($message = Session::get('success'))
-            <div class="alert alert-info alert-dismissible text-black" role="alert">
-                {{ $message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        {{-- End Alert Success --}}
-
-        {{-- card User --}}
-        <div class="card mb-4">
-            <div class="card-body">
-                <form action="{{ route('user.update', $user->id) }}" method="POST" class="needs-validation form-edit">
-                    @csrf
-                    @method('PUT')
-                    <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Nama Pengguna</label>
-                        <div class="col-sm-10">
-                            <div class="row g-3">
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control" name="employee_id" placeholder="ID Karyawan" value="{{ $user->employee_id }}" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" name="name_user" placeholder="Nama Pengguna" value="{{ $user->name }}" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <select class="form-select" name="gender">
-                                        <option value="">Jenis Kelamin</option>
-                                        <option value="Pria" {{ $user->gender == "Pria" ? "selected" : "" }}>Pria</option>
-                                        <option value="Perempuan" {{ $user->gender == "Perempuan" ? "selected" : "" }}>Perempuan</option>
-                                    </select>
-                                </div>
+        <div class="col-md-6">
+            <form action="{{ route('user.update', $user->id) }}" method="POST" class="needs-validation form-edit">
+                @csrf
+                @method('PUT')
+                <div class="card">
+                    <div class="card-header">
+                        @if ($message = Session::get('success'))
+                        <div class="alert alert-info alert-dismissible text-black" role="alert">
+                            {{ $message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        @endif
+                        @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger alert-dismissible text-black" role="alert">
+                            {{ $error }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        @endforeach
+                        Update Information
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="full_name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control @error('full_name') is-invalid @enderror" id="full_name" name="full_name" value="{{ $user->full_name }}" spellcheck="false" autocomplete="off" title="Full Name User" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="nickname" class="form-label">Nickname</label>
+                                <input type="text" class="form-control @error('nickname') is-invalid @enderror" id="nickname" name="nickname" value="{{ $user->nickname }}" spellcheck="false" autocomplete="off" title="Nickname User" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="gender" class="form-label" title="Gender user">Gender</label>
+                                <select class="form-select @error('gender') is-invalid @enderror" name="gender" id="gender" required>
+                                    <option value="" selected>Choose Gender...</option>
+                                    <option value="Pria" {{ $user->gender == "Pria" ? "selected" : "" }}>Pria</option>
+                                    <option value="Perempuan" {{ $user->gender == "Perempuan" ? "selected" : "" }}>Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="employee_id" class="form-label">Employee ID</label>
+                                <input type="text" class="form-control @error('employee_id') is-invalid @enderror" id="employee_id" name="employee_id" value="{{ $user->employee_id }}" spellcheck="false" autocomplete="off" title="Employee ID user" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ $user->title }}" spellcheck="false" autocomplete="off" title="Title user" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="role" class="form-label">Role System</label>
+                                <select class="form-select select-box @error('role') is-invalid @enderror" name="role" id="role" required title="Role in System">
+                                    <option value="" selected>Choose Role...</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->name }}" {{ $user->hasRole($role->id) ? "selected" : "" }}>{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ $user->phone_number }}" spellcheck="false" autocomplete="off" title="Phone Number User" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ $user->email }}" spellcheck="false" autocomplete="off" title="Email User" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ $user->username }}" spellcheck="false" autocomplete="off" title="Username User" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="">
+                            </div>
+                            <div class="col-12">
+                                <label for="branch" class="form-label" title="Branch user">Branch</label>
+                                <select class="form-select @error('branch') is-invalid @enderror" name="branch" id="branch" required>
+                                    <option value="" selected>Choose Branch...</option>
+                                    @foreach ($branches as $branch)
+                                        <option value="{{ $branch->id }}" {{ $user->branch_id == $branch->id ? "selected" : "" }} >{{ $branch->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Informasi Akun</label>
-                        <div class="col-sm-10">
-                            <div class="row g-3">
-                                <div class="col-md-2">
-                                    <input type="text" class="form-control" name="nickname" placeholder="Nickname" value="{{ $user->nickname }}" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-select select-box-2" data-placeholder="Pilih posisi..." style="width: 100%" name="title_id" required>
-                                        <option value=""></option>
-                                        @foreach ($titles as $title)
-                                            <option value="{{ $title->id }}" {{ $user->title_id == $title->id ? "selected" : "" }}>{{ $title->name_title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control" name="phone_number" placeholder="Nomor Telp." value="{{ $user->phone_number }}" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="email" class="form-control" name="email" placeholder="example@mitoindonesia.com" value="{{ $user->email }}" required>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-footer">
+                        <a class="btn btn-outline-secondary" href="{{ route('user.index') }}">Back</a>
+                        <button class="btn btn-outline-primary" type="submit">Save Changes</button>
                     </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Autentikasi & Keamanan</label>
-                        <div class="col-sm-10">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" name="username" value="{{ $user->username }}" placeholder="Username" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="password" class="form-control" name="password" placeholder="Password">
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-select select-box-2" name="branch_id" data-placeholder="Pilih Branch" style="width: 100%" required>
-                                        <option value=""></option>
-                                        @foreach ($branches as $branch)
-                                            <option value="{{ $branch->id }}" {{ $user->branch_id == $branch->id ? "selected" : "" }}>{{ $branch->code_branch }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Perbaharui Data</button>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-        {{-- End card --}}
     </div>
 @endsection
 

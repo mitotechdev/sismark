@@ -14,7 +14,7 @@
             </ol>
         </nav>
         
-        <form action="{{ route('sales-order.update', $salesOrder->id) }}" method="POST" class="needs-validation form-edit">
+        <form action="{{ route('sales-order.update', $salesOrder->id) }}" method="POST" novalidate class="needs-validation form-edit">
             @csrf
             @method('PUT')
             <div class="card">
@@ -32,12 +32,12 @@
                 <div class="card-body">
                     <div class="row mb-3 g-3">
                         <div class="col-12">
-                            <label for="po_customer" class="form-label">PO Customer</label>
-                            <input type="text" class="form-control" name="po_number" id="po_customer" title="PO Number Customer" value="{{ $salesOrder->so_number }}" placeholder="Enter a po number customer" required>
+                            <label for="so_number" class="form-label">No Sales Order</label>
+                            <input type="text" class="form-control" name="so_number" id="so_number" title="No Sales Order" value="{{ $salesOrder->so_number }}" spellcheck="false" autocomplete="off" placeholder="13870" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="customer-id" class="form-label">Customer</label>
-                            <select name="customer_id" id="customer-id" class="form-select select-box @error('customer_id') is-invalid @enderror" required>
+                            <label for="customer_id" class="form-label">Customer</label>
+                            <select name="customer_id" id="customer_id" class="form-select select-box @error('customer_id') is-invalid @enderror" required>
                                 <option value="">Select Customer</option>
                                 @foreach ($customers as $customer)
                                 <option value="{{ $customer->id }}" {{ $salesOrder->customer_id == $customer->id ? "selected" : "" }}>{{ $customer->name_customer }}</option>
@@ -45,47 +45,47 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="sales-person" class="form-label">Sales Person</label>
-                            <select name="sales_id" id="sales-person" class="form-select select-box
+                            <label for="sales_id" class="form-label">Sales</label>
+                            <select name="sales_id" id="sales_id" class="form-select select-box
                                     @error('sales_id')
                                         is-invalid
                                     @enderror "
                                     title="Sales Person" required>
                                 <option value="" selected>Choose Sales...</option>
-                                <option value="Sintia Lestari" {{ $salesOrder->sales_person == "Sintia Lestari" ? "selected" : "" }} >Sintia Lestari</option>
-                                <option value="MITO" {{ $salesOrder->sales_person == "MITO" ? "selected" : "" }} >MITO</option>
-                                <option value="Yudha Satria" {{ $salesOrder->sales_person == "Yudha Satria" ? "selected" : "" }} >Yudha Satria</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" {{ $user->id == $salesOrder->sales_id ? "selected" : "" }}>{{ $user->nickname }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="order-date" class="form-label">Order Date</label>
-                            <input type="date" class="form-control" name="order_date" id="order-date" readonly value="{{ $salesOrder->order_date }}" required>
+                            <label for="order_date" class="form-label">Order Date</label>
+                            <input type="date" class="form-control" name="order_date" id="order_date" value="{{ $salesOrder->order_date }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="term-of-payment" class="form-label">Category Payment</label>
-                            <select name="term" id="term-of-payment" class="form-select" required>
-                                <option value="" selected>Select Category</option>
-                                <option value="7 Hari" {{ $salesOrder->term == "7 Hari" ? "selected" : "" }}>7 Hari</option>
-                                <option value="14 Hari" {{ $salesOrder->term == "14 Hari" ? "selected" : "" }}>14 Hari</option>
-                                <option value="21 Hari" {{ $salesOrder->term == "21 Hari" ? "selected" : "" }}>21 Hari</option>
-                                <option value="30 Hari" {{ $salesOrder->term == "30 Hari" ? "selected" : "" }}>30 Hari</option>
-                                <option value="60 Hari" {{ $salesOrder->term == "60 Hari" ? "selected" : "" }}>60 Hari</option>
-                                <option value="90 Hari" {{ $salesOrder->term == "90 Hari" ? "selected" : "" }}>90 Hari</option>
+                            <label for="payment_id" class="form-label">Period Payment</label>
+                            <select name="payment_id" id="payment_id" class="form-select" required>
+                                <option value="" selected>Choose Payment...</option>
+                                @foreach ($payments as $payment)
+                                    <option value="{{ $payment->id }}" {{ $payment->id == $salesOrder->payment_id ? "selected" : "" }}>{{ $payment->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="tax_id" class="form-label">Tax</label>
+                            <select name="tax_id" id="tax_id" class="form-select select-box" required>
+                                <option value="" selected>Choose Tax...</option>
+                                @foreach ($taxes as $tax)
+                                    <option value="{{ $tax->id }}" {{ $tax->id == $salesOrder->tax_id ? "selected" : "" }}>{{ $tax->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-12">
-                            <label for="ship-to" class="form-label">Ship To</label>
-                            <input type="text" class="form-control @error('ship_to') is-invalid @enderror" name="ship_to" placeholder="Enter address" value="{{ $salesOrder->ship_to }}" title="Alamat Pengantaran" required>
+                            <label for="delivery_to" class="form-label">Delivery To</label>
+                            <input type="text" class="form-control @error('delivery_to') is-invalid @enderror" name="delivery_to" placeholder="Jl. Soekarno Hatta No. 14, Pekanbaru, Riau" value="{{ $salesOrder->delivery_to }}" title="Delivery Address" spellcheck="false" autocomplete="off" required>
                         </div>
                         <div class="col-12">
-                            <label for="desc-sales-order" class="form-label">Additional Information</label>
-                            <textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc-sales-order" cols="30" rows="10" title="Informasi Tambahan" required>{{ $salesOrder->desc }}</textarea>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-check">
-                                <input class="form-check-input" name="taxable" type="checkbox" id="taxable" {{ $salesOrder->taxable == true ? "checked" : "" }}>
-                                <label class="form-check-label" for="taxable">Dikenakan Pajak PPN 11%</label>
-                            </div>
+                            <label for="desc" class="form-label">Additional Information</label>
+                            <textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc" cols="30" rows="10" title="Additional Information" spellcheck="false" required>{{ $salesOrder->desc }}</textarea>
                         </div>
                     </div>
                 </div>

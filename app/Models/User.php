@@ -4,22 +4,23 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Models\UserManagement\SalesUser;
-use App\Models\Backend\Title;
-use App\Models\TaskManagement\Activity;
-use App\Models\TaskManagement\Progress;
+use App\Models\Backend\Branch;
+use App\Models\Customer\Customer;
+use App\Models\Marketing\Project;
+use App\Models\Marketing\Task;
+use App\Models\Sales\SalesOrder;
 use App\Models\Transaction\Quotation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -43,24 +44,34 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
+    
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function deactivate()
+    {
+        $this->update([
+            'status' => 'inactive',
+        ]);
+    }
+
+    public function activate()
+    {
+        $this->update([
+            'status' => 'active',
+        ]);
+    }
 
     public function branch(): HasOne
     {
         return $this->hasOne(Branch::class, 'id', 'branch_id');
     }
 
-    public function title(): HasOne
+    public function projects(): HasMany
     {
-        return $this->hasOne(Title::class, 'id', 'title_id');
-    }
-
-    public function activities(): HasMany
-    {
-        return $this->hasMany(Activity::class, 'id', 'activity_id');
+        return $this->hasMany(Project::class);
     }
 
     public function quotation(): HasMany
@@ -68,13 +79,18 @@ class User extends Authenticatable
         return $this->hasMany(Quotation::class, 'id', 'user_id');
     }
 
-    public function progress(): hasOne
+    public function sales_order(): HasMany
     {
-        return $this->hasOne(Progress::class);
+        return $this->hasMany(SalesOrder::class, 'sales_id', 'id');
     }
 
-    public function sales_user(): BelongsTo
+    public function tasks(): HasMany
     {
-        return $this->belongsTo(SalesUser::class, 'user_id');
+        return $this->hasMany(Task::class, 'user_id', 'id');
+    }
+
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class, 'user_id', 'id');
     }
 }

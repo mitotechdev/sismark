@@ -27,7 +27,8 @@
             <div class="card-header">
                 <h5>Items Quotation</h5>
                 <div class="d-flex align-items-center justify-content-between">
-                    @if ($quotation->status == "Draf")
+                    @can('create-quotation-item')
+                    @if ($quotation->approval->name == "Draf")
                     <button type="button" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addItemQuotation">
                         <i class='bx bxs-plus-circle'></i>
                         <span class="ms-1">Add Item</span>
@@ -46,8 +47,8 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-md-4">
+                                        <div class="row g-3">
+                                            <div class="col-12">
                                                 <label class="form-label" for="product_code">Product Code</label>
                                                 <select class="form-select select-box @error('product_id') is-invalid @enderror" id="product_code" name="product_id" required>
                                                     <option value="">Search code...</option>
@@ -56,21 +57,21 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-8">
+                                            <div class="col-12">
+                                                <label class="form-label" for="price">Price</label>
+                                                <input type="number" class="form-control" name="price_product" id="price" step=".01" title="Harga produk" value="" required>
+                                            </div>
+                                            <div class="col-12">
                                                 <label class="form-label">Name Product</label>
                                                 <input type="text" class="form-control" id="name_product" readonly disabled placeholder="Search first code product..." value="">
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-12">
                                                 <label class="form-label" for="packaging_product">Packaging</label>
                                                 <input type="text" class="form-control" id="packaging" readonly disabled placeholder="Search first code product..." title="Kemasan produk" value="">
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-12">
                                                 <label class="form-label" for="unit_product">Unit</label>
                                                 <input type="text" class="form-control" name="unit" id="unit" readonly disabled placeholder="Search first code product..." title="Satuan produk" value="">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label" for="price">Price</label>
-                                                <input type="number" class="form-control" name="price_product" id="price" step=".01" title="Harga produk" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -84,18 +85,21 @@
                     </form>
                     {{-- End Modal --}}
                     @endif
+                    @endcan
     
-                    @if ($quotationItems->isNotEmpty() && $quotation->status == "Draf")
-                        <form action="{{ route('quotation.submit', $quotation->id) }}" method="POST" class="form-submit-quotation">
+                    @can('submit-quotation-item')
+                    @if ($quotationItems->isNotEmpty() && $quotation->approval->id == 1)
+                        <form action="{{ route('quotation.status', $quotation->id) }}" method="POST" class="form-submit-quotation">
                             @csrf
                             @method('PUT')
                             <button class="btn btn-outline-success" type="submit">Open Request</button>
                         </form>
                     @endif
+                    @endcan
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-bordered">
+                <table class="table table-bordered datatable">
                     <thead>
                         <tr>
                             <th style="width: 5%" data-priority="1">#</th>
@@ -115,11 +119,10 @@
                                 <td>{{ $item->product->unit }}</td>
                                 <td>{{ 'Rp  '. number_format($item->price, 2, ',', '.') }}</td>
 
-                                @if ($quotation->status == "Draf")
-                                
+                                @if ($quotation->approval->id == 1 || Auth::user()->hasRole('Super Admin'))
                                 <td style="width: 10%">
                                     <div class="wrap d-inline-flex">
-                                        <!-- Button trigger modal -->
+                                        @can('edit-quotation-item')
                                         <button type="button" class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal" data-bs-target="#updateQuoItem-{{ $item->id }}">
                                             <i class='bx bxs-edit bx-xs'></i>
                                         </button>
@@ -172,8 +175,10 @@
                                                 </div>
                                             </div>
                                         </form>
+                                        @endcan
 
                                         {{-- Delete --}}
+                                        @can('delete-quotation-item')
                                         <form action="{{ route('quotation-item.destroy', $item->id) }}" method="POST" class="needs-validation form-destroy">
                                             @csrf
                                             @method('DELETE')
@@ -181,6 +186,7 @@
                                                 <i class='bx bxs-trash-alt bx-xs'></i>
                                             </button>
                                         </form>
+                                        @endcan
                                     </div>
                                 </td>
 
@@ -221,7 +227,7 @@
 
         product_code.addEventListener('change', function() {
             if(this.value) {
-                fetch(`/product-item/${this.value}`)
+                fetch(`/api/product/${this.value}`)
                     .then(response => response.json())
                     .then(data => updateFieldSingleProductInfo(name_product, packaging, unit, data))
                     .catch(error => console.error('Error:', error));
@@ -240,7 +246,7 @@
                 const unit = document.getElementById('unit_product_edit_' + valueId);
 
                 if (this.value) {
-                    fetch(`/product-item/${this.value}`)
+                    fetch(`/api/product/${this.value}`)
                         .then(response => response.json())
                         .then(data => updateProductInfo(valueId, name_product, packaging, unit, data))
                         .catch(error => console.error('Error:', error));

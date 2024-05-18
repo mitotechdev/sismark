@@ -1,5 +1,8 @@
+
 (() => {
     "use strict";
+    
+
 
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const forms = document.querySelectorAll(".form-create");
@@ -228,4 +231,49 @@
             }, false
         );
     });
+
+    const formLogout = document.querySelector('.form-logout');
+    formLogout.addEventListener(
+        "submit",
+        (event) => {
+            if (!formLogout.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            formLogout.classList.add("was-validated");
+
+            if (formLogout.checkValidity()) {
+                event.preventDefault();
+                Swal.fire({
+                    title: "Logout",
+                    text: "Are you sure to logout ?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#696cff",
+                    cancelButtonColor: "#8592a3",
+                    confirmButtonText: "Yes",
+                    focusCancel: true,
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Successfully",
+                            text: "Logout 🚀",
+                            icon: "success",
+                            timer: 800,
+                            didOpen: () => {
+                                Swal.showLoading()
+                              },
+                              willClose: () => {
+                                formLogout.submit();
+                              }
+                        });
+                    }
+                });
+            }
+        }, false
+    );
+
+    
 })();

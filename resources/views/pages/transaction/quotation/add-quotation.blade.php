@@ -37,6 +37,7 @@
                                 <div class="col-md-3">
                                     <input type="text" class="form-control" readonly value="{{ $activity->name_pic_customer }}">
                                 </div>
+
                                 <div class="col-md-3">
                                     <input type="text" class="form-control" readonly value="{{ $activity->position_pic }}">
                                 </div>

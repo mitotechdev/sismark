@@ -38,5 +38,10 @@ class ProspectSeeder extends Seeder
             'tag_front_end' => 'secondary',
             'tag_status' => 'void',
         ]);
+        Prospect::create([
+            'name' => 'Routine',
+            'tag_front_end' => 'primary',
+            'tag_status' => 'rou',
+        ]);
     }
 }

@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('market_progress_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name_task');
             $table->date('start_date');
-            $table->time('time_task');
+            $table->date('due_date');
             $table->text('desc_task');
-            $table->boolean('status_task')->default(0)->nullable(); // if (true) then status completed else status progress | status_task
+            $table->boolean('status_task')->default(false)->nullable(); // if (true) then status completed else status progress | status_task
             $table->timestamps();
         });
     }

@@ -13,17 +13,18 @@ return new class extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
-            $table->string('quo_code')->unique(); //ini untuk nomor sp (surat penawaran)
+            $table->string('code')->nullable()->unique();
             $table->foreignId('project_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('type_expedition');
-            $table->string('validated_quo');
-            $table->string('tax_type');
-            $table->text('desc_quo');
-            // tambahkan column pembyaran [30 hari, 60 hari]
-            $table->enum('payment_term', ['7 Hari', '14 Hari', '21 Hari', '30 Hari', '60 Hari', '90 Hari']);
-            $table->enum('status', ['Draf', 'Request', 'Aprroved', 'Reject', 'Cancelled']);
+            $table->foreignId('tax_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('payment_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('approval_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('branch_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('subject');
+            $table->string('expedition');
+            $table->string('validated');
+            $table->text('desc_quo');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

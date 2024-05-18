@@ -12,6 +12,7 @@
         </nav>
         <div class="card">
             <div class="card-header">
+                <h5>Activities</h5>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-info alert-dismissible text-black" role="alert">
                         {{ $message }}
@@ -25,6 +26,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endforeach
+                @can('create-project')
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewActivity">
                     <i class='bx bxs-plus-circle'></i>
                     <span class="ms-1">Add Activity</span>
@@ -43,24 +45,13 @@
                                 </div>
                                 <div class="modal-body">
                                 <div class="row">
-                                    <div class="mb-3">
-                                        <label for="project_name" class="form-label">Name of Activity</label>
-                                        <input type="text" id="project_name" name="project_name" class="form-control"
-                                            oninvalid="this.setCustomValidity('Enter your name activity')"
-                                            title="Name of Activity"
-                                            placeholder="Enter name your activity" required>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="mb-3">
-                                        <label for="assign_to" class="form-label">Assign To</label>
-                                        <select class="form-select" name="assign_to" id="assign_to" required
-                                            title="Ditugaskan Kepada"
-                                        >
-                                            <option value="" selected>Choose Member...</option>
-                                            <option value="Sintia Lestari">Sintia Lestari</option>
-                                            <option value="MITO">MITO</option>
-                                            <option value="Yudha Satria">Yudha Satria</option>
+                                    <div class="mb-3"> 
+                                        <label for="customer" class="form-label">Name Customer</label>
+                                        <select class="form-select select-box" name="customer_id" id="customer_id" required>
+                                            <option value="" selected>Choose Customer...</option>
+                                            @foreach ($customers as $customer)
+                                                <option value="{{ $customer->id }}">{{ '['.$customer->type_customer->name.'] '. $customer->name_customer }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -77,7 +68,7 @@
                                 <div class="row">
                                     <div class="my-3">
                                         <label for="desc_project" class="form-label">Additional Decs</label>
-                                        <textarea name="desc_project" id="desc_project" class="form-control" rows="10" placeholder="Tambahkan deskripsi untuk aktivitas anda. Kosongkan dengan (-) untuk mengabaikan bagian ini"></textarea>
+                                        <textarea name="desc_project" id="desc_project" class="form-control" rows="10" placeholder="Tambahkan deskripsi untuk aktivitas anda. Kosongkan dengan (-) untuk mengabaikan bagian ini" spellcheck="false"></textarea>
                                     </div>
                                 </div>
                                 </div>
@@ -89,17 +80,16 @@
                         </form>
                     </div>
                 </div>
+                @endcan
             </div>
             <div class="card-body">
-                <table class="table table-bordered" style="font-size: 14px">
+                <table class="table table-bordered datatable" style="font-size: 14px">
                     <thead>
                         <tr>
                             <th style="width: 5%">#</th>
                             <th>Code</th>
-                            <th data-priority="1">Activity</th>
+                            <th data-priority="1">Customer</th>
                             <th>Assign To</th>
-                            {{-- <th>Start Date</th> --}}
-                            {{-- <th>Due Date</th> --}}
                             <th>Status</th>
                             <th>Progress</th>
                             <th>Act.</th>
@@ -116,11 +106,11 @@
                                       <a
                                         class="fw-bold"
                                         data-bs-toggle="offcanvas"
-                                        data-bs-target="#offcanvasBoth{{$project->id}}"
+                                        data-bs-target="#offcanvasBoth{{ $project->id }}"
                                         aria-controls="offcanvasBoth"
                                         href="javascript:void(0);"
                                       >
-                                      {{ $project->project_name }}
+                                      {{ $project->customer->name_customer }}
                                       </a>
                                       <div
                                         class="offcanvas offcanvas-end"
@@ -140,13 +130,13 @@
                                         </div>
                                         <div class="offcanvas-body mx-0 flex-grow-0">
                                             <span class="badge rounded-pill bg-label-{{ $project->prospect->tag_front_end }} py-2 px-3 mb-2">{{ $project->prospect->name }}</span>
-                                            <h3 class="mb-4">{{ $project->project_name }}</h3>
+                                            <h3 class="mb-4">{{ $project->customer->name_customer }}</h3>
                                             <h5>Overview</h5>
                                             <p class="mb-3">
                                                 {{ $project->desc_project }}
                                             </p>
                                             <div class="wrapper-date">
-                                                <p class="text-muted">By <a class="fw-bold" href="javascript:void(0);">{{ $project->assign_to }}</a></p>
+                                                <p class="text-muted">By <a class="fw-bold" href="javascript:void(0);">{{ $project->user->full_name }}</a></p>
                                                 <dl class="row mt-2">
                                                     <dt class="col-4">Start Date</dt>
                                                     <dd class="col-8">{{ date('d F, Y', strtotime($project->start_date)) }}</dd>
@@ -165,9 +155,7 @@
                                     </div>
                                   </div>
                             </td>
-                            <td>{{ $project->assign_to }}</td>
-                            {{-- <td>{{ date('d M, Y', strtotime($project->start_date)) }}</td> --}}
-                            {{-- <td>{{ date('d M, Y', strtotime($project->due_date)) }}</td> --}}
+                            <td>{{ $project->user->nickname }}</td>
                             <td>
                                 <span class="badge bg-label-{{$project->prospect->tag_front_end}}">{{ $project->prospect->name }}</span>
                                 
@@ -181,17 +169,21 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ route('task.project', $project->id) }}">Task</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('project.detail', $project->id) }}">See More</a></li>
-                                        {{-- <li><a class="dropdown-item" href="javascript:void(0);">Print</a></li> --}}
-                                        <li><a class="dropdown-item" href="{{ route('project.edit', $project->id) }}">Update</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('project.task', $project->id) }}">Task</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('project.show', $project->id) }}">See More</a></li>
+                                        
+                                        @if (Auth::user()->id == $project->user_id || Auth::user()->hasRole('Super Admin'))
+                                            @can('edit-project')
+                                                <li><a class="dropdown-item" href="{{ route('project.edit', $project->id) }}">Update</a></li>
+                                            @endcan
+                                        @endif
+                                        
+                                        @can('delete-project')
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
                                         <li><a class="dropdown-item" href="javascript:void(0);">Remove</a></li>
+                                        @endcan
                                     </ul>
                                 </div>
                             </td>

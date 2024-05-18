@@ -6,11 +6,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Purchases Order</title>
     {{-- <link rel="stylesheet"  href="{{ public_path('css/report.css') }}" type="text/css"> --}}
-    <link rel="stylesheet"  href="{{ public_path('css/report-default.css') }}" type="text/css">
+    <link rel="stylesheet"  href="{{ public_path('css/report-quo.css') }}" type="text/css">
     
 </head>
 <body>
-    <header class="w-100 clearfix">
+    {{-- <header class="w-100 clearfix">
         <div class="d-flex align-items-center">
             <div class="fs w-15 text-center d-flex justify-content-center">
                 <img class="w-85" src="{{ public_path('img/logo/mei.png') }}">
@@ -25,18 +25,14 @@
                 <img src="{{ public_path('img/logo/logo_iscc_iso.png') }}" style="width: 110%">
             </div>
         </div>
-    </header>
+    </header> --}}
 
-    {{-- Devider --}}
-    <hr style="margin-bottom: -8px">
-    <hr>
-
-    <div class="container-main">
-        <div class="container text-center">
-            <h2 class="fw-light">PURCHASE ORDER</h2>
+    <div>
+        <div>
+            <h3 style="text-align: center">PURCHASE ORDER</h3>
         </div>
 
-        <div class="row my-2 clearfix">
+        {{-- <div class="row my-2 clearfix">
             <div class="col fs w-50">
                 <h4 class="text-muted mb-1">CUSTOMER</h4>
                 <div>
@@ -67,46 +63,91 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div style="margin-bottom: 20px">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>From</td>
+                        <td>:</td>
+                        <td>{{ $salesOrder->first()->customer->name_customer }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date Order</td>
+                        <td>:</td>
+                        <td>{{ $salesOrder->first()->order_date->format('d/m/Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td>No SO</td>
+                        <td>:</td>
+                        <td>{{ $salesOrder->first()->so_number }}</td>
+                    </tr>
+                    <tr style="vertical-align: top">
+                        <td style="width: 160px;">Delivery To</td>
+                        <td>:</td>
+                        <td style="width: 500px">{{ $salesOrder->first()->delivery_to }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        
-        <table>
+
+        <table class="table-custome">
             <thead>
                 <tr>
-                    <th>Nomor</th>
-                    <th>Amount</th>
-                    <th>Description</th>
+                    <th>No</th>
+                    <th>Name Item</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
                     <th>Price</th>
                     <th>Total</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Nomor 1</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                </tr>
-                <tr>
-                    <td>Nomor 2</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                </tr>
-                <tr>
-                    <td>Nomor 3</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                    <td>Rp 20.000</td>
-                </tr>
+                @foreach ($salesOrder->sales_order_items as $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->product->name }}</td>
+                        <td>{{ $item->qty }}</td>
+                        <td>{{ $item->product->unit }}</td>
+                        <td>{{ 'Rp  '. number_format($item->price, 0, ',', '.') }}</td>
+                        <td>{{ 'Rp  '. number_format($item->total_amount, 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
-    </div>
 
-    <footer id="report-footer">
-        <p>&copy; <?php echo date("Y");?> PT Mito Energi Indonesia</h5>
-    </footer>
+        <div style="margin-top: 50px;">
+            <table class="table-custome grand-total-table">
+                <tbody>
+                    <tr>
+                        <td>Total :</td>
+                        <td>{{ 'Rp  '. number_format($salesOrder->sales_order_items->sum('total_amount'), 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ $salesOrder->tax->name }} :</td>
+                        <td>{{ 'Rp  '. number_format($salesOrder->tax->tax_value * $salesOrder->sales_order_items->sum('total_amount'), 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Grand Total :</td>
+                        <td>
+                            @php
+                                $grandTotal = 0;
+                                $subTotal = $salesOrder->sales_order_items->sum('total_amount');
+                                $ppn = $salesOrder->tax->tax_value * $salesOrder->sales_order_items->sum('total_amount');
+                                $grandTotal = $subTotal + $ppn;
+                            @endphp
+                            {{ 'Rp  '. number_format($grandTotal, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <p>Dibuat oleh,</p>
+            <img src="" alt="">
+            <p>( {{ $salesOrder->created_by }} ) <br> Purchasing</p>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,48 @@
+# Level status prospect
+    1. Prospect DRAF(ID: 1), task masih kosong,
+    2. Prospect PROSPECTING(ID: 2), task ada dan beberapa telah done, skema pergantian status :
+       Jika Market Progress di status MAPPING(map) || INTRODUCTION(int) || PENETRATION(pen) || JARTEST(jar) || QUOTATION(quo) || NEGOTIATION(neg), maka status level masih PROSPECTING. Direkomendasikan untuk memperhatikan ini jika ada penambahan Market Progress selanjutnya karna akan mengubah alur kode pada TaskController@checked
+
+    3. Prospect HOT PROSPECT(ID: 3), skema pergantian status :
+       Jika market progress di status DEAL(dea) || PURCHASE ORDER(pur) || SUPPLY & MAINTENANCE(sur), maka status level HOT PROSPECT.
+    
+    Controller yang berkaitan dengan perubahaan status :
+    - TaskController@checked,
+    - ProjectController@submitLossProject
+
+# Flow status Customer
+    - Status customer akan berubah pada menu My Activities dan Sales Order.
+    - NOT FOLLOW UP, data activites/task ada, tetapi satupun belum done.
+    - DONE FOLLOW UP, data activites/task ada, dan beberapa telah DONE,
+    - EXISTING, data sales order ada (pernah ORDER)
+
+    Reference Controller :
+    1. TaskController@checked
+    2. SalesOrderController@status
+
+# Flow Worksheet
+    - User pertama kali harus menginput data customer baik yang new customer maupun existing. Jika data pada kolom tertentu tidak ada maka strip-kan (-)
+
+    - Ketika data customer telah ada, maka user dapat menginput data My Activities
+
+    - Ketika data activity telah di input (status: DRAF), user akan diarahkan pada menu Task dan user menginput data data pekerjaannya pada menu add activity. Data yang telah di input akan berstatus Progress (status_task: False) dan akan berstatus completed ketika user mengklik checkbox (status_task: TRUE). Proses pergantian status task ini akan mengubah status prospect data My Activities di depan sesuai market Progress. alur pergantian status prospect pada poin #level status prospect.
+
+    - user dapat mencari/mengunduh(export: EXCEL, PDF) daftar pekerjaannya pada Menu Tasks View dengan mengfilter berdasarkan tanggal Start Date dan status task yang di inginkan. 
+
+    Reference Controller :
+    1. CustomerController
+    2. ProjectController
+    3. TaskController
+
+# Flow Quotation
+    - User dapat membuat penawaran / quotation by sistem.
+
+    - User membuat penawaran berdasarkan code activity (ex: P-2406053779). Kode ini dicopy terlebih dahulu dari Menu My Activities. **Secara alur pekerjaan, user / sales marketing membuat penawaran dari hasil aktivitas/pekerjaan atau permintaan customer yang menginginkan data penawaran.
+
+    - Ketika user telah menginput data awal quotation (DRAF), selanjutnya user akan di arahkan pada Menu Item Quotation dimana user harus menginput item item apa saja yang ada dipenawaran tersebut.
+
+    - Setelah item penawaran sudah dipastikan sesuai maka user wajib mengsubmit penawaran. Status penawaran akan berganti menjadi REQUEST. **Secara alur pekerjaan, user / sales marketing dapat membuat penawaran, tetapi penawaran yang dibuat harus diketahui oleh atasan/head office/admin sales dengan mengapprove atau mereject penawaran yang telah dibuat user.
+
+    Reference Controller :
+    1. QuotationController
+    2. ItemQuotationController

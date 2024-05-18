@@ -13,16 +13,18 @@
                 <li class="breadcrumb-item active">Information</li>
             </ol>
         </nav>
-        <div class="card">
-            <div class="card-body">
-                <h2>{{ $project->project_name }}</h2>
+
+        <div class="card p-sm-4">
+            <div class="card-header">
+                <h2>{{ $project->customer->name_customer }}</h2>
                 <span class="badge rounded-pill bg-label-{{ $project->prospect->tag_front_end }} py-2 px-3 mb-2">{{ $project->prospect->name }}</span>
                 <span class="badge rounded-pill bg-label-{{ $project->market_progress->tag_front_end }} py-2 px-3 mb-2">{{ $project->market_progress->name }}</span>
-                <div class="row g-5 mt-1">
+            </div>
+            <div class="card-body">
+                <div class="row g-5">
                     <div class="col-md-5">
                         <div class="row g-3">
                             <div class="col-12 project-overview">
-                                {{-- Deskripsi dari project / Kegiataan / Prospek --}}
                                 <h5>Deskripsi Pekerjaan</h5>
                                 <p>{{ $project->desc_project }}</p>
                             </div>
@@ -45,18 +47,18 @@
                         {{-- History kegiatan yang sedang berlangsung --}}
                         <h5>Kegiatan Terakhir</h5>
                         <div class="timeline-vertical timeline-with-details">
-                        @foreach ($project->tasks()->latest()->take(5)->get() as $task)
+                        @foreach ($project->tasks()->where('status_task', true)->latest()->get() as $task)
                             <div class="timeline-item position-relative">
                                 <div class="row g-md-3">
                                     <div class="col-12 col-md-auto d-flex">
                                         <div class="timeline-item-date order-1 order-md-0 me-md-4">
-                                            <p class="fs-10 fw-semibold text-body-tertiary text-opacity-85 text-end">{{ date('d M, Y', strtotime($task->start_date)) }}<br class="d-none d-md-block"> {{ date('h:i, A', strtotime($task->time_task)) }}</p>
+                                            <p class="fs-10 fw-semibold text-body-tertiary text-opacity-85 text-end">{{ date('d M, Y', strtotime($task->due_date)) }}<br class="d-none d-md-block"><span class="badge bg-label-success">Done</span></p>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="timeline-item-content ps-6 ps-md-3">
                                             <h5 class="fs-9 lh-sm">{{ $task->name_task }}</h5>
-                                            <p class="fs-9">by <a class="fw-semibold" href="#!">{{ $project->assign_to }}</a>
+                                            <p class="fs-9">by <a class="fw-semibold" href="#!">{{ $project->user->full_name }}</a>
                                             </p>
                                             <p class="fs-9 text-body-secondary mb-5">{{ $task->desc_task }}</p>
                                         </div>

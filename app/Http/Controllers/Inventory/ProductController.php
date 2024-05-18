@@ -11,10 +11,23 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware(['permission:create-product'], ['only' => ['store']]);
+        $this->middleware(['permission:read-product'], ['only' => ['index', 'show']]);
+        $this->middleware(['permission:edit-product'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete-product'], ['only' => ['destroy']]);
+    }
+    
     public function index()
     {
+        
         $products = Product::latest()->get();
-        return view('pages.inventory.product.product-index', compact('products'));
+        return view('pages.inventory.product.product-index', [
+            'products' => $products,
+            'title' => 'Menu Product',
+            'titleMenu' => 'menu-inventory',
+        ]);
     }
 
     /**

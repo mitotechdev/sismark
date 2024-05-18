@@ -32,13 +32,7 @@
                     </div>
                     <div class="col-sm-6 text-sm-end">
                         <h5 class="fw-bold">Delivery Address</h5>
-                        <div class="1h-sm">{{ $salesOrder->ship_to }}</div>
-                        {{-- <div class="1h-sm">{{ $salesOrder->so_number }}</div>
-                        <div class="1h-sm">{{ date('d M, Y', strtotime($salesOrder->order_date)) }}</div>
-                        <div class="1h-sm">
-                            TOP 
-                            {{ now()->diffInDays($salesOrder->term) }} Day remaining    
-                        </div> --}}
+                        <div class="1h-sm">{{ $salesOrder->delivery_to }}</div>
                     </div>
                 </div>
                 <div class="row g-3 my-3">
@@ -46,16 +40,20 @@
                         <table class="text-nowrap w-100">
                             <thead style="text-transform: uppercase; background-color: #efefef;">
                                 <tr>
+                                    <th class="p-2">SO Number</th>
                                     <th class="p-2">Order In</th>
                                     <th class="p-2">Term Of Payment</th>
+                                    <th class="p-2">Tax</th>
                                     <th class="p-2">Created By</th>
                                     <th class="p-2">Department</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td class="p-2">{{ $salesOrder->so_number  }}</td>
                                     <td class="p-2">{{ date('d M, Y', strtotime($salesOrder->order_date)) }}</td>
-                                    <td class="p-2">{{ now()->diffInDays($salesOrder->term) }} Day remaining</td>
+                                    <td class="p-2">{{ $salesOrder->payment->name  }}</td>
+                                    <td class="p-2">{{ $salesOrder->tax->name  }}</td>
                                     <td class="p-2">{{ $salesOrder->created_by }}</td>
                                     <td class="p-2">Purchasing</td>
                                 </tr>
@@ -89,6 +87,33 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-3 ms-auto">
+                        <table>
+                            <tr>
+                                <td style="width: 100px;">TOTAL</td>
+                                <td>: {{ 'Rp '. number_format($salesOrder->sales_order_items->sum('total_amount'), 2, ',', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $salesOrder->tax->name }}</td>
+                                <td>: {{ 'Rp '. number_format($salesOrder->tax->tax_value * $salesOrder->sales_order_items->sum('total_amount'), 2, ',', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Grand Total</th>
+                                <th> 
+                                    @php
+                                        $grandTotal = 0;
+                                        $total = $salesOrder->sales_order_items->sum('total_amount');
+                                        $ppn = $salesOrder->tax->tax_value * $total;
+                                        $grandTotal = $total + $ppn;
+                                    @endphp
+                                    : {{ 'Rp '. number_format($grandTotal, 2, ',', '.') }}
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

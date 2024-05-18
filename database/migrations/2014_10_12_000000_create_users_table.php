@@ -17,13 +17,16 @@ return new class extends Migration
             $table->string('nickname');
             $table->enum('gender', ['Pria', 'Perempuan']);
             $table->string('employee_id');
-            $table->foreignId('title_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('title');
             $table->string('phone_number');
             $table->string('email')->unique()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('username')->unique();
             $table->string('password');
             $table->foreignId('branch_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('image')->nullable();
+            $table->string('signature')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -11,6 +11,13 @@ class ItemQuotationController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware(['permission:create-quotation-item'], ['only' => ['store']]);
+        $this->middleware(['permission:read-quotation-item'], ['only' => ['index', 'show']]);
+        $this->middleware(['permission:edit-quotation-item'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete-quotation-item'], ['only' => ['destroy']]);
+    }
     public function index()
     {
         //
@@ -29,7 +36,6 @@ class ItemQuotationController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         try {
             QuotationItem::create([
                 'quotation_id' => $request->quotation_id,

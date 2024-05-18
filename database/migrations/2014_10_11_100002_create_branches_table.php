@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
-            $table->string('code_branch')->unique();
-            $table->string('name_branch');
-            $table->string('npwp_branch');
-            $table->string('phone_number');
-            $table->string('address_branch');
-            $table->string('pic_branch');
+            $table->string('code')->unique();
+            $table->string('name');
+            $table->string('npwp');
+            $table->string('phone');
+            $table->string('address');
+            $table->string('pic');
             $table->timestamps();
         });
     }

@@ -2,22 +2,66 @@
 
 namespace App\Http\Controllers\Marketing;
 
-use App\Http\Controllers\Controller;
-use App\Models\Marketing\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Marketing\Task;
+use App\Models\Marketing\Project;
+use App\Http\Controllers\Controller;
+use App\Models\Customer\Customer;
+use App\Models\Status\MarketProgress;
 use Illuminate\Support\Facades\Validator;
-
-use function PHPSTORM_META\map;
+use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware(['permission:create-project'], ['only' => ['store']]);
+        $this->middleware(['permission:read-project'], ['only' => ['index', 'show']]);
+        $this->middleware(['permission:edit-project'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete-project'], ['only' => ['destroy']]);
+    }
+
     public function index()
     {
-        $projects = Project::latest()->get();
-        return view('pages.marketing.project.project-add', compact('projects'));
+        $customers = Customer::where('branch_id', Auth::user()->branch_id)->latest()->get();
+        $userWithRole = User::with('roles')
+                        ->whereHas('roles', function($query) {
+                            $query->where('name', 'Sales & Marketing')
+                                ->orWhere('name', 'Director');
+                        })
+                        ->get();
+        if(auth()->user()->can('view-branch')) {
+            $projects = Project::with('prospect')
+            ->whereHas('prospect', function($query) {
+                $query->where('tag_status', 'draf')
+                    ->orWhere('tag_status', 'prospect')
+                    ->orWhere('tag_status', 'hot');
+            })
+            ->where('branch_id', Auth::user()->branch_id)
+            ->latest()->get();
+        } else {
+            $projects = Project::with('prospect')
+            ->whereHas('prospect', function($query) {
+                $query->where('tag_status', 'draf')
+                    ->orWhere('tag_status', 'prospect')
+                    ->orWhere('tag_status', 'hot');
+            })
+            ->where('user_id', Auth::user()->user_id)
+            ->where('branch_id', Auth::user()->branch_id)
+            ->latest()->get();
+        }
+        return view('pages.marketing.project.project-add', [
+            'customers' => $customers,
+            'projects' => $projects,
+            'userWithRole' => $userWithRole,
+            'title' => 'Menu Activity',
+            'titleMenu' => 'menu-worksheet',
+        ]);
     }
 
     /**
@@ -35,16 +79,14 @@ class ProjectController extends Controller
     {
         try {
             $validateData = Validator::make($request->all(), [
-                'project_name' => 'required',
-                'assign_to' => 'required',
+                'customer_id' => 'required',
                 'start_date' => 'required',
                 'due_date' => 'required',
                 'desc_project' => 'required'
             ],
             [
-                'project_name.required' => 'Anda belum mengisi bagian Nama Customer/Aktivitas',
-                'assign_to.required' => 'Anda belum memilih PIC yang di tugaskan',
-                'start_date.required' => 'Anda belum meNmilih tanggal mulai aktivitas',
+                'customer_id.required' => 'Anda belum memilih customer',
+                'start_date.required' => 'Anda belum memilih tanggal mulai aktivitas',
                 'due_date.required' => 'Anda belum memilih proyeksi selesai aktivitas',
                 'desc_project.required' => 'Field deskripsi belum di isi',
             ]);
@@ -53,17 +95,23 @@ class ProjectController extends Controller
                 return redirect()->back()->withErrors($validateData)->withInput();
             }
 
+            $dataCustomerProjects = Project::where('customer_id', $request->customer_id)->latest()->get();
+            if ($dataCustomerProjects->isEmpty()) {
+                Customer::find($request->customer_id)->update(['type_customer_id' => 2]);
+            }
+
             $project = Project::create([
                             'project_code' => 'P-' . date('y') . date('d') . date('m') . random_int(1000, 9999),
-                            'project_name' => $request->project_name,
-                            'assign_to' => $request->assign_to,
+                            'customer_id' => $request->customer_id,
+                            'user_id' => Auth::user()->id,
+                            'created_by' => Auth::user()->nickname,
                             'start_date' => $request->start_date,
                             'due_date' => $request->due_date,
                             'desc_project' => $request->desc_project,
-                            'branch_id' => 1,
+                            'branch_id' => Auth::user()->branch->id,
                         ]);
 
-            return redirect()->route('task.project', $project->id)->with('success', 'Data baru telah ditambahkan 🚀');
+            return redirect()->route('project.task', $project->id)->with('success', 'Data baru telah ditambahkan 🚀');
 
         } catch (\Throwable $th) {
             // abort(404);
@@ -76,7 +124,24 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('pages.marketing.project.project-list');
+        $taskCompleted = Task::where('project_id', $project->id)->where('status_task', true)->count();
+        $taskProgress = Task::where('project_id', $project->id)->where('status_task', false)->count();
+        $project = Project::where('id', $project->id)->with('tasks')->first();
+        $progressChart = (new LarapexChart)->donutChart()
+                        ->setTitle("Task Progress")
+                        ->setSubtitle("Season 2023")
+                        ->setHeight(400)
+                        ->addData([$taskProgress, $taskCompleted])
+                        ->setColors(["#FFC107", "#193d8a"])
+                        ->setFontColor("#757575")
+                        ->setLabels(["Progress", "Completed"]);
+
+        return view('pages.marketing.project.project-detail-view', [
+            'progressChart' => $progressChart,
+            'project' => $project,
+            'title' => 'Menu Activity',
+            'titleMenu' => 'menu-worksheet',
+        ]);
     }
 
     /**
@@ -84,8 +149,14 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        // dd($project);
-        return view('pages.marketing.project.project-edit', compact('project'));
+        
+        $customers = Customer::latest()->get();
+        return view('pages.marketing.project.project-edit', [
+            'project' => $project,
+            'customers' => $customers,
+            'title' => 'Menu Activity',
+            'titleMenu' => 'menu-worksheet',
+        ]);
     }
 
     /**
@@ -95,8 +166,7 @@ class ProjectController extends Controller
     {
         try {
             $project->update([
-                'project_name' => $request->project_name,
-                'assign_to' => $request->assign_to,
+                'customer_id' => $request->customer_id,
                 'start_date' => $request->start_date,
                 'due_date' => $request->due_date,
                 'desc_project' => $request->desc_project
@@ -115,5 +185,52 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         //
+    }
+
+    public function task(Project $project)
+    {
+        $tasks = Task::where('project_id', $project->id)->where('status_task', false)->latest()->get();
+        $marketProgresses = MarketProgress::all();
+
+        $countTasks = Task::where('project_id', $project->id)->where('status_task', true)->count();
+
+        return view('pages.marketing.todo.task-add', [
+            'project' => $project,
+            'tasks' => $tasks,
+            'countTasks' => $countTasks,
+            'marketProgresses' => $marketProgresses,
+            'title' => 'Menu Activity',
+            'titleMenu' => 'menu-worksheet',
+        ]);
+    }
+
+    public function card(Request $request)
+    {
+        $projects = Project::latest()->where('branch_id', Auth::user()->branch_id)->get();
+        return view('pages.marketing.project.project-card-view', [
+            'projects' => $projects,
+            'title' => 'Menu Cards',
+            'titleMenu' => 'menu-cards',
+        ]);
+    }
+
+    public function lossProject()
+    {
+        $projects = Project::with('prospect', 'customer', 'market_progress')->where('branch_id', Auth::user()->branch_id)->latest()->get();
+        return view('pages.marketing.project.project-loss', [
+            'projects' => $projects,
+            'title' => 'Menu Loss Prospect',
+            'titleMenu' => 'menu-loss-project',
+        ]);
+    }
+
+    public function submitLossProject(Request $request)
+    {
+        Project::find($request->project_id)
+            ->update([
+                'prospect_id' => 4,
+                'desc_prospect' => $request->desc
+            ]);
+        return redirect()->back()->with('success', 'Loss prospect berhasil ditambahkan 🚀');
     }
 }

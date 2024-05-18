@@ -2,94 +2,82 @@
 
 namespace App\Http\Controllers\Report;
 
-use App\Http\Controllers\Controller;
-use App\Models\Inventory\StockMaster;
-use App\Models\Sales\Pricelist;
-use App\Models\Transaction\Invoice;
-use App\Models\Transaction\InvoiceToSppb;
-use App\Models\Transaction\PoInternal;
-use App\Models\Transaction\PoInternalItem;
-use App\Models\Transaction\Quotation;
-use App\Models\Transaction\QuotationItem;
-use App\Models\Transaction\Sppb;
+use Illuminate\Http\Request;
+use App\Models\Marketing\Task;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Database\Eloquent\Builder;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 
 class ReportController extends Controller
 {
-    public function allPricelist()
+    public function tasks()
     {
-        $pricelists = Pricelist::with('stock_master', 'city')->latest()->get();
-        $data = [
-            'title' => 'Welcome to Laravel PDF',
-            'content' => 'This is a sample PDF generated using dompdf and Laravel.'
-        ];
-    
-        $pdf = Pdf::loadView('report.all-pricelist', ['pricelist' => $pricelists])->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'landscape');
-    
-        return $pdf->stream('document.pdf');
-    }
-
-    public function allProducts()
-    {
-        $products = StockMaster::with('branch')->get()->groupBy('stock_category');
-        $pdf = Pdf::loadView('report.all-product', ['products' => $products])->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'portrait');
-    
-        return $pdf->stream('document.pdf');
-    }
-
-    public function quotationPrint(Quotation $quotation)
-    {
-    //     $quotations = Quotation::with('activities', 'quotation_items')->get();
-        // dd($quotation);
-        $quotationItems = QuotationItem::where('quotation_id', $quotation->id)->with('quotation', 'pricelist')->get();
-        $pdf = Pdf::loadView('report.print-quotation', ['quotation' => $quotation, 'quotationItems' => $quotationItems])->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'portrait');
-    
-        return $pdf->stream('document.pdf');
-    }
-
-    public function printPoInternal($id)
-    {
-        $poInternal = PoInternal::find($id)->with('po_internal_item')->latest()->first();
-        $poInternalItem = PoInternalItem::where('po_internal_id', $id)->with('po_internal', 'stock_master')->latest()->get();
-        $sumSubTotal = $poInternalItem->sum('total_price');
-        $ppn = $sumSubTotal * 0.11;
-        $grandTotal = $ppn + $sumSubTotal;
-        $pdf = Pdf::loadView('report.print-po-internal', [
-            'pointernal' => $poInternal,
-            'poInternalItem' => $poInternalItem,
-            'sumSubTotal' => $sumSubTotal,
-            'ppn' => $ppn,
-            'grandTotal' => $grandTotal,
-            ]
+        $taskCount = Task::join('projects', 'tasks.project_id', '=', 'projects.id')
+                            ->join('customers', 'projects.customer_id', '=', 'customers.id')
+                            ->where('customers.type_customer_id', 2)
+                            ->where('customers.id', 1)
+                            ->where('tasks.status_task', true)
+                            ->count();
         
-            )->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'portrait');
-    
-        return $pdf->stream('document.pdf');
+        $tasks = Task::with('project')->where('user_id', Auth::user()->id)->latest()->get();
+        return view('pages.reports.tasks', [
+            'tasks' => $tasks,
+            'title' => 'Menu Tasks',
+            'titleMenu' => 'menu-tasks',
+        ]);
         
     }
 
-    public function sppbPrint(Sppb $sppb)
+    public function resultTask(Request $request)
     {
-        $pdf = Pdf::loadView('report.print-sppb', ['sppb' => $sppb])->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'portrait');
-        return $pdf->stream('document.pdf');
-    }
-
-    public function invoicePrint(Invoice $invoice)
-    {
-        $invoiceToSppbData = InvoiceToSppb::where('invoice_id', $invoice->id)->with('sppb', 'branch')->latest()->get();
-        $subTotalTotalPrice = 0;
-        foreach ($invoiceToSppbData as $key => $invoiceToSppb) {
-            foreach ($invoiceToSppb->sppb->flatMap->sppb_item as $data) {
-                $subTotalTotalPrice += $data->total_price;
-            }
+        if($request->status_task == 0 || $request->status_task == 1) {
+            $tasks = Task::with('project')->whereBetween('start_date', [$request->start_date, $request->end_date])
+                        ->where('status_task', $request->status_task)
+                        ->where('user_id', Auth::user()->id)
+                        ->get();
+        } else {
+            $tasks = Task::with('project')->whereBetween('start_date', [$request->start_date, $request->end_date])
+                        ->where('user_id', Auth::user()->id)
+                        ->get();
         }
 
-        $ppn = $subTotalTotalPrice * 0.11;
-        $grandTotal = $ppn + $subTotalTotalPrice;
-        
-
-        $pdf = Pdf::loadView('report.print-invoice', ['invoice' => $invoice, 'invoiceToSppbData' => $invoiceToSppbData, 'subTotalTotalPrice' => $subTotalTotalPrice, 'grandTotal' => $grandTotal])->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'portrait');
-        return $pdf->stream('document.pdf');
+        return view('pages.reports.task-result', [
+            'tasks' => $tasks,
+            'title' => 'Menu Tasks',
+            'titleMenu' => 'menu-tasks',
+        ]);
     }
+
+    public function printResultTask(Request $request)
+    {
+        if($request->status_task == 0 || $request->status_task == 1) {
+            $tasks = Task::with('project', 'customer')->whereBetween('start_date', [$request->start_date, $request->end_date])
+                        ->where('status_task', $request->status_task)
+                        ->where('user_id', Auth::user()->id)
+                        ->get();
+        } else {
+            $tasks = Task::with('project', 'customer')->whereBetween('start_date', [$request->start_date, $request->end_date])
+                        ->where('user_id', Auth::user()->id)
+                        ->get();
+        }
+
+        // dd($tasks->groupBy('customer.name_customer'));
+        
+        $pdf = Pdf::loadView('report.report-result-task', [
+            'tasks' => $tasks->groupBy('customer.name_customer'),
+        ])->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'portrait');
+        return $pdf->stream('my_tasks.pdf');
+    }
+
+    public function worklists()
+    {
+        $tasks = Task::with('project', 'market_progress', 'user', 'customer')->latest()->get();
+        return view('pages.reports.worklist', [
+            'tasks' => $tasks,
+            'title' => 'Menu Progress',
+            'titleMenu' => 'menu-progress-tasks',
+        ]);
+    }
+
 }

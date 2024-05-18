@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('so_number');
             $table->foreignId('customer_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('sales_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('payment_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('tax_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('approval_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->date('order_date');
-            $table->string('term');
-            $table->string('ship_to');
-            $table->boolean('taxable')->default(false);
+            $table->string('delivery_to');
             $table->string('created_by');
-            $table->decimal('total_amount', 10,2)->default(0);
-            $table->enum('status', ['draf', 'request', 'approved', 'reject', 'cancelled', 'pending'])->default('draf');
             $table->text('desc');
-            $table->string('sales_person');
             $table->foreignId('branch_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->boolean('paid')->default(false)->nullable();
             $table->timestamps();
         });
     }

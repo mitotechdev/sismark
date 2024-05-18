@@ -155,20 +155,20 @@
                         </h2>
                         <div id="personalia-customer" class="accordion-collapse collapse show">
                             <div class="accordion-body p-3">
-                                @foreach ($customer->customer_personalia as $key => $item)
+                                @foreach ($customer->personalia as $key => $item)
                                 <div class="mb-3">
                                     <div class="row my-0">
                                         <h6 class="mb-3 text-muted">Person {{ $key+1 }}</h6>
                                     </div>
                                     <div class="row g-3">
                                         <div class="col-lg-5">
-                                            <input type="text" class="form-control" id="name_pic" readonly value="{{ $item->name_pic }}" placeholder="Nama Kontak" title="Nama Kontak" required>
+                                            <input type="text" class="form-control" readonly value="{{ $item->name }}" placeholder="Nama Kontak" title="Nama Kontak" required>
                                         </div>
                                         <div class="col-lg-3">
-                                            <input type="text" class="form-control" id="position" readonly value="{{ $item->position }}" placeholder="Jabatan" title="Jabatan" required>
+                                            <input type="text" class="form-control" readonly value="{{ $item->role }}" placeholder="Jabatan" title="Jabatan" required>
                                         </div>
                                         <div class="col-lg-3">
-                                            <input type="text" class="form-control" id="phone_number" readonly value="{{ $item->phone_number }}" placeholder="Nomor Telepon" title="Nomor Telepon" required>
+                                            <input type="text" class="form-control" readonly value="{{ $item->phone }}" placeholder="Nomor Telepon" title="Nomor Telepon" required>
                                         </div>
                                     </div>
                                 </div>
@@ -188,33 +188,32 @@
                                 <div class="d-sm-flex justify-content-between align-items-center mb-3">
                                 </div>
                                 @foreach ($customer->customer_branch as $key => $branches)
-                                    
+                                    <div class="mb-3">
+                                        <div class="row my-0">
+                                            <h6 class="mb-3 text-muted">Pabrik/Branch {{ $key+1 }}</h6>
+                                        </div>
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-lg-5">
+                                                <input type="text" class="form-control" id="name" readonly value="{{ $branches->name_branch }}" placeholder="Nama Branch / Pabrik" title="Nama Branch / Pabrik" required>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" id="type_branch" readonly value="{{ $branches->type_branch }}" placeholder="Jenis Branch / Pabrik" title="Jenis Branch / Pabrik" required>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" id="pic_branch" readonly value="{{ $branches->pic_branch }}" placeholder="PIC Branch" title="PIC Branch" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-11 mb-3">
+                                            <input type="text" class="form-control" id="address_branch" readonly value="{{ $branches->address_branch }}" placeholder="Alamat Branch / Pabrik" title="Alamat Branch / Pabrik" required>
+                                        </div>
+                                        <div class="col-lg-11">
+                                            <div class="form-floating">
+                                                <textarea class="form-control" title="Deskripsi Pabrik / Branch / Tonase atau Kapasitas produksi" readonly style="height: 100px">{{ $branches->desc_branch }}</textarea>
+                                                <label for="floatingTextarea2">Deskripsi Pabrik / Branch</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
-                                <div class="mb-3">
-                                    <div class="row my-0">
-                                        <h6 class="mb-3 text-muted">Pabrik/Branch 1</h6>
-                                    </div>
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-lg-5">
-                                            <input type="text" class="form-control" id="name" readonly value="{{ $branches->name_branch }}" placeholder="Nama Branch / Pabrik" title="Nama Branch / Pabrik" required>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <input type="text" class="form-control" id="type_branch" readonly value="{{ $branches->type_branch }}" placeholder="Jenis Branch / Pabrik" title="Jenis Branch / Pabrik" required>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <input type="text" class="form-control" id="pic_branch" readonly value="{{ $branches->pic_branch }}" placeholder="PIC Branch" title="PIC Branch" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-11 mb-3">
-                                        <input type="text" class="form-control" id="address_branch" readonly value="{{ $branches->address_branch }}" placeholder="Alamat Branch / Pabrik" title="Alamat Branch / Pabrik" required>
-                                    </div>
-                                    <div class="col-lg-11">
-                                        <div class="form-floating">
-                                            <textarea class="form-control" title="Deskripsi Pabrik / Branch / Tonase atau Kapasitas produksi" readonly style="height: 100px">{{ $branches->desc_branch }}</textarea>
-                                            <label for="floatingTextarea2">Deskripsi Pabrik / Branch</label>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
