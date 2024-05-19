@@ -4,7 +4,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('customer.index') }}">Customer</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('personaliaIndex', $customerPersonalia->customer_id) }}">Personalia</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('customer.personalia', $customerPersonalia->customer_id) }}">Personalia</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Edit</li>
             </ol>
         </nav>
@@ -12,6 +12,7 @@
         <form action="{{ route('customer-personalia.update', $customerPersonalia->id) }}" method="POST" class="needs-validation form-edit">
             @csrf
             @method('PUT')
+            <input type="hidden" name="customer_id" value="{{ $c }}">
             <div class="card mb-3">
                 <div class="card-header">Update Personalia</div>
                 <div class="card-body">

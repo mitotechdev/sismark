@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+<html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-bs-theme="dark">
 <head>
     {{-- @stack('meta-data') --}}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="" />
-    <title>{{ $menu_title ?? config('app.name') }}</title>
+    <title>{{ $title ?? config('app.name') }}</title>
     @stack('style')
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @Vite(['resources/js/style.js'])
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
-    
+
 </head>
 
 <body>
@@ -31,7 +31,7 @@
 
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="index.html" class="app-brand-link">
+                    <a href="{{ route('index') }}" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -89,150 +89,136 @@
 
                 <ul class="menu-inner py-1">
                     <!-- Dashboard -->
-                    <li class="menu-item">
-                        <a href="/" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                    <li class="menu-item {{ $title == "Dashboard" ? "active" : "" }}">
+                        <a href="{{ route('index') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-tachometer'></i>
                             <div>Dashboard</div>
                         </a>
                     </li>
                     
                     <!-- Stock -->
-                    <li class="menu-item">
+                    <li class="menu-item {{ $titleMenu == "menu-inventory" ? "active open" : "" }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-folder"></i>
+                            <i class='menu-icon tf-icons bx bxs-backpack'></i>
                             <div data-i18n="Layouts">Inventory</div>
                         </a>
 
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item {{ $title == "Menu Product" ? "active" : "" }}">
                                 <a href="{{ route('product.index') }}" class="menu-link">
                                     <div data-i18n="Without menu">Products</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('stock-master.index') }}" class="menu-link">
-                                    <div data-i18n="Without menu">Stocks</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Sales & Marketing -->
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">Sales & Marketing</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-folder"></i>
-                            <div>Task Management</div>
-                        </a>
-
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('project.index') }}" class="menu-link">
-                                    <div>My Activity</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('project.card.view') }}" class="menu-link">
-                                    <div>Activities Card</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-folder"></i>
-                            <div>Prospect</div>
-                        </a>
-
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{route('hot.prospect.index') }}" class="menu-link">
-                                    <div>Hot Prospect</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link">
-                                    <div>Loss Prospect</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link">
-                                    <div>Void Prospect</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">Admin Sales</span>
-                    </li>
-                    {{-- Sales --}}
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-folder"></i>
-                            <div>Sales</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('pricelist.index') }}" class="menu-link">
-                                    <div>Pricelists</div>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     
-                    <!-- Partner -->
-                    <li class="menu-item">
+                    <!-- Sales & Marketing -->
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Sales & Marketing</span>
+                    </li>
+                    <li class="menu-item {{ $titleMenu == "menu-worksheet" ? "active open" : "" }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-folder"></i>
-                            <div>Partner</div>
+                            <i class='menu-icon tf-icons bx bxs-book-content'></i>
+                            <div>Worksheet</div>
                         </a>
 
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item {{ $title == "Menu Databases" ? "active" : "" }}">
                                 <a href="{{ route('customer.index') }}" class="menu-link">
-                                    <div>Customers</div>
+                                    <div>Databases</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="" class="menu-link">
-                                    <div>Vendor</div>
+                            <li class="menu-item {{ $title == "Menu Activity" ? "active" : "" }}">
+                                <a href="{{ route('project.index') }}" class="menu-link">
+                                    <div>My Activities</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-item {{ $title == "Menu Tasks" ? "active" : "" }}">
+                        <a href="{{ route('report.tasks') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-notepad'></i>
+                            <div>Tasks</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == "Menu Stats" ? "active" : "" }}">
+                        <a href="{{ route('stats.user', Auth::user()->id) }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-doughnut-chart'></i>
+                            <div>Stats</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == "Menu Cards" ? "active" : "" }}">
+                        <a href="{{ route('project.card') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-id-card'></i>
+                            <div>Cards</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == "Menu Progress" ? "active" : "" }}">
+                        <a href="{{ route('worklist') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-archive'></i>
+                            <div>Progress</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == "Menu Loss Prospect" ? "active" : "" }}">
+                        <a href="{{ route('project.loss') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-blanket'></i>
+                            <div>Loss Prospect</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title == "Menu Payments" ? "active" : "" }}">
+                        <a href="{{ route('payment.index') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-credit-card-front'></i>
+                            <div>Payments</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Admin Sales</span>
+                    </li>
+                    
+                    <li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-hdd' ></i>
+                            <div>Customers</div>
+                        </a>
+                    </li>
+
+                    {{-- Transaction --}}
+                    <li class="menu-item {{ $titleMenu == "menu-transaction" ? "active open" : "" }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class='menu-icon tf-icons bx bxs-collection'></i>
+                            <div>Transaction</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ $title == "Menu Quotation" ? "active" : "" }}">
+                                <a href="{{ route('quotation.index') }}" class="menu-link">
+                                    <div>Quotation</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ $title == "Menu Sales Order" ? "active" : "" }}">
+                                <a href="{{ route('sales-order.index') }}" class="menu-link">
+                                    <div>Sales Order</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ $title == "Menu Bills" ? "active" : "" }}">
+                                <a href="{{ route('sales-order.bill') }}" class="menu-link">
+                                    <div>Bills</div>
                                 </a>
                             </li>
                         </ul>
                     </li>
 
-                    {{-- Transaction --}}
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                            <div>Transaction</div>
+                    <li class="menu-item {{ $title == "Menu Approvement" ? "active" : "" }}">
+                        <a href="{{ route('approvement.quotation') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-like' ></i>
+                            <div>Approvement</div>
                         </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('quotation.index') }}" class="menu-link">
-                                    <div>Quotation</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('sales-order.index') }}" class="menu-link">
-                                    <div>Sales Order</div>
-                                </a>
-                            </li>
-                            {{-- <li class="menu-item">
-                                <a href="{{ route('sppb.index') }}" class="menu-link">
-                                    <div data-i18n="Notifications">SPPB</div>
-                                </a>
-                            </li> --}}
-                            <li class="menu-item">
-                                <a href="{{ route('invoice.index') }}" class="menu-link">
-                                    <div data-i18n="Connections">Invoice</div>
-                                </a>
-                            </li>
-                        </ul>
+                    </li>
+                    <li class="menu-item {{ $title == "Menu Teams" ? "active" : "" }}">
+                        <a href="{{ route('team.index') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-network-chart'></i>
+                            <div>Teams</div>
+                        </a>
                     </li>
 
                     {{-- End Setting --}}
@@ -240,27 +226,32 @@
                         <span class="menu-header-text">Administrator</span>
                     </li>
                     {{-- Sales --}}
-                    <li class="menu-item">
+                    <li class="menu-item {{ $titleMenu == "menu-user-management" ? "active open" : "" }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-folder"></i>
+                            <i class='menu-icon tf-icons bx bxs-user-rectangle'></i>
                             <div>User Management</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item {{ $title == "Menu Users" ? "active" : "" }}">
                                 <a href="{{ route('user.index') }}" class="menu-link">
                                     <div>Master User</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="{{ route('sales-user.index') }}" class="menu-link">
-                                    <div>Sales</div>
+                            <li class="menu-item {{ $title == "Menu Roles" ? "active" : "" }}">
+                                <a href="{{ route('role.index') }}" class="menu-link">
+                                    <div>Roles</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ $title == "Menu Permissions" ? "active" : "" }}">
+                                <a href="{{ route('permission.index') }}" class="menu-link">
+                                    <div>Permissions</div>
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li class="menu-item">
-                        <a href="/" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-home"></i>
+                    <li class="menu-item {{ $title == "Menu Branches" ? "active" : "" }}">
+                        <a href="{{ route('branch.index') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bxs-bank'></i>
                             <div>Branches</div>
                         </a>
                     </li>
@@ -298,7 +289,11 @@
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                                     data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                        @if (Auth::user()->image)
+                                        <img src="{{ asset('storage/'. Auth::user()->image) }}" class="w-px-40 h-auto rounded-circle" />
+                                        @else
+                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
+                                        @endif
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -307,13 +302,16 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" alt
-                                                            class="w-px-40 h-auto rounded-circle" />
+                                                        @if (Auth::user()->image)
+                                                        <img src="{{ asset('storage/'. Auth::user()->image) }}" class="w-px-40 h-auto rounded-circle" />
+                                                        @else
+                                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block">John Doe</span>
-                                                    <small class="text-muted">Admin</small>
+                                                    <span class="fw-semibold d-block">{{ Auth::user()->nickname }}</span>
+                                                    <small class="text-muted">{{ Auth::user()->title }}</small>
                                                 </div>
                                             </div>
                                         </a>
@@ -322,12 +320,12 @@
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="{{ route('user.profile', Auth::user()->id) }}">
                                             <i class="bx bx-user me-2"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a class="dropdown-item" href="#">
                                             <i class="bx bx-cog me-2"></i>
                                             <span class="align-middle">Settings</span>
@@ -345,13 +343,23 @@
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                    </li>
+                                    </li> --}}
+                                    @auth
                                     <li>
-                                        <a class="dropdown-item" href="auth-login-basic.html">
+                                        {{-- <a class="dropdown-item" href="auth-login-basic.html">
                                             <i class="bx bx-power-off me-2"></i>
                                             <span class="align-middle">Log Out</span>
-                                        </a>
+                                        </a> --}}
+                                        <form action="{{ route('logout') }}" method="POST" class="needs-validation form-logout">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="submit" class="btn dropdown-item">
+                                                <i class="bx bx-power-off me-2"></i>
+                                                <span class="align-middle">Log Out</span>
+                                            </button>
+                                        </form>
                                     </li>
+                                    @endauth
                                 </ul>
                             </li>
                             <!--/ User -->
@@ -400,13 +408,15 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     @vite('resources/js/app.js')
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     @stack('script')
     <script src="{{ Vite::asset('resources/js/loader.js') }}"></script>
+    
+    
 </body>
 
 </html>

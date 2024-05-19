@@ -17,7 +17,7 @@
         
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('task.project', $project->id) }}">Progress</a>
+                <a class="nav-link" href="{{ route('project.task', $project->id) }}">Progress</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page">Completed <span class="bg-label-success">( {{ $tasksCompleted->count() }} )</span></a>
@@ -26,7 +26,7 @@
 
         <div class="card">
             <div class="card-body">
-                <table class="table">
+                <table class="table datatable">
                     <thead>
                         <tr>
                             <th data-priority="1">#</th>
@@ -44,7 +44,7 @@
                                 <td><input class="form-check-input" type="checkbox" checked="{{ $task->status_task }}" readonly disabled></td>
                                 <td>{{ $task->name_task }}</td>
                                 <td class="text-nowrap">{{ date('d M, Y', strtotime($task->start_date)) }}</td>
-                                <td class="text-nowrap">{{ date('h:i, A', strtotime($task->time_task)) }}</td>
+                                <td class="text-nowrap">{{ date('d M, Y', strtotime($task->due_date)) }}</td>
                                 <td>{{ $task->market_progress->name }}</td>
                                 <td style="width:35%">{{ $task->desc_task }}</td>
                                 <td>

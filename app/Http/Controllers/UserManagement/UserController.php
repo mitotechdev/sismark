@@ -2,24 +2,43 @@
 
 namespace App\Http\Controllers\UserManagement;
 
-use App\Http\Controllers\Controller;
-use App\Models\Backend\Branch;
-use App\Models\Backend\Title;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Backend\Branch;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    {
+        $this->middleware(['role:Super Admin'], ['only' => ['index']]);
+        $this->middleware(['role:Super Admin'], ['only' => ['store']]);
+        $this->middleware(['role:Super Admin'], ['only' => ['edit']]);
+        $this->middleware(['role_or_permission:Super Admin|edit-user'], ['only' => ['update']]);
+        $this->middleware(['role:Super Admin'], ['only' => ['deactivate']]);
+        $this->middleware(['role:Super Admin'], ['only' => ['activate']]);
+    }
+
     public function index()
     {
-        $users = User::with('title')->latest()->get();
+        $users = User::latest()->get();
         $branches = Branch::all();
-        $titles = Title::all();
-        return view('pages.user-management.master-user.user', compact('users', 'branches', 'titles'));
+        $roles = Role::all();
+        return view('pages.user-management.master-user.user', [
+            'users' => $users,
+            'branches' => $branches,
+            'roles' => $roles,
+            'title' => 'Menu Users',
+            'titleMenu' => 'menu-user-management',
+        ]);
     }
 
     /**
@@ -35,39 +54,56 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        
         try {
-            $request->validate([
-                'employee_id' => 'required',
-                'name_user' => 'required',
-                'gender' => 'required',
+            $validateData = Validator::make($request->all(), [
+                'full_name' => 'required',
                 'nickname' => 'required',
-                'title_id' => 'required',
+                'gender' => 'required',
+                'employee_id' => 'required',
+                'title' => 'required',
                 'phone_number' => 'required',
-                'email' => 'required|email',
+                'email' => 'required',
                 'username' => 'required',
                 'password' => 'required',
-                'branch_id' => 'required'
+                'branch_id' => 'required',
+            ],
+            [
+                'full_name.required' => 'Nama anda masih kosong',
+                'nickname.required' => 'Nickname anda masih kosong',
+                'gender.required' => 'Jenis kelamin masih kosong',
+                'employee_id.required' => 'NIK karyawan masih kosong',
+                'title.required' => 'Jabatan masih kosong',
+                'phone_number.required' => 'Nomor telepon masih kosong',
+                'email.required' => 'Email masih kosong',
+                'username.required' => 'Username masih kosong',
+                'password.required' => 'Password masih kosong',
+                'branch_id.required' => 'Branch bermasalah. Hubungi IT',
             ]);
 
-            User::create([
-                'name' => $request->name_user,
+            if( $validateData->fails() ) {
+                return redirect()->back()->withErrors($validateData)->withInput();
+            }
+
+
+            $user = User::create([
+                'full_name' => $request->full_name,
                 'nickname' => $request->nickname,
                 'gender' => $request->gender,
                 'employee_id' => $request->employee_id,
-                'title_id' => $request->title_id,
+                'title' => $request->title,
                 'phone_number' => $request->phone_number,
                 'email' => $request->email,
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
                 'branch_id' => $request->branch_id,
             ]);
+            $user->syncRoles($request->role);
 
-            return redirect()->back()->with('success', 'Data user berhasil ditambahkan 🚀')
-;
+            return redirect()->back()->with('success', 'Data user berhasil ditambahkan 🚀');
             
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan pada saat menyimpan data.');
         }
     }
 
@@ -85,8 +121,14 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $branches = Branch::all();
-        $titles = Title::all();
-        return view('pages.user-management.master-user.edit-user', compact('user', 'branches', 'titles'));
+        $roles = Role::all();
+        return view('pages.user-management.master-user.edit-user', [
+            'user' => $user,
+            'branches' => $branches,
+            'roles' => $roles,
+            'title' => 'Menu Users',
+            'titleMenu' => 'menu-user-management',
+        ]);
     }
 
     /**
@@ -94,35 +136,64 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        if($request->password !== null)
+        
+        $validateData = Validator::make($request->all(), [
+            'employee_id' => 'required',
+            'full_name' => 'required',
+            'nickname' => 'required',
+            'gender' => 'required',
+            'title' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+            'username' => 'required',
+            'password' => 'nullable',
+            'image' => 'nullable|file|mimes:jpeg,jpg,png',
+        ],
+        [
+            'employee_id.required' => 'Employee ID is need required',
+            'full_name.required' => 'Full name user is need required',
+            'nickname.required' => 'Nickname user is need required',
+            'gender.required' => 'Gender user is need required',
+            'title.required' => 'Title of user is need required',
+            'phone.required' => 'Phone number is need required',
+            'email.required' => 'Email is need required',
+        ]);
+
+        if($validateData->fails())
         {
-            $user->update([
-                'name' => $request->name_user,
-                'nickname' => $request->nickname,
-                'gender' => $request->gender,
-                'employee_id' => $request->employee_id,
-                'title_id' => $request->title_id,
-                'phone_number' => $request->phone_number,
-                'email' => $request->email,
-                'username' => $request->username,
-                'password' => Hash::make($request->password),
-                'branch_id' => $request->branch_id,
-            ]);
-            return redirect()->route('user.index')->with('success', 'Data berhasil diupdate 🚀');
-        } else {
-            $user->update([
-                'name' => $request->name_user,
-                'nickname' => $request->nickname,
-                'gender' => $request->gender,
-                'employee_id' => $request->employee_id,
-                'title_id' => $request->title_id,
-                'phone_number' => $request->phone_number,
-                'email' => $request->email,
-                'username' => $request->username,
-                'branch_id' => $request->branch_id,
-            ]);
-            return redirect()->route('user.index')->with('success', 'Data berhasil diupdate 🚀');
+            return redirect()->back()->withErrors($validateData)->withInput();
         }
+
+        $updateData = [
+            'full_name' => $request->full_name,
+            'nickname' => $request->nickname,
+            'gender' => $request->gender,
+            'employee_id' => $request->employee_id,
+            'title' => $request->title,
+            'phone_number' => $request->phone,
+            'email' => $request->email,
+            'username' => $request->username,
+        ];
+
+        if($request->has('branch')) {
+            $updateData['branch_id'] = $request->branch;
+        } 
+
+        if($request->file('image')) {
+
+            if($user->image !== null) Storage::delete($user->image);
+
+            $updateData['image'] = $request->file('image')->storeAs('images/employees', $request->file('image')->getClientOriginalName());
+        }
+        
+        if ($request->password !== null) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+        
+        $user->update($updateData);
+        $user->syncRoles($request->role);
+        
+        return redirect()->back()->with('success', 'Data berhasil diupdate 🚀');
     }
 
     /**
@@ -131,5 +202,46 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+
+    public function profile(User $user)
+    {
+        if (auth()->id() !== $user->id && !auth()->user()->can('view', $user)) {
+            abort(403);
+        }
+        $roles = Role::all();
+        $branches = Branch::all();
+        return view('pages.user-management.user.detail', [
+            'user' => $user,
+            'roles' => $roles,
+            'branches' => $branches,
+            'title' => 'Menu Profile',
+            'titleMenu' => 'menu-profile',
+        ]);
+    }
+
+    public function image(User $user)
+    {
+        
+        if ($user->image) {
+            Storage::delete($user->image);
+            $user->image = null;
+            $user->save();
+        }
+        return redirect()->back()->with('success', 'Foto profile berhasil dihapus 🚀');
+
+    }
+
+    public function deactivate(User $user)
+    {
+        $user->deactivate();
+        return redirect()->back()->with('success', 'User account has been deactivated .');
+    }
+
+    public function activate(User $user)
+    {
+        $user->activate();
+        return redirect()->back()->with('success', 'User account has been activated .');
     }
 }

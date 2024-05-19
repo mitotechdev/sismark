@@ -24,29 +24,16 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="mb-3">
-                                <label for="project_name" class="form-label">Name Customer</label>
-                                <input type="text" id="project_name" name="project_name" class="form-control"
-                                    oninvalid="this.setCustomValidity('Isikan nama customer / prospek anda.')"
-                                    title="Nama customer / prospek anda"
-                                    placeholder="Enter name customer"
-                                    required
-                                    value="{{ $project->project_name }}"
-                                    >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3">
-                                <label for="assign_to" class="form-label">Assign To</label>
-                                <select class="form-select" name="assign_to" id="assign_to"
-                                    required
-                                    title="Ditugaskan Kepada"
-                                >
-                                    <option value="Sintia Lestari" {{ $project->assign_to == "Sintia Letari" ? "selected" : "" }}>Sintia Lestari</option>
-                                    <option value="MITO" {{ $project->assign_to == "MITO" ? "selected" : "" }}>MITO</option>
-                                    <option value="Yudha Satria" {{ $project->assign_to == "Yudha Satria" ? "selected" : "" }}>Yudha Satria</option>
+                                <label for="customer" class="form-label">Name Customer</label>
+                                <select class="form-select select-box" name="customer_id" id="customer_id" required>
+                                    <option value="" selected>Choose Customer...</option>
+                                    @foreach ($customers as $customer)
+                                        <option value="{{ $customer->id }}" {{ $customer->id == $project->customer_id ? "selected" : "" }}>{{ '['.$customer->type_customer->name.'] '. $customer->name_customer }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
+                        
                         <div class="row g-2">
                             <div class="col mb-0">
                                 <label for="start_date" class="form-label">Tanggal Mulai</label>

@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,11 +22,15 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
+            TypeCustomerSeeder::class,
+            TaxSeeder::class,
+            PaymentSeeder::class,
+            PermissionSeeder::class,
+            RoleSeeder::class,
             MarketProgressSeeder::class,
             ProspectSeeder::class,
-            TitleSeeder::class,
+            ApprovalSeeder::class,
             BranchSeeder::class,
-            CitySeeder::class,
             UserSeeder::class,
         ]);
     }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('branch_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('type_customer_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('name_customer');
             $table->string('type_business');
             $table->date('foundation_date')->nullable();
@@ -30,7 +31,7 @@ return new class extends Migration
             $table->text('desc_technical');
             $table->text('desc_clasification');
             $table->text('add_information');
-            $table->foreignId('sales_user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -1,0 +1,121 @@
+$monthlyRevenue = SalesOrder::with('customer', 'sales_order_items', 'tax')
+        ->where('branch_id', Auth::user()->branch_id)
+        ->whereYear('order_date', date('Y'))
+        ->latest()
+        ->get()
+        ->groupBy(function ($bill) {
+            return date('F', strtotime($bill->order_date));
+        });
+    
+    $revenueByMonth = [];
+    
+    foreach ($monthlyRevenue as $month => $bills) {
+        $revenueByMonth[$month] = $bills->reduce(function ($carry, $bill) {
+            $total = $bill->sales_order_items->sum('total_amount');
+            $ppn = $total * ($bill->tax->tax_value / 100); // Pastikan tax_value dalam bentuk persentase
+            return $carry + $total + $ppn;
+        }, 0);
+    }
+    
+    // Urutan bulan dari Januari hingga Desember
+    $monthsOrder = [
+        'January', 'February', 'March', 'April', 'May', 'June', 
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    
+    // Mengurutkan data pendapatan sesuai dengan urutan bulan
+    $sortedRevenueByMonth = [];
+    foreach ($monthsOrder as $month) {
+        $sortedRevenueByMonth[$month] = $revenueByMonth[$month] ?? 0;
+    }
+    
+    $monthNames = array_keys($sortedRevenueByMonth);
+    $revenueValues = array_values($sortedRevenueByMonth);
+    
+    return $this->chart->barChart()
+        ->setTitle('Monthly Revenue')
+        ->setSubtitle('Year ' . date('Y'))
+        ->addData('Revenue', $revenueValues)
+        ->setXAxis($monthNames);
+    
+    }
+
+
+
+
+
+    /// ini kode pada Controller
+
+
+    public function index()
+    {
+        $sales = SalesOrder::all();
+        $total_task = Task::count();
+        $total_order = SalesOrderItem::sum('qty');
+        $total_sales = 0;
+        foreach ($sales as $item) {
+            $sub_total = $item->sales_order_items->sum('total_amount');
+            $ppn = $item->tax->tax_value * $sub_total;
+            $total_sales += $sub_total + $ppn;
+        }
+        //PKU
+        
+        $projects_pku = Project::with('branch')->whereHas('branch', function ($query) {$query->where('code', 'PKU');})->get();;
+        
+        $chart_progress_pku = (new LarapexChart)->pieChart()
+                                            ->setTitle('Seasson 2023')
+                                            ->addData([
+                                                $projects_pku->where('prospect_id', 2)->count(),
+                                                $projects_pku->where('prospect_id', 3)->count(),
+                                                $projects_pku->where('prospect_id', 4)->count(),
+                                                ])
+                                            ->setLabels(['Prospecting', 'Hot Prospect', 'Loss Prospect']);
+        //MDN
+        $projects_mdn = Project::with('branch')->whereHas('branch', function ($query) {$query->where('code', 'MDN');})->get();
+        
+        $chart_progress_mdn = (new LarapexChart)->pieChart()
+                                            ->setTitle('Seasson 2023')
+                                            ->addData([
+                                                $projects_mdn->where('prospect_id', 2)->count(),
+                                                $projects_mdn->where('prospect_id', 3)->count(),
+                                                $projects_mdn->where('prospect_id', 4)->count(),
+                                                ])
+                                            ->setLabels(['Prospecting', 'Hot Prospect', 'Loss Prospect']);
+        //PNK
+        $projects_pnk = Project::with('branch')->whereHas('branch', function ($query) {$query->where('code', 'PNK');})->get();
+        $chart_progress_pnk = (new LarapexChart)->pieChart()
+                                            ->setTitle('Seasson 2023')
+                                            ->addData([
+                                                $projects_pnk->where('prospect_id', 2)->count(),
+                                                $projects_pnk->where('prospect_id', 3)->count(),
+                                                $projects_pnk->where('prospect_id', 4)->count(),
+                                                ])
+                                            ->setLabels(['Prospecting', 'Hot Prospect', 'Loss Prospect']);
+        // $sumProduct = AbbreviateNumber::abbreviate(StockMaster::count());
+        return view("components.app.dashboard", compact('total_sales', 'total_order', 'total_task', 'chart_progress_pku', 'chart_progress_mdn', 'chart_progress_pnk'));
+    }
+
+    public function importFileExcel(Request $request)
+    {
+        try {
+            Excel::import(new PricelistImport, $request->file('file'));
+            return redirect()->back()->with("success", "Yeay, impor file anda berhasil dilakukan");
+
+        } catch (Exception $ex) {
+            return redirect()->back()->with('error','💢 Oops, data anda tidak dapat diproses. Pastikan data excel dan sistem tidak sama.');
+        }
+
+    }
+
+    public function importStock(Request $request)
+    {
+        try {
+            Excel::import(new StockImport, $request->file('file'));
+            return redirect()->back()->with("success", "Yeay, import file anda berhasil dilakukan 🚀");
+
+        } catch (Exception $ex) {
+            // return redirect()->back()->with('error','💢 Duplicate Entry, data anda tidak dapat diproses pastikan data excel dan sistem tidak sama.');
+            return redirect()->back()->with('error', $ex->getMessage());
+        }
+
+    }

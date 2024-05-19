@@ -14,30 +14,30 @@ class BranchSeeder extends Seeder
     public function run(): void
     {
         Branch::create([
-            'code_branch' => 'PKU',
-            'name_branch' => 'HO Pekanbaru',
-            'npwp_branch' => '964361182706000',
-            'phone_number' => '(0761) 5795004',
-            'address_branch' => 'Komp. Taman Harapan Indah, Blk. C No.16, Jl. Riau Gg. Harapan 2, Air Hitam, Kec. Payung Sekaki, Kota Pekanbaru, Riau 28292',
-            'pic_branch' => 'Tn. Taufan'
+            'code' => 'PKU',
+            'name' => 'HO Pekanbaru',
+            'npwp' => '96.007.415.1-216.000',
+            'phone' => '(0761) 5795004',
+            'address' => 'Komp. Taman Harapan Indah, Blk. C No.16, Jl. Riau Gg. Harapan 2, Air Hitam, Kec. Payung Sekaki, Kota Pekanbaru, Riau 28292',
+            'pic' => 'Tn. Taufan'
         ]);
 
         Branch::create([
-            'code_branch' => 'MDN',
-            'name_branch' => 'Branch & Warehouse Medan',
-            'npwp_branch' => '964361182706000',
-            'phone_number' => '(061) 42776613',
-            'address_branch' => 'Komp. Menteng Indah Blok A4 No.5, Jl. Menteng VII, Medan Denai, Sumatera Utara',
-            'pic_branch' => 'Tn. M. Hafiz Lubis',
+            'code' => 'MDN',
+            'name' => 'Branch & Warehouse Medan',
+            'npwp' => '96.007.415.1-216.000',
+            'phone' => '(061) 42776613',
+            'address' => 'Komp. Menteng Indah Blok A4 No.5, Jl. Menteng VII, Medan Denai, Sumatera Utara',
+            'pic' => 'Tn. M. Hafiz Lubis',
         ]);
 
         Branch::create([
-            'code_branch' => 'PNK',
-            'name_branch' => 'Branch & Warehouse Pontianak',
-            'npwp_branch' => '964361182706000',
-            'phone_number' => 'Unavailable',
-            'address_branch' => 'Pergudangan Equator',
-            'pic_branch' => 'Tn. Saktiar Sitorus'
+            'code' => 'PNK',
+            'name' => 'Branch & Warehouse Pontianak',
+            'npwp' => '96.007.415.1-216.000',
+            'phone' => 'Unavailable',
+            'address' => 'Pergudangan Equator',
+            'pic' => 'Tn. Saktiar Sitorus'
         ]);
     }
 }
