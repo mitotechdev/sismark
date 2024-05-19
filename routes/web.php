@@ -78,17 +78,3 @@ Route::middleware(['auth', 'check_user_status'])->group(function () {
     Route::post    ('export/tasks', [ExportsController::class, 'export'])->name('export.tasks');
     Route::post    ('logout', [AuthenticationController::class, 'logout'])->name('logout');
 });
-
-// Route::view('homepage', 'components.app.home');
-
-Route::view('billing', 'pages.transaction.billing');
-
-Route::view('approval/quotation', 'pages.approval.quotation');
-
-Route::get('export-example', [ExportsController::class, 'export']);
-
-
-// Add Menu too see All Task done and progress
-// Add Menu Tax & Payment for cutomize Tax dan TOP
-// Add column perihal on Quotation
-// Menu Report Mingguan dan Bulanan Sales & Marketing
