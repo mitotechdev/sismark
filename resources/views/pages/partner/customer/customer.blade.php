@@ -1,7 +1,7 @@
 @extends('components.app.layouts')
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold pb-3"><span class="text-muted fw-light">Menu Customer</h4>
+        <h4 class="fw-bold">Menu Customer</h4>
 
         {{-- Alert Success --}}
         @if ($message = Session::get('success'))
@@ -75,6 +75,7 @@
                                             <label for="country" class="form-label">Negara <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="country" name="country" title="Negara/Wilayah" required>
                                         </div>
+                                        @role('Super Admin')
                                         <div class="col-md-6">
                                             <label for="pic_sales" class="form-label">Nama Sales/Marketing <span class="text-danger">*</span></label>
                                             <select name="user_id" id="pic_sales" class="form-select select-box" title="Nama PIC / Marketing MITO" required>
@@ -84,6 +85,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @endrole
                                     </div>
                                 </div>
                             </div>

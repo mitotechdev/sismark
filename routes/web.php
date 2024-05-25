@@ -42,6 +42,7 @@ Route::middleware(['auth', 'check_user_status'])->group(function () {
     Route::post    ('role/{role}/give-permission-to', [RoleController::class, 'permission'])->name('role.permission');
     Route::resource('permission', PermissionController::class);
     Route::resource('product', ProductController::class);
+    Route::get     ('customer/list', [CustomerController::class, 'customerList'])->name('customer.list');
     Route::resource('customer', CustomerController::class);
     Route::get     ('customer/{customer}/detail', [CustomerController::class, 'detail'])->name('customer.detail');
     Route::get     ('customer/{customer}/personalia', [CustomerController::class, 'personalia'])->name('customer.personalia');

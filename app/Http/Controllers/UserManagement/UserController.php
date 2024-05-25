@@ -147,7 +147,7 @@ class UserController extends Controller
             'email' => 'required',
             'username' => 'required',
             'password' => 'nullable',
-            'image' => 'nullable|file|mimes:jpeg,jpg,png',
+            'image' => 'nullable|file|mimes:jpeg,jpg,png|max:1024',
         ],
         [
             'employee_id.required' => 'Employee ID is need required',
@@ -157,6 +157,7 @@ class UserController extends Controller
             'title.required' => 'Title of user is need required',
             'phone.required' => 'Phone number is need required',
             'email.required' => 'Email is need required',
+            'image.max' => 'Gambar upload harus 1 Mb.',
         ]);
 
         if($validateData->fails())

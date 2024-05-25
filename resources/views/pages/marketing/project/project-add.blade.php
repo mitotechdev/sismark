@@ -1,15 +1,7 @@
 @extends('components.app.layouts')
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold"><span class="text-muted fw-light">My Activity</h4>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="{{ route('index') }}">Home</a>
-                </li>
-                <li class="breadcrumb-item active">My Activity</li>
-            </ol>
-        </nav>
+        <h4 class="fw-bold">Menu Activity</h4>
         <div class="card">
             <div class="card-header">
                 <h5>Activities</h5>

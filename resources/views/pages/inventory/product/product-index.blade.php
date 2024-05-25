@@ -1,7 +1,7 @@
 @extends('components.app.layouts')
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold pb-3"><span class="text-muted fw-light">Menu Products</h4>
+        <h4 class="fw-bold">Menu Products</h4>
 
         @if ($message = Session::get('success'))
             <div class="alert alert-info alert-dismissible text-black" role="alert">

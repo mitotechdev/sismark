@@ -11,7 +11,7 @@
                 <p>Welcome back, we're happy to have you there!</p>
             </div>
 
-            <div class="row">
+            <div class="row g-3">
                 <div class="col-sm-8">
                     <div class="row g-3">
                         <div class="col-sm-6">

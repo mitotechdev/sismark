@@ -176,8 +176,8 @@
                         <span class="menu-header-text">Admin Sales</span>
                     </li>
                     
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">
+                    <li class="menu-item {{ $title == "Customers" ? "active" : "" }}">
+                        <a href="{{ route('customer.list') }}" class="menu-link">
                             <i class='menu-icon tf-icons bx bxs-hdd' ></i>
                             <div>Customers</div>
                         </a>

@@ -54,6 +54,13 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         try {
+
+            if ($request->has('user_id')) {
+                $salesperson = $request->user_id;
+            } else {
+                $salesperson = Auth::user()->id;
+            }
+
             $customer = Customer::create([
                 'branch_id' => Auth::user()->branch_id,
                 'name_customer' => $request->name_customer,
@@ -73,7 +80,7 @@ class CustomerController extends Controller
                 'desc_technical' => $request->desc_technical,
                 'desc_clasification' => $request->desc_clasification,
                 'add_information' => $request->add_information,
-                'user_id' => $request->user_id
+                'user_id' => $salesperson,
             ]);
 
             for ($i=0; $i < count($request->name_pic); $i++) { 
@@ -172,6 +179,16 @@ class CustomerController extends Controller
             'customer' => $customer,
             'title' => 'Menu Databases',
             'titleMenu' => 'menu-worksheet',
+        ]);
+    }
+
+    public function customerList()
+    {
+        $customers = Customer::with('type_customer', 'user', 'personalia', 'branch')->where('branch_id', Auth::user()->branch_id)->latest()->get();
+        return view('pages.partner.customer.customer-list', [
+            'customers' => $customers,
+            'title' => 'Customers',
+            'titleMenu' => 'menu-customer',
         ]);
     }
 }
