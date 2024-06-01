@@ -27,7 +27,7 @@
                 <!-- Modal -->
                 <div class="modal fade" id="addNewActivity" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
-                        <form action="{{ route('project.store') }}" method="POST" class="needs-validation form-create">
+                        <form action="{{ route('project.store') }}" method="POST" novalidate class="needs-validation form-create">
                             @csrf
                             @method('POST')
                             <div class="modal-content">
@@ -38,7 +38,7 @@
                                 <div class="modal-body">
                                 <div class="row">
                                     <div class="mb-3"> 
-                                        <label for="customer" class="form-label">Name Customer</label>
+                                        <label for="customer_id" class="form-label">Name Customer</label>
                                         <select class="form-select select-box" name="customer_id" id="customer_id" required>
                                             <option value="" selected>Choose Customer...</option>
                                             @foreach ($customers as $customer)
@@ -96,7 +96,6 @@
                                 <div class="col-lg-12 col-md-6">
                                     <div class="wrapper">
                                       <a
-                                        class="fw-bold"
                                         data-bs-toggle="offcanvas"
                                         data-bs-target="#offcanvasBoth{{ $project->id }}"
                                         aria-controls="offcanvasBoth"

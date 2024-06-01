@@ -42,7 +42,7 @@
                             <input type="text" class="form-control" name="subject" autocomplete="off" spellcheck="false" placeholder="Ex: Penawaran Chemical" value="{{ $quotation->subject }}" required>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label" for="basic-default-fullname">Linked To</label>
+                            <label class="form-label" for="project_code">Linked To</label>
                             <select class="form-select select-box @error('project_id') is-invalid @enderror" id="project_code" name="project_id" required>
                                 <option selected value="">Search code...</option>
                                 @foreach ($projects as $project)
@@ -62,31 +62,15 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label" for="validated">Validate</label>
-                            <select class="form-select select-box @error('validated') is-invalid @enderror" id="validated" name="validated" required>
-                                <option selected value="">Select Period...</option>
-                                <option value="7 Hari" {{ $quotation->validated == "7 Hari" ? "selected" : "" }} >7 Hari</option>
-                                <option value="14 Hari" {{ $quotation->validated == "14 Hari" ? "selected" : "" }} >14 Hari</option>
-                                <option value="21 Hari" {{ $quotation->validated == "21 Hari" ? "selected" : "" }} >21 Hari</option>
-                                <option value="30 Hari" {{ $quotation->validated == "30 Hari" ? "selected" : "" }} >30 Hari</option>
-                            </select>
+                            <input type="text" class="form-control" name="validated" id="validated" placeholder="14 Hari" title="Validated Quotation" value="{{ $quotation->validated }}" required>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label" for="tax_id">Tax</label>
-                            <select class="form-select select-box @error('tax_id') is-invalid @enderror" id="tax_id" name="tax_id" required>
-                                <option selected value="">Select Tax...</option>
-                                @foreach ($taxes as $tax)
-                                    <option value="{{ $tax->id }}" {{ $quotation->tax_id == $tax->id ? "selected" : "" }}>{{ $tax->name }}</option>
-                                @endforeach
-                            </select>
+                            <label class="form-label" for="tax">Tax</label>
+                            <input type="text" class="form-control" name="tax" id="tax" placeholder="PPN 10%" title="Tax" value="{{ $quotation->tax }}" required>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label" for="payment_term">Payment Term</label>
-                            <select class="form-select select-box @error('payment_term') is-invalid @enderror" id="payment_term" name="payment_id" required>
-                                <option selected value="">Select Payment..</option>
-                                @foreach ($payments as $payment)
-                                    <option value="{{ $payment->id }}" {{ $quotation->payment_id == $payment->id ? "selected" : "" }}>{{ $payment->name }}</option>
-                                @endforeach
-                            </select>
+                            <label class="form-label" for="payment">Payment Term</label>
+                            <input type="text" class="form-control" name="payment" id="payment" placeholder="Cash" title="Term of Payment" value="{{ $quotation->payment }}" required>
                         </div>
                         <div class="col-12">
                             <label class="form-label" for="desc-quo">Description Quotation</label>
@@ -108,11 +92,10 @@
     <script>
         project_code.addEventListener('change', function() {
             if(this.value) {
-                fetch(`/quotation/${this.value}/detail`)
+                fetch(`/api/project/${this.value}`)
                     .then(response => response.json())
                     .then(data => {
-                        // console.log(data.project_name);
-                        customer.value = data.project_name;
+                        customer.value = data.customer.name_customer;
 
                     })
                     .catch(error => console.error('Error:', error));

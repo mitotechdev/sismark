@@ -94,11 +94,11 @@
             <tbody>
                 <tr>
                     <td>Harga</td>
-                    <td>: {{ $quotation->first()->tax->name }}</td>
+                    <td>: {{ $quotation->first()->tax}}</td>
                 </tr>
                 <tr>
                     <td>Pembayaran</td>
-                    <td>: {{ $quotation->first()->payment->name }}</td>
+                    <td>: {{ $quotation->first()->payment }}</td>
                 </tr>
                 <tr>
                     <td>Pengiriman</td>
@@ -120,20 +120,12 @@
         </table>
         
 
-        <p style="margin-top: 20px; margin-bottom: 20px">Demikian surat penawaran ini kami sampaikan, atas perhatian dan kesempatan nya kami ucapkan terimakasih.</p>
+        <p style="margin-top: 20px; margin-bottom: 40px">Demikian surat penawaran ini kami sampaikan, atas perhatian dan kesempatan nya kami ucapkan terimakasih.</p>
 
         <p>Hormat kami, <br>PT Mito Energi Indonesia</p>
-        <div style="position: relative; margin-top: 10px; height: 100px;">
-            <div style="position: relative">
-                <img src="{{ public_path('img/logo/cap.png') }}" style="width: 220px;">
-            </div>
-            {{-- signature user --}}
-            <div style="position: absolute; top: 0; left: 0; margin-top: -40px;">
-                <img src="{{ public_path('img/logo/sign-sintia.png') }}" style="">
-            </div>
-        </div>
+        
 
-        <p>{{ $quotation->first()->user->full_name }} <br> <strong>{{ $quotation->first()->user->roles->first()->name }}</strong></p>
+        <p style="margin-top: 100px">{{ $quotation->first()->user->full_name }} <br> <strong>{{ $quotation->first()->user->roles->first()->name }}</strong></p>
 
     </main>
 </body>

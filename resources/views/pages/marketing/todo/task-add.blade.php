@@ -1,7 +1,7 @@
 @extends('components.app.layouts')
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold"><span class="text-muted fw-light">Task</h4>
+        <h4 class="fw-bold">Tasks</h4>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
@@ -57,7 +57,7 @@
                                 <input type="hidden" value="{{ $project->id }}" name="project_id">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel1">Information Task</h5>
+                                        <h5 class="modal-title">Information Task</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -80,7 +80,7 @@
                                     <div class="row">
                                         <div class="col-12 my-3">
                                             <label for="market-progress" class="form-label">Market Progress</label>
-                                            <select name="market_progress" id="market-progress" class="form-select" title="Market Progress" required>
+                                            <select name="market_progress" id="market-progress" class="form-select select-box" title="Market Progress" required>
                                                 <option value="" selected>Choose progress</option>
                                                 @foreach ($marketProgresses->skip(1) as $progress)
                                                     <option value="{{ $progress->id }}">{{ $progress->name }}</option>
@@ -232,7 +232,6 @@
                 } else {
                     checkbox.checked = !checkbox.checked;
                 }
-
             });
         });
     </script>

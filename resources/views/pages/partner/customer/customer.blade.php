@@ -14,7 +14,7 @@
 
         {{-- Form Customer --}}
         @can('create-customer')
-        <form action="{{ route('customer.store') }}" method="POST" class="needs-validation form-create">
+        <form action="{{ route('customer.store') }}" novalidate method="POST" class="needs-validation form-create">
             @csrf
             @method('POST')
             <div class="card mb-3">
@@ -31,11 +31,11 @@
                                     <div class="row g-3">
                                         <div class="col-md-5">
                                             <label for="name_customer" class="form-label">Nama Customer <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="name_customer" name="name_customer" title="Nama Customer Baru" required>
+                                            <input type="text" class="form-control" id="name_customer" name="name_customer" title="Nama Customer Baru" autocomplete="off" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="type_business" class="form-label">Jenis Perusahaan <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="type_business" name="type_business" title="Jenis Perusahaan" required>
+                                            <input type="text" class="form-control" id="type_business" name="type_business" title="Jenis Perusahaan" autocomplete="off" required>
                                         </div>
                                         <div class="col-md">
                                             <label for="foundation_date" class="form-label">Tanggal Berdiri <span class="text-danger">*</span></label>
@@ -43,42 +43,32 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="npwp" class="form-label">NPWP Perusahaan <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="npwp" name="npwp" title="NPWP Perusahaan" required>
+                                            <input type="text" class="form-control" id="npwp" name="npwp" title="NPWP Perusahaan" autocomplete="off" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="owner" class="form-label">Pemilik Perusahaan <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="owner" name="owner" title="Pemilik Perusahaan" required>
+                                            <input type="text" class="form-control" id="owner" name="owner" title="Pemilik Perusahaan" autocomplete="off" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="total_employee" class="form-label">Jumlah Karyawan <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="total_employee" id="total_employee" required>
-                                                <option value="" selected>Pilih </option>
-                                                <option value="<10">&lt; 10 Karyawan</option>
-                                                <option value="11-50">11-50 Karyawan</option>
-                                                <option value="51-100">51-100 Karyawan</option>
-                                                <option value="101-500">101-500 Karyawan</option>
-                                                <option value="501-1000">501-1000 Karyawan</option>
-                                                <option value="1001-5000">1001-5000 Karyawan</option>
-                                                <option value="5001-10001">5001-10000 Karyawan</option>
-                                                <option value="10001+">10001+ Karyawan</option>
-                                            </select>
+                                            <input type="text" class="form-control" id="total_employee" name="total_employee" title="Total Employee" placeholder="11-50 Karyawan" autocomplete="off" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="address" class="form-label">Alamat <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="address" name="address_customer" title="Alamat Perusahaan" required>
+                                            <input type="text" class="form-control" id="address" name="address_customer" title="Alamat Perusahaan" autocomplete="off" required>
                                         </div>
                                         <div class="col-md-3">
                                             <label for="city" class="form-label">Kota <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="city" name="city" title="Kota" required>
+                                            <input type="text" class="form-control" id="city" name="city" title="Kota" autocomplete="off" required>
                                         </div>
                                         <div class="col-md-3">
                                             <label for="country" class="form-label">Negara <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="country" name="country" title="Negara/Wilayah" required>
+                                            <input type="text" class="form-control" id="country" name="country" title="Negara/Wilayah" autocomplete="off" required>
                                         </div>
                                         @role('Super Admin')
                                         <div class="col-md-6">
                                             <label for="pic_sales" class="form-label">Nama Sales/Marketing <span class="text-danger">*</span></label>
-                                            <select name="user_id" id="pic_sales" class="form-select select-box" title="Nama PIC / Marketing MITO" required>
+                                            <select name="user_id" id="pic_sales" class="form-select select-box" required>
                                                 <option value="" selected>Pilih Sales / Marketing</option>
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}">{{ $user->full_name }}</option>
@@ -105,21 +95,21 @@
                                         <div class="col-md-5">
                                             <div class="mb-3">
                                                 <label class="form-label" for="phone_a">Nomor Telepon <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="phone_a" name="phone_a" placeholder="Nomor Telepon" title="Nomor Telepon" required>
+                                                <input type="text" class="form-control" id="phone_a" name="phone_a" placeholder="Nomor Telepon" title="Nomor Telepon" autocomplete="off" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="phone_b">Nomor Telepon <span class="text-muted">(opsional)</span></label>
-                                                <input type="text" class="form-control" id="phone_b" name="phone_b" placeholder="Nomor Telepon (opsional)" title="Nomor Telepon (opsional)" required>
+                                                <input type="text" class="form-control" id="phone_b" name="phone_b" placeholder="Nomor Telepon (opsional)" title="Nomor Telepon (opsional)" autocomplete="off" required>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="mb-3">
                                                 <label class="form-label" for="email_a">Email <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="email_a" name="email_a" placeholder="Email" title="Email" required>
+                                                <input type="text" class="form-control" id="email_a" name="email_a" placeholder="Email" title="Email" autocomplete="off" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="email_b">Email <span class="text-muted">(opsional)</span></label>
-                                                <input type="text" class="form-control" id="email_b" name="email_b" placeholder="Email (opsional)" title="Email (opsional)" required>
+                                                <input type="text" class="form-control" id="email_b" name="email_b" placeholder="Email (opsional)" title="Email (opsional)" autocomplete="off" required>
                                             </div>
                                         </div>
                                     </div>
@@ -140,19 +130,19 @@
                                     <div class="mb-3">
                                         <div class="form-floating">
                                             <textarea class="form-control" placeholder="Deskripsikan data teknikal disini" name="desc_technical" style="height: 100px" title="Data Teknikal" required></textarea>
-                                            <label for="floatingTextarea2">Data Teknikal</label>
+                                            <label>Data Teknikal</label>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <div class="form-floating">
                                             <textarea class="form-control" placeholder="Deskripsikan data klasifikasi disini" name="desc_clasification" style="height: 100px" title="Data Klasifikasi" required></textarea>
-                                            <label for="floatingTextarea2">Data Klasifikasi</label>
+                                            <label>Data Klasifikasi</label>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <div class="form-floating">
                                             <textarea class="form-control" placeholder="Deskripsikan informasi tambahan perusahaan disini" name="add_information" style="height: 100px" title="Informasi Tambahan" required></textarea>
-                                            <label for="floatingTextarea2">Informasi Tambahan</label>
+                                            <label>Informasi Tambahan</label>
                                         </div>
                                     </div>
                                 </div>
@@ -178,13 +168,13 @@
                                         </div>
                                         <div class="row g-3">
                                             <div class="col-lg-5">
-                                                <input type="text" class="form-control" id="name_pic" name="name_pic[]" placeholder="Nama Kontak" title="Nama Kontak" required>
+                                                <input type="text" class="form-control" id="name_pic" name="name_pic[]" placeholder="Nama Kontak" title="Nama Kontak" autocomplete="off" required>
                                             </div>
                                             <div class="col-lg-3">
-                                                <input type="text" class="form-control" id="position" name="position[]" placeholder="Jabatan" title="Jabatan" required>
+                                                <input type="text" class="form-control" id="position" name="position[]" placeholder="Jabatan" title="Jabatan" autocomplete="off" required>
                                             </div>
                                             <div class="col-lg-3">
-                                                <input type="text" class="form-control" id="phone_number" name="phone_number[]" placeholder="Nomor Telepon" title="Nomor Telepon" required>
+                                                <input type="text" class="form-control" id="phone_number" name="phone_number[]" placeholder="Nomor Telepon" title="Nomor Telepon" autocomplete="off" required>
                                             </div>
                                         </div>
                                     </div>
@@ -196,13 +186,13 @@
 
                                             <div class="row g-3">
                                                 <div class="col-lg-5">
-                                                    <input type="text" class="form-control" id="name_pic" name="name_pic[]" placeholder="Nama Kontak" title="Nama Kontak" required>
+                                                    <input type="text" class="form-control" id="name_pic" name="name_pic[]" placeholder="Nama Kontak" title="Nama Kontak" autocomplete="off" required>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <input type="text" class="form-control" id="position" name="position[]" placeholder="Jabatan" title="Jabatan" required>
+                                                    <input type="text" class="form-control" id="position" name="position[]" placeholder="Jabatan" title="Jabatan" autocomplete="off" required>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <input type="text" class="form-control" id="phone_number" name="phone_number[]" placeholder="Nomor Telepon" title="Nomor Telepon" required>
+                                                    <input type="text" class="form-control" id="phone_number" name="phone_number[]" placeholder="Nomor Telepon" title="Nomor Telepon" autocomplete="off" required>
                                                 </div>
                                                 <div class="col mt-sm-auto mt-md-auto mt-3">
                                                     <button type="button" class="btn btn-danger btn-small" x-on:click="removeField(index)">&times;</button>
@@ -234,7 +224,7 @@
                                         </div>
                                         <div class="row g-3 mb-3">
                                             <div class="col-lg-5">
-                                                <input type="text" class="form-control" id="name" name="name_branch[]" placeholder="Nama Branch / Pabrik" title="Nama Branch / Pabrik" required>
+                                                <input type="text" class="form-control" id="name" name="name_branch[]" autocomplete="off" placeholder="Nama Branch / Pabrik" title="Nama Branch / Pabrik" required>
                                             </div>
                                             <div class="col-lg-3">
                                                 <input type="text" class="form-control" id="type_branch" name="type_branch[]" placeholder="Jenis Branch / Pabrik" title="Jenis Branch / Pabrik" required>
@@ -249,7 +239,7 @@
                                         <div class="col-lg-11">
                                             <div class="form-floating">
                                                 <textarea class="form-control" placeholder="Deskripsikan pabrik / branch / Kapasitas Produksi disini" name="desc_branch[]" style="height: 100px"></textarea>
-                                                <label for="floatingTextarea2">Keterangan</label>
+                                                <label>Keterangan</label>
                                             </div>
                                         </div>
                                     </div>
@@ -276,7 +266,7 @@
                                                 <div class="col-lg-11 mb-lg-0 mb-3">
                                                     <div class="form-floating">
                                                         <textarea class="form-control" placeholder="Deskripsikan pabrik / branch disini" name="desc_branch[]" style="height: 100px" required></textarea>
-                                                        <label for="floatingTextarea2">Keterangan</label>
+                                                        <label>Keterangan</label>
                                                     </div>
                                                 </div>
                                                 <div class="col mt-auto">
@@ -300,7 +290,7 @@
 
         {{-- Table View --}}
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                 <h5>Daftar Customer</h5>
             </div>
             <div class="card-body">
@@ -345,7 +335,6 @@
                                                 <a class="dropdown-item" href="{{ route('customer.edit', $customer->id) }}">Edit Customer</a>
                                                 @endcan
                                                 @can('delete-customer')
-                                                {{-- <a class="dropdown-item" href=""><i class="bx bx-trash me-1"></i> Hapus</a>  --}}
                                                 <form action="{{ route('customer.destroy', $customer->id) }}" method="POST" class="needs-validation form-destroy">
                                                     @csrf
                                                     @method('DELETE')
@@ -366,54 +355,6 @@
     </div>
 @endsection
 
-@push('style')
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-@endpush
-
 @push('script')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        function handler() {
-            return {
-            fields: [],
-            addNewContact() {
-                this.fields.push({
-                    name_pic: '',
-                    position: '',
-                    phone_number: '',
-                });
-                },
-                removeField(index) {
-                this.fields.splice(index, 1);
-                }
-            }
-        }
-
-        function handlerAddFactory() {
-            return {
-            fields: [],
-            addNewFactory() {
-                this.fields.push({
-                    name_branch: '',
-                    type_branch: '',
-                    pic_branch: '',
-                    address_branch: '',
-                    desc_branch: '',
-                });
-                },
-                removeField(index) {
-                this.fields.splice(index, 1);
-                }
-            }
-        }
-
-        $(document).ready(function() {
-            $('.select-box-2').select2({
-                theme: "bootstrap-5",
-                allowClear: true
-            })
-
-        });
-    </script>
+    <script src="{{ Vite::asset('resources/js/dynamic-add-input.js') }}"></script>
 @endpush

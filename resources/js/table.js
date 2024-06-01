@@ -1,3 +1,3 @@
 new DataTable('.datatable', {
-    responsive: true
+    responsive: true,
 })

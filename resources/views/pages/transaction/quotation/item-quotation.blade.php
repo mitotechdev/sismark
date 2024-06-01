@@ -62,15 +62,15 @@
                                                 <input type="number" class="form-control" name="price_product" id="price" step=".01" title="Harga produk" value="" required>
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label">Name Product</label>
+                                                <label class="form-label" for="name_product">Name Product</label>
                                                 <input type="text" class="form-control" id="name_product" readonly disabled placeholder="Search first code product..." value="">
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label" for="packaging_product">Packaging</label>
+                                                <label class="form-label" for="packaging">Packaging</label>
                                                 <input type="text" class="form-control" id="packaging" readonly disabled placeholder="Search first code product..." title="Kemasan produk" value="">
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label" for="unit_product">Unit</label>
+                                                <label class="form-label" for="unit">Unit</label>
                                                 <input type="text" class="form-control" name="unit" id="unit" readonly disabled placeholder="Search first code product..." title="Satuan produk" value="">
                                             </div>
                                         </div>

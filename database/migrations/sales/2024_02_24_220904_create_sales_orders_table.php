@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('so_number');
             $table->foreignId('customer_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('sales_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('payment_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('tax_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('payment');
             $table->foreignId('approval_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->date('order_date');
             $table->string('delivery_to');

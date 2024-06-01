@@ -40,7 +40,7 @@
                             </div>
                             <div class="col-12">
                                 <label for="gender" class="form-label" title="Gender user">Gender</label>
-                                <select class="form-select @error('gender') is-invalid @enderror" name="gender" id="gender" required>
+                                <select class="form-select select-box @error('gender') is-invalid @enderror" name="gender" id="gender" required>
                                     <option value="" selected>Choose Gender...</option>
                                     <option value="Pria" {{ $user->gender == "Pria" ? "selected" : "" }}>Pria</option>
                                     <option value="Perempuan" {{ $user->gender == "Perempuan" ? "selected" : "" }}>Perempuan</option>
@@ -81,7 +81,7 @@
                             </div>
                             <div class="col-12">
                                 <label for="branch" class="form-label" title="Branch user">Branch</label>
-                                <select class="form-select @error('branch') is-invalid @enderror" name="branch" id="branch" required>
+                                <select class="form-select select-box @error('branch') is-invalid @enderror" name="branch" id="branch" required>
                                     <option value="" selected>Choose Branch...</option>
                                     @foreach ($branches as $branch)
                                         <option value="{{ $branch->id }}" {{ $user->branch_id == $branch->id ? "selected" : "" }} >{{ $branch->name }}</option>
@@ -99,21 +99,3 @@
         </div>
     </div>
 @endsection
-
-@push('style')
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-@endpush
-
-@push('script')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.select-box-2').select2({
-                theme: "bootstrap-5",
-                allowClear: true
-            })
-
-        });
-    </script>
-@endpush

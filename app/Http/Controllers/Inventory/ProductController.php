@@ -23,7 +23,7 @@ class ProductController extends Controller
     {
         
         $products = Product::latest()->get();
-        return view('pages.inventory.product.product-index', [
+        return view('pages.services.product', [
             'products' => $products,
             'title' => 'Menu Product',
             'titleMenu' => 'menu-inventory',
@@ -53,8 +53,8 @@ class ProductController extends Controller
                 'name' => $request->name_product,
                 'packaging' => $request->packaging,
                 'unit' => $request->unit,
-                'category_product_id' => $request->category_product_id,
-                'type_product_id' => $request->type_product_id,
+                'category_product' => $request->category_product,
+                'type_product' => $request->type_product,
             ]);
             return redirect()->back()->with('success', 'Data produk baru berhasil ditambahkan 🚀');
 
@@ -84,15 +84,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        // dd($request->all());
         try {
             $product->update([
                 'code' => $request->code,
                 'name' => $request->name_product,
                 'packaging' => $request->packaging,
                 'unit' => $request->unit,
-                'category_product_id' => $request->category_product_id,
-                'type_product_id' => $request->type_product_id
+                'category_product' => $request->category_product,
+                'type_product' => $request->type_product
             ]);
             return redirect()->back()->with('success', 'Data telah berhasil diperbaharui 🚀');
 

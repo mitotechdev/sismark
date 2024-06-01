@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
-use App\Models\Finance\Payment;
-use App\Models\Finance\Tax;
 use App\Models\Inventory\Product;
 use App\Models\Marketing\Project;
 use App\Models\Transaction\Quotation;
@@ -29,18 +27,14 @@ class QuotationController extends Controller
     }
     public function index()
     {
-        $quotations = Quotation::with('user', 'branch', 'tax', 'payment', 'approval', 'project')
+        $quotations = Quotation::with('user', 'branch', 'approval', 'project')
                                 ->whereHas('branch', function($query) {
                                     $query->where('id', Auth::user()->branch_id);
                                 })
                                 ->latest()->get();
         $projects = Project::latest()->get();
-        $taxs = Tax::all();
-        $payments = Payment::all();
         return view('pages.transaction.quotation.quotation', [
             'projects' => $projects,
-            'taxs' => $taxs,
-            'payments' => $payments,
             'quotations' => $quotations,
             'title' => 'Menu Quotation',
             'titleMenu' => 'menu-transaction',
@@ -63,8 +57,8 @@ class QuotationController extends Controller
         try {
             $validateData = Validator::make($request->all(), [
                 'project_id' => 'required',
-                'tax_id' => 'required',
-                'payment_id' => 'required',
+                'tax' => 'required',
+                'payment' => 'required',
                 'expedition' => 'required',
                 'validated' => 'required',
                 'subject' => 'required',
@@ -72,9 +66,9 @@ class QuotationController extends Controller
             ],
             [
                 'project_id.required' => 'Data aktivitas belum dipilih/kaitkan',
-                'tax_id.required' => 'Pajak belum dipilih',
+                'tax.required' => 'Pajak belum dipilih',
                 'subject.required' => 'Subject penawaran belum di isi',
-                'payment_id.required' => 'Term of Payment (TOP) belum dipilih',
+                'payment.required' => 'Term of Payment (TOP) belum dipilih',
                 'expedition.required' => 'Ekspedisi masih kosong',
                 'validated.required' => 'Masa berlaku penawaran belum di pilih',
                 'desc_quo.required' => 'Deskripsi atau catatan penawaran belum di isi',
@@ -89,8 +83,8 @@ class QuotationController extends Controller
                 Quotation::create([
                     'code' => null,
                     'project_id' => $request->project_id,
-                    'tax_id' => $request->tax_id,
-                    'payment_id' => $request->payment_id,
+                    'tax' => $request->tax,
+                    'payment' => $request->payment,
                     'subject' => $request->subject,
                     'user_id' => Auth::user()->id,
                     'approval_id' => 1,
@@ -133,14 +127,10 @@ class QuotationController extends Controller
     {
         $projects = Project::latest()->get();
         $users = User::latest()->get();
-        $taxes = Tax::latest()->get();
-        $payments = Payment::latest()->get();
         return view('pages.transaction.quotation.edit-quotation', [
             'quotation' => $quotation,
             'projects' => $projects,
             'users' => $users,
-            'taxes' => $taxes,
-            'payments' => $payments,
             'title' => 'Menu Quotation',
             'titleMenu' => 'menu-transaction',
         ]);
@@ -157,16 +147,16 @@ class QuotationController extends Controller
                 'project_id' => 'required',
                 'expedition' => 'required',
                 'validated' => 'required',
-                'tax_id' => 'required',
-                'payment_id' => 'required',
+                'tax' => 'required',
+                'payment' => 'required',
                 'desc_quo' => 'required',
             ],
             [
                 'project_id.required' => 'Kode belum dipilih',
                 'expedition.required' => 'Bagian ekspedisi belum diisi',
                 'validated.required' => 'Masa berlaku penawaran belum dipilih',
-                'tax_id.required' => 'Tax belum dipilih',
-                'payment_id.required' => 'Term of Payment belum dipilih',
+                'tax.required' => 'Tax belum dipilih',
+                'payment.required' => 'Term of Payment belum dipilih',
                 'desc_quo.required' => 'Deskripsi atau catatan belum diisi',
             ]);
 
@@ -179,9 +169,9 @@ class QuotationController extends Controller
                 'project_id' => $request->project_id,
                 'expedition' => $request->expedition,
                 'validated' => $request->validated,
-                'tax_id' => $request->tax_id,
-                'payment_id' => $request->payment_id,
-                'desc_quo' => $request->desc_quo,
+                'tax' => $request->tax,
+                'payment' => $request->payment,
+            'desc_quo' => $request->desc_quo,
             ]);
 
             return redirect()->route('quotation.index')->with('success', 'Data berhasil diperbaharui');

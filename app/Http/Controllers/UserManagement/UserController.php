@@ -184,7 +184,7 @@ class UserController extends Controller
 
             if($user->image !== null) Storage::delete($user->image);
 
-            $updateData['image'] = $request->file('image')->storeAs('images/employees', $request->file('image')->getClientOriginalName());
+            $updateData['image'] = $request->file('image')->storeAs('public/employees', $request->file('image')->getClientOriginalName());
         }
         
         if ($request->password !== null) {

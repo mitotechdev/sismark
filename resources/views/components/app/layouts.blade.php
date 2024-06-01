@@ -2,22 +2,19 @@
 
 <html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-bs-theme="dark">
 <head>
-    {{-- @stack('meta-data') --}}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="" />
     <title>{{ $title ?? config('app.name') }}</title>
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/loader.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/img/mito.png') }}"/>
+    @Vite(['resources/js/style.js'])
     @stack('style')
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @Vite(['resources/js/style.js'])
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/loader.css') }}">
-    <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/assets/img/favicon/mito.png') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+    <!-- datatables css -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 
 </head>
 
@@ -165,12 +162,6 @@
                             <div>Loss Prospect</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title == "Menu Payments" ? "active" : "" }}">
-                        <a href="{{ route('payment.index') }}" class="menu-link">
-                            <i class='menu-icon tf-icons bx bxs-credit-card-front'></i>
-                            <div>Payments</div>
-                        </a>
-                    </li>
 
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Admin Sales</span>
@@ -198,6 +189,11 @@
                             <li class="menu-item {{ $title == "Menu Sales Order" ? "active" : "" }}">
                                 <a href="{{ route('sales-order.index') }}" class="menu-link">
                                     <div>Sales Order</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ $title == "Menu Prevent" ? "active" : "" }}">
+                                <a href="{{ route('sales-order.prevent') }}" class="menu-link">
+                                    <div>Prevent</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ $title == "Menu Bills" ? "active" : "" }}">
@@ -272,18 +268,16 @@
                     </div>
 
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                        <!-- Search -->
+                        
                         <div class="navbar-nav align-items-center">
                             <div class="nav-item d-flex align-items-center">
                                 <div>Sistem Marketing</div>
                             </div>
                         </div>
-                        <!-- /Search -->
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- Place this tag where you want the button to render. -->
                             
-
                             <!-- User -->
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
@@ -292,7 +286,7 @@
                                         @if (Auth::user()->image)
                                         <img src="{{ asset('storage/'. Auth::user()->image) }}" class="w-px-40 h-auto rounded-circle" />
                                         @else
-                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
+                                        <img src="{{ Vite::asset('resources/img/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
                                         @endif
                                     </div>
                                 </a>
@@ -305,7 +299,7 @@
                                                         @if (Auth::user()->image)
                                                         <img src="{{ asset('storage/'. Auth::user()->image) }}" class="w-px-40 h-auto rounded-circle" />
                                                         @else
-                                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
+                                                        <img src="{{ Vite::asset('resources/img/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
                                                         @endif
                                                     </div>
                                                 </div>
@@ -346,10 +340,6 @@
                                     </li> --}}
                                     @auth
                                     <li>
-                                        {{-- <a class="dropdown-item" href="auth-login-basic.html">
-                                            <i class="bx bx-power-off me-2"></i>
-                                            <span class="align-middle">Log Out</span>
-                                        </a> --}}
                                         <form action="{{ route('logout') }}" method="POST" class="needs-validation form-logout">
                                             @csrf
                                             @method('POST')
@@ -385,7 +375,7 @@
                                 ©
                                 <script>
                                     document.write(new Date().getFullYear());
-                                </script> &nbsp;Dibuat oleh
+                                </script> &nbsp;Created by
                                 <a href="https://mitoindonesia.com" target="_blank"
                                     class="footer-link fw-bolder">Departement IT</a>
                             </div>
@@ -403,20 +393,15 @@
         <!-- Overlay -->
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-    <!-- / Layout wrapper -->
 
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     @vite('resources/js/app.js')
-    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- datatables js -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    @stack('script')
-    <script src="{{ Vite::asset('resources/js/loader.js') }}"></script>
-    
-    
+    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+    @stack('script')    
 </body>
 
 </html>

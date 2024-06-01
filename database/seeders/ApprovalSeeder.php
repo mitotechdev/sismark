@@ -36,5 +36,11 @@ class ApprovalSeeder extends Seeder
             'tag_front_end' => 'danger',
             'tag_status' => 'rej',
         ]);
+
+        Approval::create([
+            'name' => 'Closed',
+            'tag_front_end' => 'success',
+            'tag_status' => 'closed',
+        ]);
     }
 }

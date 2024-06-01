@@ -73,6 +73,11 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'print-sales-order', 'for' => 'Sales Order', 'tag' => 'Print']);
         Permission::create(['name' => 'approve-sales-order', 'for' => 'Sales Order', 'tag' => 'Approve']);
         Permission::create(['name' => 'view-sales-order', 'for' => 'Sales Order', 'tag' => 'View']);
+        // Prevent
+        Permission::create(['name' => 'create-prevent', 'for' => 'Prevent', 'tag' => 'Create']);
+        Permission::create(['name' => 'view-prevent', 'for' => 'Prevent', 'tag' => 'View']);
+        Permission::create(['name' => 'reject-sales-order', 'for' => 'Prevent', 'tag' => 'Reject SO']);
+        Permission::create(['name' => 'rollback-to-request', 'for' => 'Prevent', 'tag' => 'Request SO']);
         // Sales Order Item
         Permission::create(['name' => 'create-sales-order-item', 'for' => 'SO Item', 'tag' => 'Create']);
         Permission::create(['name' => 'edit-sales-order-item', 'for' => 'SO Item', 'tag' => 'Edit']);

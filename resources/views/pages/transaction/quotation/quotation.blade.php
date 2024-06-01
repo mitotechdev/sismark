@@ -73,32 +73,16 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label" for="validated">Validate</label>
-                                            <select class="form-select select-box @error('validated') is-invalid @enderror" id="validated" name="validated" required>
-                                                <option selected value="">Select Period...</option>
-                                                <option value="7 Hari">7 Hari</option>
-                                                <option value="14 Hari">14 Hari</option>
-                                                <option value="21 Hari">21 Hari</option>
-                                                <option value="30 Hari">30 Hari</option>
-                                            </select>
+                                            <input type="text" class="form-control" name="validated" id="validated" placeholder="14 Hari" title="Validated Quotation" autocomplete="off" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label" for="tax">Tax</label>
-                                            <select class="form-select select-box @error('tax_id') is-invalid @enderror" id="tax" name="tax_id" title="Tax Terms" required>
-                                                <option selected value="">Select Tax...</option>
-                                                @foreach ($taxs as $tax)
-                                                    <option value="{{ $tax->id }}">{{ $tax->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control" name="tax" id="tax" placeholder="PPN 10%" title="Tax" autocomplete="off" required>
                                         </div>
                                         
                                         <div class="col-md-4">
-                                            <label class="form-label" for="payment_term">Payment Term</label>
-                                            <select class="form-select select-box @error('payment_term') is-invalid @enderror" id="payment_term" name="payment_id" required>
-                                                <option selected value="">Select Payment..</option>
-                                                @foreach ($payments as $payment)
-                                                    <option value="{{ $payment->id }}">{{ $payment->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <label class="form-label" for="payment">Payment Term</label>
+                                            <input type="text" class="form-control" name="payment" id="payment" placeholder="Cash" title="Term of Payment" autocomplete="off" required>
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label" for="desc-quo">Description Quotation</label>
@@ -137,8 +121,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td class="text-nowrap">{{ $quo->code }}</td>
                                 <td>{{ $quo->project->customer->name_customer }}</td>
-                                <td class="text-nowrap">{{ $quo->tax->name }}</td>
-                                <td class="text-nowrap">{{ $quo->payment->name }}</td>
+                                <td class="text-nowrap">{{ $quo->tax }}</td>
+                                <td class="text-nowrap">{{ $quo->payment }}</td>
                                 <td>{{ $quo->created_at->diffForHumans() }}</td>
                                 <td>{{ $quo->user->nickname }}</td>
                                 <td>

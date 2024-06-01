@@ -22,6 +22,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+                @if ($message = Session::get('error'))
+                    <div class="alert alert-danger alert-dismissible text-black" role="alert">
+                        {{ $message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
 
                 <h5>List Item</h5>
                 <div class="d-flex align-items-center justify-content-between">
@@ -92,7 +98,7 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="total" class="col-sm-3 col-form-label fw-bold">Grand Total</label>
+                                            <label class="col-sm-3 col-form-label fw-bold">Grand Total</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group mb-3">
                                                     <input type="text" id="show_grand_total" class="form-control fw-bold">

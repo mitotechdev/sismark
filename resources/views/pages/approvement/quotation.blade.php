@@ -24,8 +24,8 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $quo->code }}</td>
                             <td>{{ $quo->project->customer->name_customer }}</td>
-                            <td>{{ $quo->tax->name }}</td>
-                            <td>{{ $quo->payment->name }}</td>
+                            <td>{{ $quo->tax }}</td>
+                            <td>{{ $quo->payment }}</td>
                             <td>{{ $quo->created_by }}</td>
                             <td class="bx-flashing">Waiting Approval...</td>
                             <td>
@@ -52,6 +52,7 @@
         </div>
     </div>
 @endsection
+
 @push('script')
     <script src="{{ Vite::asset('resources/js/approvement.js') }}"></script>
 @endpush

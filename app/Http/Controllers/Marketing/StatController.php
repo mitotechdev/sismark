@@ -36,7 +36,7 @@ class StatController extends Controller
         $total_po = SalesOrder::where('sales_id', Auth::user()->id)->count();
 
         // dd($total_po);
-        $projects = Project::with('market_progress', 'prospect')->where('user_id', Auth::user()->id)->latest()->take(6)->get();
+        $projects = Project::with('market_progress', 'prospect')->where('user_id', Auth::user()->id)->where('branch_id', Auth::user()->branch_id)->latest()->take(6)->get();
         $tasks = Task::with('project')->where('user_id', Auth::user()->id)->where('status_task', false)->latest()->take(4)->get();
         $task_done = Task::with('project', 'market_progress')->where('user_id', Auth::user()->id)->where('status_task', true)->latest()->take(4)->get();
         $customers = Customer::with('branch')

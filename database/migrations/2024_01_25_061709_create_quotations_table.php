@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('code')->nullable()->unique();
             $table->foreignId('project_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('tax_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('payment_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('tax');
+            $table->string('payment');
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('approval_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('branch_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();

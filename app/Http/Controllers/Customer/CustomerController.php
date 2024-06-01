@@ -140,6 +140,32 @@ class CustomerController extends Controller
     {
         try {
             $customer->update($request->all());
+            if ($request->has('user_id')) {
+                $salesperson = $request->user_id;
+            } else {
+                $salesperson = Auth::user()->id;
+            }
+
+            $customer->update([
+                'branch_id' => Auth::user()->branch_id,
+                'name_customer' => $request->name_customer,
+                'type_business' => $request->type_business,
+                'foundation_date' => $request->foundation_date,
+                'npwp' => $request->npwp,
+                'owner' => $request->owner,
+                'total_employee' => $request->total_employee,
+                'address_customer' => $request->address_customer,
+                'city' => $request->city,
+                'country' => $request->country,
+                'phone_a' => $request->phone_a,
+                'phone_b' => $request->phone_b,
+                'email_a' => $request->email_a,
+                'email_b' => $request->email_b,
+                'desc_technical' => $request->desc_technical,
+                'desc_clasification' => $request->desc_clasification,
+                'add_information' => $request->add_information,
+                'user_id' => $salesperson,
+            ]);
             return redirect()->route('customer.index')->with('success', 'Data customer berhasil diperbaharui 🚀');
         } catch (\Exception $m) {
             return redirect()->back()->with('error', $m->getMessage());

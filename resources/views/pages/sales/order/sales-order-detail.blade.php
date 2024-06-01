@@ -45,17 +45,15 @@
                                     <th class="p-2">Term Of Payment</th>
                                     <th class="p-2">Tax</th>
                                     <th class="p-2">Created By</th>
-                                    <th class="p-2">Department</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td class="p-2">{{ $salesOrder->so_number  }}</td>
                                     <td class="p-2">{{ date('d M, Y', strtotime($salesOrder->order_date)) }}</td>
-                                    <td class="p-2">{{ $salesOrder->payment->name  }}</td>
+                                    <td class="p-2">{{ $salesOrder->payment  }}</td>
                                     <td class="p-2">{{ $salesOrder->tax->name  }}</td>
                                     <td class="p-2">{{ $salesOrder->created_by }}</td>
-                                    <td class="p-2">Purchasing</td>
                                 </tr>
                             </tbody>
                         </table>

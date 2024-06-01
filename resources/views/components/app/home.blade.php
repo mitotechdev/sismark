@@ -26,7 +26,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <h2>{{ 'Rp  '. number_format($totalRevenue, 0, ',', '.') }}</h2>
+                                    <h3>{{ 'Rp '. number_format($totalRevenue, 2, ',', '.') }}</h3>
                                     <small class="text-muted">Total pendapatan cabang anda ditahun ini</small>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <h2>{{ 'Rp  '. number_format($totalOutstanding, 0, ',', '.') }}</h2>
+                                    <h3>{{ 'Rp  '. number_format($totalOutstanding, 2, ',', '.') }}</h3>
                                     <small class="text-muted">Total piutang customer anda ditahun ini</small>
                                 </div>
                             </div>
@@ -81,9 +81,9 @@
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             @if ($task->user->image)
-                                                                <img src="{{ asset('storage/'. $task->user->image) }}" class="w-px-40 h-auto rounded-circle" />
+                                                                <img src="{{ asset('storage/'. $task->user->image) }}" class="w-px-40 h-auto rounded-circle me-2" />
                                                             @else
-                                                                <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
+                                                                <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle me-2"/>    
                                                             @endif
                                                             <span>{{ $task->user->nickname }}</span>
                                                         </div>
@@ -123,7 +123,7 @@
                                         @if ($order->sales->image)
                                             <img src="{{ asset('storage/'. $order->sales->image) }}" class="w-px-40 h-auto rounded-circle" />
                                         @else
-                                            <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
+                                            <img src="{{ Vite::asset('resources/img/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>    
                                         @endif
                                     </div>
                                     <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
@@ -146,92 +146,6 @@
                                 @empty
                                 <div class="alert alert-info">Data masih kosong</div>
                                 @endforelse
-                                {{-- <li class="d-flex mb-4 pb-1">
-                                    <div class="avatar flex-shrink-0 me-3">
-                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>
-                                    </div>
-                                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                        <div class="me-2">
-                                            <small class="text-muted d-block mb-1">Yudha Satria</small>
-                                            <h6 class="mb-0">PO/SKXX/2033/23X</h6>
-                                        </div>
-                                        <div class="user-progress d-flex align-items-center gap-1">
-                                            <h6 class="mb-0">+82.6</h6> <span class="text-muted">USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li class="d-flex mb-4 pb-1">
-                                    <div class="avatar flex-shrink-0 me-3">
-                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>
-                                    </div>
-                                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                        <div class="me-2">
-                                            <small class="text-muted d-block mb-1">Yudha Satria</small>
-                                            <h6 class="mb-0">PO/SKXX/2033/23X</h6>
-                                        </div>
-                                        <div class="user-progress d-flex align-items-center gap-1">
-                                            <h6 class="mb-0">+82.6</h6> <span class="text-muted">USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="d-flex mb-4 pb-1">
-                                    <div class="avatar flex-shrink-0 me-3">
-                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>
-                                    </div>
-                                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                        <div class="me-2">
-                                            <small class="text-muted d-block mb-1">Yudha Satria</small>
-                                            <h6 class="mb-0">PO/SKXX/2033/23X</h6>
-                                        </div>
-                                        <div class="user-progress d-flex align-items-center gap-1">
-                                            <h6 class="mb-0">+82.6</h6> <span class="text-muted">USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="d-flex mb-4 pb-1">
-                                    <div class="avatar flex-shrink-0 me-3">
-                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>
-                                    </div>
-                                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                        <div class="me-2">
-                                            <small class="text-muted d-block mb-1">Yudha Satria</small>
-                                            <h6 class="mb-0">PO/SKXX/2033/23X</h6>
-                                        </div>
-                                        <div class="user-progress d-flex align-items-center gap-1">
-                                            <h6 class="mb-0">+82.6</h6> <span class="text-muted">USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="d-flex mb-4 pb-1">
-                                    <div class="avatar flex-shrink-0 me-3">
-                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>
-                                    </div>
-                                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                        <div class="me-2">
-                                            <small class="text-muted d-block mb-1">Yudha Satria</small>
-                                            <h6 class="mb-0">PO/SKXX/2033/23X</h6>
-                                        </div>
-                                        <div class="user-progress d-flex align-items-center gap-1">
-                                            <h6 class="mb-0">+82.6</h6> <span class="text-muted">USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="d-flex mb-4 pb-1">
-                                    <div class="avatar flex-shrink-0 me-3">
-                                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle"/>
-                                    </div>
-                                    <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                        <div class="me-2">
-                                            <small class="text-muted d-block mb-1">Yudha Satria</small>
-                                            <h6 class="mb-0">PO/SKXX/2033/23X</h6>
-                                        </div>
-                                        <div class="user-progress d-flex align-items-center gap-1">
-                                            <h6 class="mb-0">+82.6</h6> <span class="text-muted">USD</span>
-                                        </div>
-                                    </div>
-                                </li> --}}
-                            
                             </ul>
                         </div>
                     </div>

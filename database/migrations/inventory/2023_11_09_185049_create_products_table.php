@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('packaging');
             $table->string('unit');
-            $table->string('category_product_id');
-            $table->string('type_product_id');
+            $table->string('category_product');
+            $table->string('type_product');
             $table->timestamps();
         });
     }

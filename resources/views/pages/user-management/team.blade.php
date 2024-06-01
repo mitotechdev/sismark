@@ -14,7 +14,7 @@
                                 @if ($personil->image)
                                     <img src="{{ asset('storage/'. $personil->image) }}" class="img-thumbnail rounded-circle border border-secondary" />
                                 @else
-                                    <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="img-thumbnail rounded-circle border border-secondary"/>    
+                                    <img src="{{ Vite::asset('resources/img/avatar.png') }}" class="img-thumbnail rounded-circle border border-secondary"/>    
                                 @endif  
                             </div>
                             <h5 class="card-title mb-1">{{ $personil->full_name }}</h5>

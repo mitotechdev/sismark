@@ -19,7 +19,10 @@ class MonthlyRevenueChart
     public function build(): \ArielMejiaDev\LarapexCharts\AreaChart
     {
         
-        $monthlyRevenue = SalesOrder::with('customer', 'sales_order_items', 'tax')
+        $monthlyRevenue = SalesOrder::with('customer', 'sales_order_items', 'tax', 'approval')
+            ->whereHas('approval', function($query) {
+                $query->where('tag_status', 'closed');
+            })
             ->where('branch_id', Auth::user()->branch_id)
             ->whereYear('order_date', date('Y'))
             ->latest()

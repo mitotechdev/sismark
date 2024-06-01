@@ -50,12 +50,7 @@ class SalesOrder extends Model
     {
         return $this->belongsTo(Tax::class, 'tax_id', 'id');
     }
-
-    public function payment(): BelongsTo
-    {
-        return $this->belongsTo(Payment::class, 'payment_id', 'id');
-    }
-
+    
     public function approval(): BelongsTo
     {
         return $this->belongsTo(Approval::class, 'approval_id', 'id');
@@ -69,6 +64,9 @@ class SalesOrder extends Model
     public function scopeTotalRevenueByStatusSalesOrder($query, $status)
     {
         return $query->with('customer', 'sales_order_items', 'tax')
+                     ->whereHas('approval', function($query) {
+                        $query->where('tag_status', '<>', 'rej');
+                     })
                      ->where('branch_id', Auth::user()->branch_id)
                      ->where(DB::raw("DATE_FORMAT(order_date, '%Y')"), date('Y'))
                      ->where('paid', $status)

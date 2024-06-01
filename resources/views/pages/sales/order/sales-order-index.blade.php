@@ -72,12 +72,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="payment_id" class="form-label">Period Payment</label>
-                                            <select name="payment_id" id="payment_id" class="form-select select-box" required>
-                                                <option value="" selected>Choose Payment...</option>
-                                                @foreach ($payments as $payment)
-                                                    <option value="{{ $payment->id }}">{{ $payment->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control" name="payment" id="payment_id" title="TOP" autocomplete="off" placeholder="Cash" required>
                                         </div>
                                         <div class="col-12">
                                             <label for="tax_id" class="form-label">Tax</label>
@@ -135,7 +130,7 @@
                             <td>{{ $item->so_number }}</td>
                             <td>{{ $item->customer->name_customer }}</td>
                             <td style="text-transform: uppercase">{{ date('d M, Y', strtotime($item->order_date)) }}</td>
-                            <td>{{ $item->payment->name }}</td>
+                            <td>{{ $item->payment }}</td>
                             <td>
                                 @php
                                    $total = $item->sales_order_items->sum('total_amount');
@@ -144,42 +139,59 @@
                                 {{ 'Rp  '. number_format($granTotal = $total + $ppn, 2, ',', '.') }}
                             </td>
                             <td>
-                                <span class="badge rounded-pill bg-label-{{ $item->approval->tag_front_end }} py-2 px-3 mb-2">{{ $item->approval->name }}</span>
+                                <span class="badge rounded-pill bg-label-{{ $item->approval->tag_front_end }} py-2 px-3">{{ $item->approval->name }}</span>
                             </td>
                             <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-transparant btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        @can('read-sales-order-item')
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('sales-order.item', $item->id) }}">
-                                                <span class="badge rounded-pill bg-info">{{ $item->sales_order_items->count() }}</span>
-                                                Item</a>
-                                        </li>
-                                        @endcan
-                                        <li><a class="dropdown-item" href="{{ route('sales-order.document', $item->id) }}" target="__blank">Print</a></li>
-                                        @if ($item->approval->id == 1)
-                                            @can('edit-sales-order')
-                                            <li><a class="dropdown-item" href="{{ route('sales-order.edit', $item->id) }}">Edit</a></li>
-                                            @endcan
-                                        @else
+                                <div class="d-flex">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-transparant btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @can('read-sales-order-item')
                                             <li>
-                                                <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                                                    <i class='bx bx-lock-alt me-2'></i>
-                                                    <span>Edit</span>
-                                                </a>
+                                                <a class="dropdown-item" href="{{ route('sales-order.item', $item->id) }}">
+                                                    <span class="badge rounded-pill bg-info">{{ $item->sales_order_items->count() }}</span>
+                                                    Item</a>
                                             </li>
-                                            <li><a class="dropdown-item" href="{{ route('sales-order.show', $item->id) }}">Read More</a></li>
+                                            @endcan
+                                            <li>
+                                                <form action="{{ route('sales-order.document') }}" method="POST" target="__blank">
+                                                    @csrf
+                                                    <input type="hidden" value="{{ $item->id }}" name="sales_order">
+                                                    <button class="btn dropdown-item" type="submit">Print</button>
+                                                </form>
+                                            </li>
+                                            @if ($item->approval->id == 1)
+                                                @can('edit-sales-order')
+                                                <li><a class="dropdown-item" href="{{ route('sales-order.edit', $item->id) }}">Edit</a></li>
+                                                @endcan
+                                            @else
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
+                                                        <i class='bx bx-lock-alt me-2'></i>
+                                                        <span>Edit</span>
+                                                    </a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="{{ route('sales-order.show', $item->id) }}">Read More</a></li>
+                                            @endif
+                                            @can('delete-sales-order')
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="javascript:void(0);">Remove</a></li>
+                                            @endcan
+                                        </ul>
+                                    </div>
+                                    @can('approve-sales-order')
+                                        @if ($item->approval->tag_status == "req")
+                                        <form action="{{ route('sales-order.approved', $item->id) }}" method="POST" class="form-create">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-sm btn-info">Approve</button>
+                                        </form>
                                         @endif
-                                        @can('delete-sales-order')
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:void(0);">Remove</a></li>
-                                        @endcan
-                                    </ul>
+                                    @endcan
                                 </div>
                             </td>
                         </tr>

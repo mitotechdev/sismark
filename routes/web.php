@@ -13,7 +13,6 @@ use App\Http\Controllers\Marketing\TaskController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\PersonaliaController;
 use App\Http\Controllers\ExportsController;
-use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Marketing\StatController;
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Sales\SalesOrderController;
@@ -31,7 +30,6 @@ Route::post    ('authenticate', [AuthenticationController::class, 'authenticate'
 Route::middleware(['auth', 'check_user_status'])->group(function () {
     Route::get     ('/', [Controller::class, 'dashboard'])->name('index');
     Route::resource('branch', BranchController::class);
-    Route::resource('payment', PaymentController::class);
     Route::resource('user', UserController::class);
     Route::get     ('user/{user}/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::put     ('user/{user}/deativate', [UserController::class, 'deactivate'])->name('user.deactivate');
@@ -70,7 +68,7 @@ Route::middleware(['auth', 'check_user_status'])->group(function () {
     Route::get     ('sales-order/{salesOrder}/item', [SalesOrderController::class, 'item'])->name('sales-order.item');
     Route::resource('sales-order-item', SalesOrderItemController::class);
     Route::put     ('sales-order/{salesOrder}/status', [SalesOrderController::class, 'status'])->name('sales-order.status');
-    Route::get     ('sales-order/{salesOrder}/document', [SalesOrderController::class, 'document'])->name('sales-order.document');
+    Route::post    ('sales-order/document', [SalesOrderController::class, 'document'])->name('sales-order.document');
     Route::get     ('stats/{user}', StatController::class)->name('stats.user');
     Route::get     ('report/tasks', [ReportController::class, 'tasks'])->name('report.tasks');
     Route::get     ('report/tasks/result', [ReportController::class, 'resultTask'])->name('report.result.tasks');
@@ -79,3 +77,9 @@ Route::middleware(['auth', 'check_user_status'])->group(function () {
     Route::post    ('export/tasks', [ExportsController::class, 'export'])->name('export.tasks');
     Route::post    ('logout', [AuthenticationController::class, 'logout'])->name('logout');
 });
+
+
+Route::get('prevent', [SalesOrderController::class, 'prevent'])->name('sales-order.prevent');
+Route::put('sales-order-approve/{salesOrder}', [SalesOrderController::class, 'approved'])->name('sales-order.approved');
+Route::post('sales-order-reject', [SalesOrderController::class, 'salesOrderReject'])->name('sales-order.reject');
+Route::post('sales-order-req', [SalesOrderController::class, 'salesOrderReq'])->name('sales-order.req');

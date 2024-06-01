@@ -1,26 +1,41 @@
 #loader {
-    border: 12px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 12px solid #444444;
-    width: 70px;
-    height: 70px;
-    animation: spin 1s linear infinite;
-}
-
-.center {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    place-content: center;
+    background-color: white;
+    transition: opacity 0.25s, visibility 0.25s;
+    z-index: 99;
 }
 
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
+.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#loader::after {
+    content: "";
+    box-sizing: content-box !important;
+    width: 75px;
+    height: 75px;
+    border: 19px solid #ddd;
+    border-top-color: #7449f5;
+    border-radius: 50%;
+    animation: loading 1s ease infinite;
+}
+
+@keyframes loading {
+    from {
+        transform: rotate(0turn);
+    }
+    to {
+        transform: rotate(1turn);
     }
 }
+/* for set swal front page */
 .swal2-container {
     z-index: 9999;
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Sales\SalesOrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\QueryException;
+
 
 class SalesOrderItemController extends Controller
 {
@@ -31,25 +33,25 @@ class SalesOrderItemController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        try {
-            $validatedData = Validator::make($request->all(), [
-                'product_id' => 'required',
-                'qty' => 'required',
-                'price' => 'required',
-                'discount' => 'required',
-                'total_amount' => 'required',
-            ],
-            [
-                'product_id.required' => 'Produk belum dipilih',
-                'qty.required' => 'QTY item belum dimasukkan',
-                'price.required' => 'Harga satuan belum dimasukkan',
-                'discount.required' => 'Diskon belum dimasukkan',
-            ]);
+        $validatedData = Validator::make($request->all(), [
+            'product_id' => 'required',
+            'qty' => 'required',
+            'price' => 'required',
+            'discount' => 'required',
+            'total_amount' => 'required',
+        ],
+        [
+            'product_id.required' => 'Produk belum dipilih',
+            'qty.required' => 'QTY item belum dimasukkan',
+            'price.required' => 'Harga satuan belum dimasukkan',
+            'discount.required' => 'Diskon belum dimasukkan',
+        ]);
 
-            if($validatedData->fails()) {
-                return redirect()->back()->withErrors($validatedData)->withInput();
+        if($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
 
-            } else {
+        } else {
+            try {
                 SalesOrderItem::create([
                     'sales_order_id' => $request->sales_order_id,
                     'product_id' => $request->product_id,
@@ -58,12 +60,14 @@ class SalesOrderItemController extends Controller
                     'discount' => $request->discount,
                     'total_amount' => $request->total_amount
                 ]);
-
-                return redirect()->back()->with('success', 'Item telah ditambahkan 🚀');
+            } catch (QueryException $e) {
+                return redirect()->back()->with('error', $this->getUserFriendlyErrorMessage($e));
             }
-        } catch (\Throwable $th) {
-            throw $th;
+            
+
+            return redirect()->back()->with('success', 'Item telah ditambahkan 🚀');
         }
+        
     }
 
     /**
@@ -97,5 +101,17 @@ class SalesOrderItemController extends Controller
     {
         $salesOrderItem->delete();
         return redirect()->back()->with('success', 'Item berhasil dihapus 🚀');
+    }
+
+    private function getUserFriendlyErrorMessage(QueryException $exception)
+    {
+        // Periksa kode kesalahan dan buat pesan yang lebih ramah pengguna
+        switch ($exception->getCode()) {
+            case '22003': // Numeric value out of range
+                return 'The value provided is out of range for one of the fields. Contact your developer';
+            // Tambahkan pengecekan kode kesalahan lainnya jika diperlukan
+            default:
+                return 'An error occurred while processing your request.';
+        }
     }
 }

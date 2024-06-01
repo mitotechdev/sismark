@@ -59,16 +59,11 @@
                         </div>
                         <div class="col-md-6">
                             <label for="order_date" class="form-label">Order Date</label>
-                            <input type="date" class="form-control" name="order_date" id="order_date" value="{{ $salesOrder->order_date }}" required>
+                            <input type="date" class="form-control" name="order_date" id="order_date" value="{{ $salesOrder->order_date->format('Y-m-d') }}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="payment_id" class="form-label">Period Payment</label>
-                            <select name="payment_id" id="payment_id" class="form-select" required>
-                                <option value="" selected>Choose Payment...</option>
-                                @foreach ($payments as $payment)
-                                    <option value="{{ $payment->id }}" {{ $payment->id == $salesOrder->payment_id ? "selected" : "" }}>{{ $payment->name }}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control" name="payment" id="payment_id" title="TOP" value="{{ $salesOrder->payment }}" autocomplete="off" placeholder="Cash" required>
                         </div>
                         <div class="col-12">
                             <label for="tax_id" class="form-label">Tax</label>

@@ -1,4 +1,5 @@
 @extends('components.app.layouts')
+
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <nav aria-label="breadcrumb">
@@ -59,17 +60,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="total_employee" class="form-label">Jumlah Karyawan <span class="text-danger">*</span></label>
-                                            <select class="form-select" name="total_employee" id="total_employee" required>
-                                                <option value="" selected>Pilih </option>
-                                                <option value="<10"        {{ $customer->total_employee == "<10" ? "selected" : "" }}>&lt; 10 Karyawan</option>
-                                                <option value="11-50"      {{ $customer->total_employee == "11-50" ? "selected" : "" }}>11-50 Karyawan</option>
-                                                <option value="51-100"     {{ $customer->total_employee == "51-100" ? "selected" : "" }}>51-100 Karyawan</option>
-                                                <option value="101-500"    {{ $customer->total_employee == "101-500" ? "selected" : "" }}>101-500 Karyawan</option>
-                                                <option value="501-1000"   {{ $customer->total_employee == "501-1000" ? "selected" : "" }}>501-1000 Karyawan</option>
-                                                <option value="1001-5000"  {{ $customer->total_employee == "1001-5000" ? "selected" : "" }}>1001-5000 Karyawan</option>
-                                                <option value="5001-10001" {{ $customer->total_employee == "5001-10001" ? "selected" : "" }}>5001-10000 Karyawan</option>
-                                                <option value="10001+"     {{ $customer->total_employee == "10001+" ? "selected" : "" }}>10001+ Karyawan</option>
-                                            </select>
+                                            <input type="text" class="form-control" id="total_employee" name="total_employee" title="Total Employee" value="{{ $customer->total_employee }}" autocomplete="off" placeholder="11-50 Karyawan" spellcheck="false" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="address" class="form-label">Alamat <span class="text-danger">*</span></label>
@@ -83,6 +74,7 @@
                                             <label for="country" class="form-label">Negara <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="country" name="country" title="Negara/Wilayah" value="{{ $customer->country }}" spellcheck="false" required>
                                         </div>
+                                        @role('Super Admin')
                                         <div class="col-md-6">
                                             <label for="pic_sales" class="form-label">Nama Sales/Marketing <span class="text-danger">*</span></label>
                                             <select name="user_id" id="pic_sales" class="form-select select-box" title="Nama PIC / Marketing MITO" required>
@@ -92,6 +84,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @endrole
                                     </div>
                                 </div>
                             </div>
@@ -146,19 +139,19 @@
                                     <div class="mb-3">
                                         <div class="form-floating">
                                             <textarea class="form-control" placeholder="Deskripsikan data teknikal disini" name="desc_technical" style="height: 100px" title="Data Teknikal" required>{{ $customer->desc_technical }}</textarea>
-                                            <label for="floatingTextarea2">Data Teknikal</label>
+                                            <label>Data Teknikal</label>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <div class="form-floating">
                                             <textarea class="form-control" placeholder="Deskripsikan data klasifikasi disini" name="desc_clasification" style="height: 100px" title="Data Klasifikasi" required>{{ $customer->desc_clasification }}</textarea>
-                                            <label for="floatingTextarea2">Data Klasifikasi</label>
+                                            <label>Data Klasifikasi</label>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <div class="form-floating">
                                             <textarea class="form-control" placeholder="Deskripsikan informasi tambahan perusahaan disini" name="add_information" style="height: 100px" title="Informasi Tambahan" required>{{ $customer->add_information }}</textarea>
-                                            <label for="floatingTextarea2">Informasi Tambahan</label>
+                                            <label>Informasi Tambahan</label>
                                         </div>
                                     </div>
                                 </div>
@@ -175,21 +168,3 @@
         {{-- Form Activities --}}
     </div>
 @endsection
-
-@push('style')
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-@endpush
-
-@push('script')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.select-box-2').select2({
-                theme: "bootstrap-5",
-                allowClear: true
-            })
-
-        });
-    </script>
-@endpush

@@ -56,7 +56,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Total Karyawan</label>
                                     <div class="col-sm-10">
-                                        <input type="text" readonly class="form-control" value="{{ $customer->total_employee }} Karyawan" title="Total Karyawan">
+                                        <input type="text" readonly class="form-control" value="{{ $customer->total_employee }}" title="Total Karyawan">
                                     </div>
                                 </div>
                                 <div class="row mb-3">

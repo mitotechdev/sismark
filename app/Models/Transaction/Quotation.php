@@ -87,17 +87,7 @@ class Quotation extends Model
     {
         return $this->belongsTo(Project::class);
     }
-
-    public function tax(): BelongsTo
-    {
-        return $this->belongsTo(Tax::class, 'tax_id', 'id');
-    }
-
-    public function payment(): BelongsTo
-    {
-        return $this->belongsTo(Payment::class, 'payment_id', 'id');
-    }
-
+    
     public function approval(): BelongsTo
     {
         return $this->belongsTo(Approval::class, 'approval_id', 'id');

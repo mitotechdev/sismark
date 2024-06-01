@@ -26,9 +26,9 @@
                 <div class="row g-3">
                     <div class="col-md-2 col-sm-2 col-12 my-auto">
                         @if (Auth::user()->image)
-                        <img src="{{ asset('storage/'. Auth::user()->image) }}" class="img-thumbnail rounded-circle border border-secondary" />
+                        <img src="{{ asset('storage/'.Auth::user()->image) }}" class="img-thumbnail rounded-circle border border-secondary" />
                         @else
-                        <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="img-thumbnail rounded-circle border border-secondary"/>    
+                        <img src="{{ Vite::asset('resources/img/avatar.png') }}" class="img-thumbnail rounded-circle border border-secondary"/>    
                         @endif
                     </div>
                     <div class="col-md-10 col-sm-10 col-12 my-md-auto text-center text-sm-start">
@@ -114,14 +114,14 @@
                         </div>
                         @endcan
                         <div class="row mb-3">
-                            <label for="image" class="col-sm-2 col-form-label">Photo</label>
+                            <label class="col-sm-2 col-form-label">Photo</label>
                             <div class="col-sm-10">
                                 <div class="hero">
                                     <label for="input-file" id="drop-area">
                                         <input type="file" accept="image/*" id="input-file" name="image" hidden>
                                         <div id="img-view">
                                             <div id="placeholder_image">
-                                                <img src="{{ Vite::asset('resources/assets/img/elements/upload_icon.png') }}" alt="">
+                                                <img src="{{ Vite::asset('resources/img/upload_icon.png') }}" alt="">
                                                 <p>Drag and Drop or click here <br>to upload image</p>
                                                 <span>Upload any images from desktop</span>
                                             </div>
@@ -131,7 +131,7 @@
                                         <button class="btn btn-outline-danger" id="btn_img_del"><i class='bx bx-trash-alt'></i></button>
                                     </div>
                                 </div>
-                                <small>Rekomendasi Upload foto anda dengan ukuran 200x200 (1:1)</small>
+                                <small>Rekomendasi Upload foto anda dengan ukuran 200x200px (1:1)</small>
                             </div>
                         </div>
                         
@@ -166,42 +166,40 @@
 @endsection
 
 @push('script')
-<script>
-    const dropArea = document.getElementById('drop-area');
-    const inputFile = document.getElementById('input-file');
-    const imgView = document.getElementById('img-view');
-    const overlayBtnDelete = document.querySelector('.overlay-btn-delete');
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const inputFile = document.getElementById('input-file');
+        const imgView = document.getElementById('img-view');
+        const overlayBtnDelete = document.querySelector('.overlay-btn-delete');
 
-    btn_img_del.addEventListener('click', clearImage);
+        btn_img_del.addEventListener('click', clearImage);
 
-    inputFile.addEventListener('change', uploadImage);
+        inputFile.addEventListener('change', uploadImage);
 
-    function uploadImage() {
-        let imgLink = URL.createObjectURL(inputFile.files[0]);
-        imgView.style.backgroundImage = `url(${imgLink})`;
-        placeholder_image.style.display = "none";
-        // imgView.style.border = 0;
-        overlayBtnDelete.classList.add("show");
-    }
+        function uploadImage() {
+            let imgLink = URL.createObjectURL(inputFile.files[0]);
+            imgView.style.backgroundImage = `url(${imgLink})`;
+            placeholder_image.style.display = "none";
+            overlayBtnDelete.classList.add("show");
+        }
 
-    dropArea.addEventListener('dragover', function(e) {
-        e.preventDefault();
+        dropArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
 
-    });
+        });
 
-    dropArea.addEventListener('drop', function(e) {
-        e.preventDefault();
-        inputFile.files = e.dataTransfer.files;
-        uploadImage();
-    });
+        dropArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            inputFile.files = e.dataTransfer.files;
+            uploadImage();
+        });
 
-    function clearImage(){
-        imgView.style.backgroundImage = '';
-        placeholder_image.style.display = "block";
-        // imgView.style.border = "2px dashed #bbb5ff";
-        inputFile.value = "";
-        overlayBtnDelete.classList.remove("show");
-    }
-</script>
+        function clearImage(){
+            imgView.style.backgroundImage = '';
+            placeholder_image.style.display = "block";
+            inputFile.value = "";
+            overlayBtnDelete.classList.remove("show");
+        }
+    </script>
 
 @endpush

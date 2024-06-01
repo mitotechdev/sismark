@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Sales;
 use App\Models\User;
 use App\Models\Finance\Tax;
 use Illuminate\Http\Request;
-use App\Models\Finance\Payment;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Sales\SalesOrder;
 use App\Models\Customer\Customer;
@@ -25,6 +24,9 @@ class SalesOrderController extends Controller
         $this->middleware(['permission:read-sales-order'], ['only' => ['index', 'show']]);
         $this->middleware(['permission:edit-sales-order'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete-sales-order'], ['only' => ['destroy']]);
+        $this->middleware(['permission:view-prevent'], ['only' => ['prevent']]);
+        $this->middleware(['permission:reject-sales-order'], ['only' => ['salesOrderReject']]);
+        $this->middleware(['permission:rollback-to-request'], ['only' => ['salesOrderReq']]);
         $this->middleware(['permission:print-sales-order'], ['only' => ['document']]);
         $this->middleware(['permission:read-sales-order-item'], ['only' => ['item']]);
     }
@@ -33,10 +35,9 @@ class SalesOrderController extends Controller
     {
         
         $customers = Customer::latest()->where('branch_id', Auth::user()->branch_id)->get();
-        $users = User::latest()->role('Sales & Marketing')->get();
+        $users = User::latest()->where('branch_id', Auth::user()->branch_id)->get();
         $taxes = Tax::latest()->get();
-        $payments = Payment::latest()->get();
-        $salesOrders = SalesOrder::latest()->with('sales_order_items', 'customer', 'sales', 'payment', 'approval', 'branch', 'tax')
+        $salesOrders = SalesOrder::latest()->with('sales_order_items', 'customer', 'sales', 'approval', 'branch', 'tax')
             ->where('branch_id', Auth::user()->branch_id)
             ->get();        
         return view('pages.sales.order.sales-order-index', [
@@ -44,7 +45,6 @@ class SalesOrderController extends Controller
             'salesOrders' => $salesOrders,
             'users' => $users,
             'taxes' => $taxes,
-            'payments' => $payments,
             'title' => 'Menu Sales Order',
             'titleMenu' => 'menu-transaction',
         ]);
@@ -69,7 +69,7 @@ class SalesOrderController extends Controller
                 'customer_id' => 'required',
                 'sales_id' => 'required',
                 'order_date' => 'required',
-                'payment_id' => 'required',
+                'payment' => 'required',
                 'tax_id' => 'required',
                 'delivery_to' => 'required',
                 'desc' => 'required',
@@ -79,7 +79,7 @@ class SalesOrderController extends Controller
                 'customer_id.required' => 'Customer belum dipilih',
                 'sales_id.required' => 'Sales person belum dipilih',
                 'order_date.required' => 'Tanggal order masih kosong',
-                'payment_id.required' => 'Term of Payment tidak boleh tanggal mundur!',
+                'payment.required' => 'Term of Payment masih kosong!',
                 'delivery_to.required' => 'Alamat pengantaran masih kosong',
                 'desc.required' => 'Deskripsi tambahan masih kosong'
             ]);
@@ -93,7 +93,7 @@ class SalesOrderController extends Controller
                 'customer_id' => $request->customer_id,
                 'sales_id' => $request->sales_id,
                 'order_date' => $request->order_date,
-                'payment_id' => $request->payment_id,
+                'payment' => $request->payment,
                 'tax_id' => $request->tax_id,
                 'delivery_to' => $request->delivery_to,
                 'desc' => $request->desc,
@@ -127,16 +127,14 @@ class SalesOrderController extends Controller
      */
     public function edit(SalesOrder $salesOrder)
     {
-        $customers = Customer::latest()->get();
-        $users = User::latest()->get();
+        $customers = Customer::latest()->where('branch_id', Auth::user()->branch_id)->get();
+        $users = User::latest()->where('branch_id', Auth::user()->branch_id)->get();
         $taxes = Tax::latest()->get();
-        $payments = Payment::latest()->get();
         return view('pages.sales.order.sales-order-edit', [
             'salesOrder' => $salesOrder,
             'customers' => $customers,
             'users' => $users,
             'taxes' => $taxes,
-            'payments' => $payments,
             'title' => 'Menu Sales Order',
             'titleMenu' => 'menu-transaction',
         ]);
@@ -153,7 +151,7 @@ class SalesOrderController extends Controller
                 'customer_id' => 'required',
                 'sales_id' => 'required',
                 'order_date' => 'required',
-                'payment_id' => 'required',
+                'payment' => 'required',
                 'tax_id' => 'required',
                 'delivery_to' => 'required',
                 'desc' => 'required',
@@ -163,7 +161,7 @@ class SalesOrderController extends Controller
                 'customer_id.required' => 'Customer belum dipilih',
                 'sales_id.required' => 'Sales person belum dipilih',
                 'order_date.required' => 'Tanggal order masih kosong',
-                'payment_id.required' => 'Term of Payment masih kosong',
+                'payment.required' => 'Term of Payment masih kosong',
                 'tax_id.required' => 'Tax belum dipilih',
                 'delivery_to.required' => 'Alamat pengantaran masih kosong',
                 'desc.required' => 'Deskripsi / Catatan masih kosong'
@@ -177,7 +175,7 @@ class SalesOrderController extends Controller
                 'so_number' => $request->so_number,
                 'customer_id' => $request->customer_id,
                 'sales_id' => $request->sales_id,
-                'payment_id' => $request->payment_id,
+                'payment' => $request->payment,
                 'tax_id' => $request->tax_id,
                 'order_date' => $request->order_date,
                 'delivery_to' => $request->delivery_to,
@@ -221,8 +219,9 @@ class SalesOrderController extends Controller
         return redirect()->route('sales-order.index')->with('success', 'SO telah berhasil disubmit 🚀');
     }
 
-    public function document(SalesOrder $salesOrder)
+    public function document(Request $request)
     {
+        $salesOrder = SalesOrder::find($request->sales_order);
         $pdf = Pdf::loadView('report.sales.print-sales-order', [
             'salesOrder' => $salesOrder,
         ])->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'portrait');
@@ -231,8 +230,11 @@ class SalesOrderController extends Controller
     
     public function bill()
     {
-        $bills = SalesOrder::with('customer', 'sales_order_items', 'tax')
+        $bills = SalesOrder::with('customer', 'sales_order_items', 'tax', 'approval')
             ->where('branch_id', Auth::user()->branch_id)
+            ->whereHas('approval', function($query) {
+                $query->whereIn('tag_status', ['approved', 'closed']);
+            })
             ->latest()
             ->get();
         return view('pages.transaction.bill', [
@@ -245,7 +247,57 @@ class SalesOrderController extends Controller
     public function paid(SalesOrder $salesOrder)
     {
         $salesOrder->paid();
-        $salesOrder->update(['approval_id' => 3]);
+        $salesOrder->update(['approval_id' => 5]);
         return redirect()->back()->with('success', 'PO has been paid.');
+    }
+
+    public function approved(SalesOrder $salesOrder)
+    {
+        $salesOrder->update(['approval_id' => 3]);
+        return redirect()->back()->with('success', 'Sales order berhasil di Approved 🚀');
+    }
+
+    public function prevent()
+    {
+        $salesOrders = SalesOrder::latest()->with('approval')
+            ->whereHas('approval', function($query) {
+                $query->where('tag_status', 'rej');
+            })
+            ->where('branch_id', Auth::user()->branch_id)
+            ->get();  
+        $salesOrdersApprove = SalesOrder::latest()->with('approval')
+            ->whereHas('approval', function($query) {
+                $query->where('tag_status', 'approved');
+            })
+            ->where('branch_id', Auth::user()->branch_id)
+            ->get();  
+        return view('pages.sales.prevent', [
+            'salesOrders' => $salesOrders,
+            'salesOrdersApprove' => $salesOrdersApprove,
+            'title' => 'Menu Prevent',
+            'titleMenu' => 'menu-transaction',
+        ]);
+    }
+
+    public function salesOrderReject(Request $request)
+    {
+        $salesOrder = SalesOrder::find($request->sales_order_id);
+        $salesOrder->update([
+            'approval_id' => 4,
+            'desc' => $request->desc,
+        ]);
+
+        return redirect()->back()->with('success', 'Data berhasil di reject 🚀');
+    }
+
+    public function salesOrderReq(Request $request)
+    {
+        $salesOrder = SalesOrder::find($request->sales_order_id_rollback_req);
+        $salesOrder->update([
+            'approval_id' => 2,
+            'desc' => $request->desc_rollback_req,
+        ]);
+
+        return redirect()->back()->with('success', 'Data berhasil di reject 🚀');
     }
 }

@@ -2,31 +2,21 @@
 <html lang="en">
 
 <head>
-    {{-- @stack('meta-data') --}}
     <meta charset="utf-8" />
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="" />
-    <title>{{ $menu_title ?? config('app.name') }}</title>
+    <title>Login</title>
+    <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/img/mito.png') }}" />
     <link rel="stylesheet" href="{{ Vite::asset('resources/css/loader.css') }}">
-    @stack('style')
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/page-auth.css') }}">
     @Vite(['resources/js/style.js'])
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/loader.css') }}">
-    <link rel="stylesheet" href="{{ Vite::asset('resources/assets/vendor/css/pages/page-auth.css') }}">
-    <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/assets/img/favicon/mito.png') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
 
 </head>
 
 <body>
     <!-- Content -->
-    <div id="loader" class="center"></div>
-
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
@@ -119,19 +109,13 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="remember-me" />
-                                    <label class="form-check-label" for="remember-me"> Remember Me </label>
-                                </div>
-                            </div>
-                            <div class="mb-3">
                                 <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
                             </div>
                         </form>
 
                         <p class="text-center">
                             <span>New on our platform?</span>
-                            <a href="auth-register-basic.html">
+                            <a href="javascript:void(0)">
                                 <span>Create an account</span>
                             </a>
                         </p>
@@ -142,17 +126,11 @@
         </div>
     </div>
 
+    <div id="loader"></div>
     <!-- / Content -->
-    <script src="{{ Vite::asset('resources/assets/vendor/libs/jquery/jquery.js') }}"></script>
-    <script src="{{ Vite::asset('resources/assets/vendor/libs/popper/popper.js') }}"></script>
-    <script src="{{ Vite::asset('resources/assets/vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ Vite::asset('resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-    <script src="{{ Vite::asset('resources/assets/vendor/js/menu.js') }}"></script>
-    <script src="{{ Vite::asset('resources/assets/vendor/js/helpers.js') }}"></script>
-    <script src="{{ Vite::asset('resources/assets/js/main.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="{{ Vite::asset('resources/js/loader.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/bootstrap.js') }}"></script>
+    
 </body>
 
 </html>
