@@ -39,12 +39,14 @@ class SalesOrderItemController extends Controller
             'price' => 'required',
             'discount' => 'required',
             'total_amount' => 'required',
+            'desc' => 'required',
         ],
         [
             'product_id.required' => 'Produk belum dipilih',
             'qty.required' => 'QTY item belum dimasukkan',
             'price.required' => 'Harga satuan belum dimasukkan',
             'discount.required' => 'Diskon belum dimasukkan',
+            'desc.required' => 'Deskripsi belum di isi!'
         ]);
 
         if($validatedData->fails()) {
@@ -58,7 +60,8 @@ class SalesOrderItemController extends Controller
                     'qty' => $request->qty,
                     'price' => $request->price,
                     'discount' => $request->discount,
-                    'total_amount' => $request->total_amount
+                    'total_amount' => $request->total_amount,
+                    'desc' => $request->desc,
                 ]);
             } catch (QueryException $e) {
                 return redirect()->back()->with('error', $this->getUserFriendlyErrorMessage($e));

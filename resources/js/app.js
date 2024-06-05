@@ -1,5 +1,5 @@
 import.meta.glob([
-    './img/**',
+    '../img/**',
 ]);
 
 import Swal from 'sweetalert2';
@@ -17,3 +17,5 @@ import './vendor/perfect-scrollbar.js';
 import './vendor/menu.js';
 import './vendor/main.js';
 import './table.js';
+
+

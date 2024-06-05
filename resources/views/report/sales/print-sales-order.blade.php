@@ -81,11 +81,15 @@
                         <tr class="datalist">
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->product->code }}</td>
+                            @if ($item->product->type_product == "Produk")
                             <td>{{ $item->product->name }}</td>
+                            @else
+                            <td>{{ $item->desc }}</td>
+                            @endif
                             <td>{{ $item->qty }}</td>
                             <td>{{ $item->product->unit }}</td>
-                            <td>{{ 'Rp  '. number_format($item->price, 0, ',', '.') }}</td>
-                            <td>{{ 'Rp  '. number_format($item->total_amount, 0, ',', '.') }}</td>
+                            <td style="width: 170px">{{ 'Rp  '. number_format($item->price, 0, ',', '.') }}</td>
+                            <td style="width: 170px">{{ 'Rp  '. number_format($item->total_amount, 0, ',', '.') }}</td>
                         </tr>
                         @endforeach
                         

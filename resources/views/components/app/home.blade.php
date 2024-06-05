@@ -83,7 +83,7 @@
                                                             @if ($task->user->image)
                                                                 <img src="{{ asset('storage/'. $task->user->image) }}" class="w-px-40 h-auto rounded-circle me-2" />
                                                             @else
-                                                                <img src="{{ Vite::asset('resources/assets/img/avatars/avatar.png') }}" class="w-px-40 h-auto rounded-circle me-2"/>    
+                                                                <img src="{{ Vite::asset('resources/img/avatar.png') }}" class="w-px-40 h-auto rounded-circle me-2"/>    
                                                             @endif
                                                             <span>{{ $task->user->nickname }}</span>
                                                         </div>

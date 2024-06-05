@@ -101,8 +101,16 @@
                                             <label class="col-sm-3 col-form-label fw-bold">Grand Total</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group mb-3">
-                                                    <input type="text" id="show_grand_total" class="form-control fw-bold">
+                                                    <input type="text" id="show_grand_total" class="form-control fw-bold" autocomplete="off" spellcheck="false" readonly>
                                                     <input type="hidden" value="" name="total_amount" id="total_amount">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-3 col-form-label">Description</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group mb-3">
+                                                    <textarea class="form-control" name="desc" id="desc" rows="4" required placeholder="Deskripsikan jika jasa. Abaikan bagian ini dengan tanda (-) jika tidak ada."></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,6 +147,7 @@
                             <th>Unit</th>
                             <th>Price</th>
                             <th>Total Amount</th>
+                            <th>Desc</th>
                             <th>Act.</th>
                         </tr>
                     </thead>
@@ -151,6 +160,9 @@
                                 <td>{{ $item->product->unit }}</td>
                                 <td>{{ 'Rp  '. number_format($item->price, 2, ',', '.') }}</td>
                                 <td>{{ 'Rp  '. number_format($item->total_amount, 2, ',', '.') }}</td>
+                                <td>
+                                    {{ $item->desc }}
+                                </td>
                                 <td>
                                     @if ($salesOrder->approval->id == 1)
                                     @can('delete-sales-order-item')
@@ -185,10 +197,11 @@
         }
 
         function calculateOnInput() {
-            const currentQty = parseFloat(qty.value || 0);
+            const currentQty = parseFloat(qty.value || 0) || 1;
             const currentPrice = parseFloat(price.value || 0);
             const currentDiscount = parseFloat(discount.value || 0);
             const totalAmount = currentQty * (currentPrice - currentDiscount);
+            // console.log(currentQty);
 
             show_grand_total.value = new Intl.NumberFormat('id-ID', {
                 style: 'currency',

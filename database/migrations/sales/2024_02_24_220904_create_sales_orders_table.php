@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sales_orders', function (Blueprint $table) {
             $table->id();
             $table->string('so_number');
+            $table->integer('type_so');
             $table->foreignId('customer_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('sales_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('tax_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();

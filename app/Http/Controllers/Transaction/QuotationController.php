@@ -56,6 +56,7 @@ class QuotationController extends Controller
     {
         try {
             $validateData = Validator::make($request->all(), [
+                'type_quo' => 'required',
                 'project_id' => 'required',
                 'tax' => 'required',
                 'payment' => 'required',
@@ -65,6 +66,7 @@ class QuotationController extends Controller
                 'desc_quo' => 'required',
             ],
             [
+                'type_quo.required' => 'Tipe penawaran belum di pilih',
                 'project_id.required' => 'Data aktivitas belum dipilih/kaitkan',
                 'tax.required' => 'Pajak belum dipilih',
                 'subject.required' => 'Subject penawaran belum di isi',
@@ -82,6 +84,7 @@ class QuotationController extends Controller
 
                 Quotation::create([
                     'code' => null,
+                    'type_quo' => $request->type_quo,
                     'project_id' => $request->project_id,
                     'tax' => $request->tax,
                     'payment' => $request->payment,
@@ -143,6 +146,7 @@ class QuotationController extends Controller
     {
         try {
             $validateData = Validator::make($request->all(), [
+                'type_quo' => 'required',
                 'subject' => 'required',
                 'project_id' => 'required',
                 'expedition' => 'required',
@@ -152,6 +156,7 @@ class QuotationController extends Controller
                 'desc_quo' => 'required',
             ],
             [
+                'type_quo.required' => 'required',
                 'project_id.required' => 'Kode belum dipilih',
                 'expedition.required' => 'Bagian ekspedisi belum diisi',
                 'validated.required' => 'Masa berlaku penawaran belum dipilih',
@@ -165,6 +170,7 @@ class QuotationController extends Controller
             }
 
             $quotation->update([
+                'type_quo' => $request->type_quo,
                 'subject' => $request->subject,
                 'project_id' => $request->project_id,
                 'expedition' => $request->expedition,
@@ -191,8 +197,9 @@ class QuotationController extends Controller
         //
     }
 
-    public function document(Quotation $quotation)
+    public function print(Request $request)
     {
+        $quotation = Quotation::find($request->quo_id);
         $month = array (1 =>   'Januari',
             'Februari',
             'Maret',
@@ -210,8 +217,15 @@ class QuotationController extends Controller
         $split 	  = explode('-', date('Y-m-d'));
         $dateNow = $split[2] . ' ' . $month[ (int)$split[1] ] . ' ' . $split[0];
 
+        if ($quotation->type_quo == 1) {
+            $path = 'product';
+        } else if($quotation->type_quo == 2) {
+            $path = 'service';
+        } else {
+            $path = 'another';
+        }
 
-        $pdf = Pdf::loadView('report.transaction.quotation-document', [
+        $pdf = Pdf::loadView('report.transaction.print-quotation-'.$path, [
             'quotation' => $quotation, 
             'currentTime' => $dateNow
             ])->setOption(['dpi' => 150, 'defaultFont' => 'arial, sans-serif'])->setPaper('a4', 'portrait');

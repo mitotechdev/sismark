@@ -67,6 +67,7 @@
                                 <th>Item</th>
                                 <th>Description</th>
                                 <th>QTY</th>
+                                <th>Unit</th>
                                 <th>Item Price</th>
                                 <th>Disc.</th>
                                 <th>Total</th>
@@ -78,6 +79,7 @@
                                     <td>{{ $item->product->code }}</td>
                                     <td>{{ $item->product->name }}</td>
                                     <td>{{ $item->qty }}</td>
+                                    <td>{{ $item->product->unit }}</td>
                                     <td>{{ 'Rp  '. number_format($item->price, 2, ',', '.') }}</td>
                                     <td>{{ 'Rp  '. number_format($item->discount, 2, ',', '.') }}</td>
                                     <td>{{ 'Rp  '. number_format($item->total_amount, 2, ',', '.') }}</td>
@@ -88,7 +90,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-3 ms-auto">
+                    <div class="table-responsive">
                         <table>
                             <tr>
                                 <td style="width: 100px;">TOTAL</td>

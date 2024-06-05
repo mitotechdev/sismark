@@ -40,7 +40,8 @@ class ItemQuotationController extends Controller
             QuotationItem::create([
                 'quotation_id' => $request->quotation_id,
                 'product_id' => $request->product_id,
-                'price' => $request->price_product
+                'price' => $request->price_product,
+                'desc' => $request->desc,
             ]);
             return redirect()->back()->with('success', 'Item penawaran berhasil ditambahkan 🚀');
 
@@ -74,6 +75,7 @@ class ItemQuotationController extends Controller
             $quotationItem->update([
                 'product_id' => $request->product_id,
                 'price' => $request->price_product,
+                'desc' => $request->desc
             ]);
 
             return redirect()->back()->with('success', 'Data berhasil diperbaharui 🚀');

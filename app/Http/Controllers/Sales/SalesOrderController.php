@@ -40,7 +40,7 @@ class SalesOrderController extends Controller
         $salesOrders = SalesOrder::latest()->with('sales_order_items', 'customer', 'sales', 'approval', 'branch', 'tax')
             ->where('branch_id', Auth::user()->branch_id)
             ->get();        
-        return view('pages.sales.order.sales-order-index', [
+        return view('pages.sales.order.sales-order', [
             'customers' => $customers,
             'salesOrders' => $salesOrders,
             'users' => $users,
@@ -65,6 +65,7 @@ class SalesOrderController extends Controller
     {
         try {
             $validatedData = Validator::make($request->all(), [
+                'type_so' => 'required',
                 'so_number' => 'required',
                 'customer_id' => 'required',
                 'sales_id' => 'required',
@@ -75,6 +76,7 @@ class SalesOrderController extends Controller
                 'desc' => 'required',
             ],
             [
+                'type_so.required' => 'Tipe Sales Order belum di pilih',
                 'so_number.required' => 'No Sales Order belum di isi',
                 'customer_id.required' => 'Customer belum dipilih',
                 'sales_id.required' => 'Sales person belum dipilih',
@@ -89,6 +91,7 @@ class SalesOrderController extends Controller
             }
    
             $salesOrder = SalesOrder::create([
+                'type_so' => $request->type_so,
                 'so_number' => $request->so_number,
                 'customer_id' => $request->customer_id,
                 'sales_id' => $request->sales_id,
@@ -221,6 +224,7 @@ class SalesOrderController extends Controller
 
     public function document(Request $request)
     {
+
         $salesOrder = SalesOrder::find($request->sales_order);
         $pdf = Pdf::loadView('report.sales.print-sales-order', [
             'salesOrder' => $salesOrder,

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('quotation_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->decimal('price', 10,2);
+            $table->text('desc');
             $table->timestamps();
         });
     }

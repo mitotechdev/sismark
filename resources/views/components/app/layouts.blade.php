@@ -8,9 +8,9 @@
     <title>{{ $title ?? config('app.name') }}</title>
     <link rel="stylesheet" href="{{ Vite::asset('resources/css/loader.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/img/mito.png') }}"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @Vite(['resources/js/style.js'])
     @stack('style')
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <!-- datatables css -->

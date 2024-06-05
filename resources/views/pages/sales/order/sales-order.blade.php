@@ -41,6 +41,15 @@
                                 <div class="modal-body">
                                     <div class="row mb-3 g-3">
                                         <div class="col-12">
+                                            <label class="form-label" for="type_so">Type Sales Order</label>
+                                            <select class="form-select select-box @error('type_so') is-invalid @enderror" id="type_so" name="type_so" required>
+                                                <option selected value="">Choose type...</option>
+                                                <option value="1">Produk</option>
+                                                <option value="2">Jasa</option>
+                                                <option value="3">Jasa & Produk</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
                                             <label for="so_number" class="form-label">No Sales Order</label>
                                             <input type="text" class="form-control" name="so_number" id="so_number" title="No Sales Order" placeholder="13076" autocomplete="off" required>
                                         </div>
@@ -85,7 +94,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <label for="delivery_to" class="form-label">Delivery To</label>
-                                            <input type="text" class="form-control @error('delivery_to') is-invalid @enderror" name="delivery_to" placeholder="Jl. Soekarno Hatta No. 17, Pekanbaru" value="{{ old('delivery_to') }}" title="Delivery Address" autocomplete="off" spellcheck="false" required>
+                                            <input type="text" class="form-control @error('delivery_to') is-invalid @enderror" name="delivery_to" id="delivery_to" placeholder="Jl. Soekarno Hatta No. 17, Pekanbaru" value="{{ old('delivery_to') }}" title="Delivery Address" autocomplete="off" spellcheck="false" required>
                                         </div>
                                         <div class="col-12">
                                             <label for="desc_order" class="form-label">Additional Information</label>
@@ -163,7 +172,7 @@
                                                 </form>
                                             </li>
                                             @if ($item->approval->id == 1)
-                                                @can('edit-sales-order')
+                                                @can('edit-sales-order')j
                                                 <li><a class="dropdown-item" href="{{ route('sales-order.edit', $item->id) }}">Edit</a></li>
                                                 @endcan
                                             @else

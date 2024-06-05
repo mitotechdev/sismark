@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable()->unique();
+            $table->integer('type_quo');
             $table->foreignId('project_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('tax');
             $table->string('payment');

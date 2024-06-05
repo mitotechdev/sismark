@@ -38,6 +38,15 @@
                 <div class="card-body">
                     <div class="row mb-3 g-3">
                         <div class="col-12">
+                            <label class="form-label" for="type_quo">Type Quotation</label>
+                            <select class="form-select select-box @error('type_quo') is-invalid @enderror" id="type_quo" name="type_quo" required>
+                                <option selected value="">Choose type...</option>
+                                <option value="1" {{ $quotation->type_quo == 1 ? "selected" : "" }}>Produk</option>
+                                <option value="2" {{ $quotation->type_quo == 2 ? "selected" : "" }}>Jasa</option>
+                                <option value="3" {{ $quotation->type_quo == 3 ? "selected" : "" }}>Jasa & Produk</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
                             <label class="form-label" for="tax">Subject</label>
                             <input type="text" class="form-control" name="subject" autocomplete="off" spellcheck="false" placeholder="Ex: Penawaran Chemical" value="{{ $quotation->subject }}" required>
                         </div>

@@ -73,6 +73,11 @@
                                                 <label class="form-label" for="unit">Unit</label>
                                                 <input type="text" class="form-control" name="unit" id="unit" readonly disabled placeholder="Search first code product..." title="Satuan produk" value="">
                                             </div>
+                                            <div class="col-12">
+                                                <label class="form-label" for="desc">Description</label>
+                                                <textarea class="form-control" name="desc" id="desc" rows="4" required></textarea>
+                                                <div class="form-text">Deskripsikan jasa anda. Abaikan bagian ini dengan tanda (-) jika tidak ada.</div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -164,6 +169,11 @@
                                                                 <div class="col-md-4">
                                                                     <label class="form-label" for="price_product">Price</label>
                                                                     <input type="number" class="form-control" id="price_product_edit_{{ $item->id }}" step=".01" name="price_product" title="Harga produk" value="{{ $item->price }}">
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <label class="form-label" for="desc">Description</label>
+                                                                    <textarea class="form-control" name="desc" id="desc" rows="4" required>{{ $item->desc }}</textarea>
+                                                                    <div class="form-text">Deskripsikan jasa anda. Abaikan bagian ini dengan tanda (-) jika tidak ada.</div>
                                                                 </div>
                                                             </div>
                                                         </div>

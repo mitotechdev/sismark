@@ -57,6 +57,7 @@ Route::middleware(['auth', 'check_user_status'])->group(function () {
     Route::get     ('task/{project}/completed', [TaskController::class, 'completed'])->name('task.completed');
     Route::resource('quotation', QuotationController::class);
     Route::get     ('quotation/{quotation}/document', [QuotationController::class, 'document'])->name('quotation.document');
+    Route::post    ('quotation/print', [QuotationController::class, 'print'])->name('print.quotation');
     Route::put     ('quotation/{quotation}/status', [QuotationController::class, 'status'])->name('quotation.status');
     Route::resource('quotation-item', ItemQuotationController::class);
     Route::get     ('approvement/quotation', [ApprovementController::class, 'quotation'])->name('approvement.quotation');

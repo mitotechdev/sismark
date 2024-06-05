@@ -30,10 +30,17 @@
                             <td class="bx-flashing">Waiting Approval...</td>
                             <td>
                                 <div class="d-inline-flex">
-                                    <form action="{{ route('approvement.quotation.approve', $quo->id) }}" method="POST" class="needs-validation form-approve me-2">
+                                    
+                                    <form action="{{ route('print.quotation') }}" method="POST" target="__blank">
+                                        @csrf
+                                        @method('POST')
+                                        <input type="hidden" value="{{ $quo->id }}" name="quo_id">
+                                        <button class="btn btn-sm btn-outline-secondary me-1" type="submit">Print</button>
+                                    </form>
+                                    <form action="{{ route('approvement.quotation.approve', $quo->id) }}" method="POST" class="needs-validation form-approve">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="btn btn-sm btn-outline-info">Approve</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-info me-1">Approve</button>
                                     </form>
     
                                     <form action="{{ route('approvement.quotation.reject', $quo->id) }}" method="POST" class="needs-validation form-reject">

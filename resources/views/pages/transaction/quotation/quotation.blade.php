@@ -48,10 +48,18 @@
                                 <div class="modal-body">
                                     <div class="row mb-3 g-3">
                                         <div class="col-12">
-                                            <label class="form-label" for="tax">Subject</label>
-                                            <input type="text" class="form-control" name="subject" autocomplete="off" spellcheck="false" placeholder="Ex: Penawaran Chemical" required>
+                                            <label class="form-label" for="type_quo">Type Quotation</label>
+                                            <select class="form-select select-box @error('type_quo') is-invalid @enderror" id="type_quo" name="type_quo" required>
+                                                <option selected value="">Choose type...</option>
+                                                <option value="1">Produk</option>
+                                                <option value="2">Jasa</option>
+                                                <option value="3">Jasa & Produk</option>
+                                            </select>
                                         </div>
-
+                                        <div class="col-12">
+                                            <label class="form-label" for="tax">Subject</label>
+                                            <input type="text" class="form-control" name="subject" autocomplete="off" spellcheck="false" placeholder="Penawaran harga..." required>
+                                        </div>
                                         <div class="col-md-6">
                                             <label class="form-label" for="project_code">Linked To</label>
                                             <select class="form-select select-box @error('project_id') is-invalid @enderror" id="project_code" name="project_id" autofocus required>
@@ -69,7 +77,7 @@
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-12">
                                             <label class="form-label" for="expedition">Expedition</label>
-                                            <input type="text" class="form-control" id="expedition" name="expedition" placeholder="Ex. Franco Gudang" title="Expedition" autocomplete="off" required>
+                                            <input type="text" class="form-control" id="expedition" name="expedition" placeholder="Franco Gudang" title="Expedition" autocomplete="off" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label" for="validated">Validate</label>
@@ -77,7 +85,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label" for="tax">Tax</label>
-                                            <input type="text" class="form-control" name="tax" id="tax" placeholder="PPN 10%" title="Tax" autocomplete="off" required>
+                                            <input type="text" class="form-control" name="tax" id="tax" placeholder="PPN 11%" title="Tax" autocomplete="off" required>
                                         </div>
                                         
                                         <div class="col-md-4">
@@ -109,7 +117,7 @@
                             <th data-priority="2">Customer</th>
                             <th>PPN</th>
                             <th>TOP</th>
-                            <th>Created At</th>
+                            <th>Date Input</th>
                             <th>Created By</th>
                             <th data-priority="4">Status</th>
                             <th data-priority='5'>Act.</th>
@@ -123,7 +131,7 @@
                                 <td>{{ $quo->project->customer->name_customer }}</td>
                                 <td class="text-nowrap">{{ $quo->tax }}</td>
                                 <td class="text-nowrap">{{ $quo->payment }}</td>
-                                <td>{{ $quo->created_at->diffForHumans() }}</td>
+                                <td>{{ $quo->created_at->format('d/m/Y') }}</td>
                                 <td>{{ $quo->user->nickname }}</td>
                                 <td>
                                     <span class="badge rounded-pill bg-label-{{ $quo->approval->tag_front_end }} py-2 px-3">{{ $quo->approval->name }}</span>
@@ -150,7 +158,12 @@
                                                 </a>
                                             </li>
                                             @else
-                                            <li><a class="dropdown-item" href="{{ route('quotation.document', $quo->id) }}" target="__blank">Print</a></li>
+                                                <form action="{{ route('print.quotation') }}" method="POST" target="__blank">
+                                                    @csrf
+                                                    @method('POST')
+                                                    <input type="hidden" value="{{ $quo->id }}" name="quo_id">
+                                                    <button class="btn dropdown-item" type="submit">Print</button>
+                                                </form>
                                             @endif
 
                                             @can('delete-quotation')
