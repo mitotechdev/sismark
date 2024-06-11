@@ -121,7 +121,7 @@
             {{-- created by --}}
             <div class="wrapper-signature">
                 <h5>Dibuat oleh,</h5>
-                <p>Gea Nabila</p>
+                <p>{{ $salesOrder->created_by }}</p>
                 <p>(Admin Sales)</p>
             </div>
         </div>

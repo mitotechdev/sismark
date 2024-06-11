@@ -1,15 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+lang="en"
+class="light-style customizer-hide"
+dir="ltr"
+data-theme="theme-default"
+data-template="vertical-menu-template-free"
+>
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="" />
     <title>Login</title>
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/fonts/boxicons.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/img/mito.png') }}" />
     <link rel="stylesheet" href="{{ Vite::asset('resources/css/loader.css') }}">
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/core.min.css') }}" class="template-customizer-core-css"> 
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/theme-default.css') }}" class="template-customizer-theme-css">
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/demo.css') }}">
     <link rel="stylesheet" href="{{ Vite::asset('resources/css/page-auth.css') }}">
-    @Vite(['resources/js/style.js'])
+    {{-- @vite(['resources/js/style.js']) --}}
+    <script src="{{ Vite::asset('resources/js/vendor/helpers.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/config.js') }}"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
 
@@ -127,9 +139,12 @@
     </div>
 
     <div id="loader"></div>
-    <!-- / Content -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="{{ Vite::asset('resources/js/loader.js') }}"></script>
-    <script src="{{ Vite::asset('resources/js/vendor/bootstrap.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/menu.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/main.js') }}"></script>
     
 </body>
 

@@ -14,7 +14,7 @@ class CheckUserStatus
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
+{
         if (auth()->check() && auth()->user()->status === 'inactive') {
             auth()->logout();
             return redirect()->route('login')->with('error', 'Your account has been deactivated. Please contact the administrator to reactivate it.');

@@ -22,10 +22,11 @@ class AuthenticationController extends Controller
             'username' => ['required'],
             'password' => ['required'],
         ]);
- 
+         
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
  
+            Auth::logoutOtherDevices($request->password);
             return redirect()->intended('/');
         }
  
@@ -37,11 +38,18 @@ class AuthenticationController extends Controller
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
-    
-        $request->session()->invalidate();
-    
+
+
+        $request->session()->flush();
+
         $request->session()->regenerateToken();
     
         return redirect()->route('login');
+
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }

@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 
-<html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-bs-theme="dark">
+<html
+lang="en"
+class="light-style layout-menu-fixed"
+dir="ltr"
+data-theme="theme-default"
+data-template="vertical-menu-template-free"
+>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="" />
     <title>{{ $title ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ Vite::asset('resources/css/loader.css') }}">
-    <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/img/mito.png') }}"/>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @Vite(['resources/js/style.js'])
-    @stack('style')
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/fonts/boxicons.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/img/mito.png') }}"/>
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/core.min.css') }}" class="template-customizer-core-css"> 
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/loader.css') }}">
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/theme-default.css') }}" class="template-customizer-theme-css">
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/demo.css') }}">
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/perfect-scrollbar.css') }}">
+    <link rel="stylesheet" href="{{ Vite::asset('resources/css/dataTables-bootstrap5.min.css') }}">
+    @stack('style')
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
     <!-- datatables css -->
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
@@ -395,12 +407,23 @@
     </div>
 
     @vite('resources/js/app.js')
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ Vite::asset('resources/js/loader.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/confirm.js') }}"></script>
+    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+    <script src="{{ Vite::asset('resources/js/select-box.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/helpers.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/popper.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/perfect-scrollbar.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/menu.js') }}"></script>
+    <script src="{{ Vite::asset('resources/js/vendor/main.js') }}"></script>
     <!-- datatables js -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+    <script src="{{ Vite::asset('resources/js/table.js') }}"></script>
+    
     @stack('script')    
 </body>
 

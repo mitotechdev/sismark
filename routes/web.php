@@ -1,27 +1,28 @@
 <?php
 
-use App\Http\Controllers\ApprovementController;
-use App\Http\Controllers\Auth\AuthenticationController;
-use App\Http\Controllers\Backend\BranchController;
-use App\Http\Controllers\Backend\PermissionController;
-use App\Http\Controllers\Backend\RoleController;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Customer\CustomerBranchController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExportsController;
+use App\Http\Controllers\ApprovementController;
+use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Report\ReportController;
+use App\Http\Controllers\Backend\BranchController;
+use App\Http\Controllers\Marketing\StatController;
+use App\Http\Controllers\Marketing\TaskController;
+use App\Http\Controllers\Sales\SalesOrderController;
+use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Inventory\ProductController;
 use App\Http\Controllers\Marketing\ProjectController;
-use App\Http\Controllers\Marketing\TaskController;
-use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Backend\PermissionController;
+use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Customer\PersonaliaController;
-use App\Http\Controllers\ExportsController;
-use App\Http\Controllers\Marketing\StatController;
-use App\Http\Controllers\Report\ReportController;
-use App\Http\Controllers\Sales\SalesOrderController;
-use App\Http\Controllers\Sales\SalesOrderItemController;
-use App\Http\Controllers\Transaction\ItemQuotationController;
-use App\Http\Controllers\Transaction\QuotationController;
 use App\Http\Controllers\UserManagement\TeamController;
 use App\Http\Controllers\UserManagement\UserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Sales\SalesOrderItemController;
+use App\Http\Controllers\Transaction\QuotationController;
+use App\Http\Controllers\Customer\CustomerBranchController;
+use App\Http\Controllers\Transaction\ItemQuotationController;
 
 Route::fallback(function () { return abort(404);});
 Route::get     ('login', [AuthenticationController::class, 'login'])->name('login')->middleware('guest');
@@ -77,10 +78,8 @@ Route::middleware(['auth', 'check_user_status'])->group(function () {
     Route::get     ('worklist', [ReportController::class, 'worklists'])->name('worklist');
     Route::post    ('export/tasks', [ExportsController::class, 'export'])->name('export.tasks');
     Route::post    ('logout', [AuthenticationController::class, 'logout'])->name('logout');
+    Route::get     ('prevent', [SalesOrderController::class, 'prevent'])->name('sales-order.prevent');
+    Route::put     ('sales-order-approve/{salesOrder}', [SalesOrderController::class, 'approved'])->name('sales-order.approved');
+    Route::post    ('sales-order-reject', [SalesOrderController::class, 'salesOrderReject'])->name('sales-order.reject');
+    Route::post    ('sales-order-req', [SalesOrderController::class, 'salesOrderReq'])->name('sales-order.req');
 });
-
-
-Route::get('prevent', [SalesOrderController::class, 'prevent'])->name('sales-order.prevent');
-Route::put('sales-order-approve/{salesOrder}', [SalesOrderController::class, 'approved'])->name('sales-order.approved');
-Route::post('sales-order-reject', [SalesOrderController::class, 'salesOrderReject'])->name('sales-order.reject');
-Route::post('sales-order-req', [SalesOrderController::class, 'salesOrderReq'])->name('sales-order.req');

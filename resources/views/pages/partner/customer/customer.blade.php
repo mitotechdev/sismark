@@ -1,8 +1,4 @@
 @extends('components.app.layouts')
-@push('style')
-
-@endpush
-
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold">Menu Customer</h4>
@@ -361,39 +357,4 @@
 
 @push('script')
     <script src="{{ Vite::asset('resources/js/dynamic-add-input.js') }}"></script>
-    <script>
-        function handler() {
-            return {
-            fields: [],
-            addNewContact() {
-                this.fields.push({
-                    name_pic: '',
-                    position: '',
-                    phone_number: '',
-                });
-                },
-                removeField(index) {
-                this.fields.splice(index, 1);
-                }
-            }
-        }
-
-        function handlerAddFactory() {
-            return {
-            fields: [],
-            addNewFactory() {
-                this.fields.push({
-                    name_branch: '',
-                    type_branch: '',
-                    pic_branch: '',
-                    address_branch: '',
-                    desc_branch: '',
-                });
-                },
-                removeField(index) {
-                this.fields.splice(index, 1);
-                }
-            }
-        }
-    </script>
 @endpush
