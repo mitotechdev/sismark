@@ -110,6 +110,7 @@
                         </div>
                     </div>
                 </div>
+                {{-- @dd(SalesOrder::calculateTotalRevenueByStatus(true)) --}}
                 <div class="col">
                     <div class="card">
                         <div class="card-header">

@@ -75,6 +75,7 @@ class SalesOrder extends Model
 
     public static function calculateTotalRevenueByStatus($status)
     {
+        // dd(self::totalRevenueByStatusSalesOrder($status)->get());
         return self::totalRevenueByStatusSalesOrder($status)->get()->reduce(function ($carry, $bill) {
             $total = $bill->sales_order_items->sum('total_amount');
             $ppn = $total * ($bill->tax->tax_value);

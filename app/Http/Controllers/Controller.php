@@ -28,6 +28,9 @@ class Controller extends BaseController
                 $query->where('branch_id', Auth::user()->branch_id);
             })
             ->latest()->take(5)->get();
+
+        // dd(SalesOrder::calculateTotalRevenueByStatus(false));
+
         return view('components.app.home', [
             'monthlyRevenueChart' => $monthlyRevenueChart->build(),
             'salesOrders' => SalesOrder::totalRevenueByStatusSalesOrder(true)->get(),

@@ -101,7 +101,7 @@ data-template="vertical-menu-template-free"
 
                         <form id="formAuthentication" class="mb-3 needs-validation" action="{{ route('authenticate') }}" method="POST">
                             @csrf
-                            @method('POST')
+                            {{-- @method('POST') --}}
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" autocomplete="off" spellcheck="false" autofocus tabindex="1" value="{{ old('username') }}" required/>

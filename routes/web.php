@@ -28,7 +28,7 @@ Route::fallback(function () { return abort(404);});
 Route::get     ('login', [AuthenticationController::class, 'login'])->name('login')->middleware('guest');
 Route::post    ('authenticate', [AuthenticationController::class, 'authenticate'])->name('authenticate');
 //Top Model Priority
-Route::middleware(['auth', 'check_user_status'])->group(function () {
+Route::middleware(['auth', 'auth.session', 'check_user_status'])->group(function () {
     Route::get     ('/', [Controller::class, 'dashboard'])->name('index');
     Route::resource('branch', BranchController::class);
     Route::resource('user', UserController::class);
