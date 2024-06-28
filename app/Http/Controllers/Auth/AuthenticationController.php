@@ -28,17 +28,18 @@ class AuthenticationController extends Controller
  
             // Auth::logoutOtherDevices($request->password);
             return redirect()->intended('/');
+        } else {
+
+            return back()->with(
+                'error', 'The provided credentials do not match our records.',
+            )->onlyInput('username');
+
         }
- 
-        return back()->with(
-            'error', 'The provided credentials do not match our records.',
-        )->onlyInput('username');
     }
     
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
-
 
         $request->session()->flush();
 

@@ -99,9 +99,8 @@ data-template="vertical-menu-template-free"
                         <h4 class="mb-2">Welcome to Sismark 👋</h4>
                         <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
-                        <form id="formAuthentication" class="mb-3 needs-validation" action="{{ route('authenticate') }}" method="POST">
+                        <form class="mb-3 needs-validation" action="{{ route('authenticate') }}" method="POST">
                             @csrf
-                            {{-- @method('POST') --}}
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" autocomplete="off" spellcheck="false" autofocus tabindex="1" value="{{ old('username') }}" required/>
@@ -109,9 +108,6 @@ data-template="vertical-menu-template-free"
                             <div class="mb-3 form-password-toggle">
                                 <div class="d-flex justify-content-between">
                                     <label class="form-label" for="password">Password</label>
-                                    <a href="javascript:void(0)">
-                                        <small>Forgot Password?</small>
-                                    </a>
                                 </div>
                                 <div class="input-group input-group-merge">
                                     <input type="password" id="password" class="form-control" name="password" tabindex="2"
@@ -124,13 +120,6 @@ data-template="vertical-menu-template-free"
                                 <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
                             </div>
                         </form>
-
-                        <p class="text-center">
-                            <span>New on our platform?</span>
-                            <a href="javascript:void(0)">
-                                <span>Create an account</span>
-                            </a>
-                        </p>
                     </div>
                 </div>
                 <!-- /Register -->

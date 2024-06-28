@@ -89,12 +89,6 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'create-loss-prospect', 'for' => 'Loss Prospect', 'tag' => 'Create']);
         Permission::create(['name' => 'read-loss-prospect', 'for' => 'Loss Prospect', 'tag' => 'Read']);
         Permission::create(['name' => 'view-loss-prospect', 'for' => 'Loss Prospect', 'tag' => 'View']);
-        // Payments
-        Permission::create(['name' => 'create-payments', 'for' => 'Payment', 'tag' => 'Create']);
-        Permission::create(['name' => 'edit-payments', 'for' => 'Payment', 'tag' => 'Edit']);
-        Permission::create(['name' => 'read-payments', 'for' => 'Payment', 'tag' => 'Read']);
-        Permission::create(['name' => 'delete-payments', 'for' => 'Payment', 'tag' => 'Delete']);
-        Permission::create(['name' => 'view-payments', 'for' => 'Payment', 'tag' => 'View']);
         // Bills
         Permission::create(['name' => 'view-bill', 'for' => 'Bill', 'tag' => 'View']);
         Permission::create(['name' => 'mark-paid-off', 'for' => 'Bill', 'tag' => 'Edit']);
